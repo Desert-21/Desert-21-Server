@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player {
+@Data
+public class ResourceSet {
 
-    private String id;
-    private String nickname;
-    private ResourceSet resources;
+    private int metal;
+    private int buildingMaterials;
+    private int electricity;
 }

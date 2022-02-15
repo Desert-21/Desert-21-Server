@@ -3,6 +3,7 @@ package com.github.maciejmalewicz.Desert21.domain.users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +15,15 @@ import java.util.Collection;
 @Data
 @Document("app_users")
 public class ApplicationUser implements UserDetails {
+    @Id
+    private String id;
     private String nickname;
     private LoginData loginData;
+
+    public ApplicationUser(String nickname, LoginData loginData) {
+        this.nickname = nickname;
+        this.loginData = loginData;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

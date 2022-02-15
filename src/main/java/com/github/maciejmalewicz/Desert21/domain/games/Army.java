@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player {
-
-    private String id;
-    private String nickname;
-    private ResourceSet resources;
+public class Army {
+    private int droids;
+    private int tanks;
+    private int cannons;
 }
