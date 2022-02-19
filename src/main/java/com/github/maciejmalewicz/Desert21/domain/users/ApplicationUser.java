@@ -6,9 +6,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
+
+import static com.github.maciejmalewicz.Desert21.config.Constants.USER_TOPIC_PREFIX;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +31,9 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Arrays.asList(
+          new SimpleGrantedAuthority(USER_TOPIC_PREFIX + id)
+        );
     }
 
     @Override

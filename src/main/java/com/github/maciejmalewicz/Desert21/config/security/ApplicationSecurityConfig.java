@@ -30,15 +30,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+    private final JwtTokenVerifier tokenVerifier;
 
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
                                      ApplicationUserDetailsService applicationUserDetailsService,
                                      SecretKey secretKey,
-                                     JwtConfig jwtConfig) {
+                                     JwtConfig jwtConfig, JwtTokenVerifier tokenVerifier) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = applicationUserDetailsService;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
+        this.tokenVerifier = tokenVerifier;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(jwtConfig, secretKey), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(tokenVerifier, JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/registration/users").permitAll()
                 .antMatchers(HttpMethod.POST, "**/**", "/api/login").permitAll()
