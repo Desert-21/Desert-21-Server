@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.config.websockets;
 
 import com.github.maciejmalewicz.Desert21.config.security.jwt.JwtConfig;
 import com.github.maciejmalewicz.Desert21.config.security.jwt.JwtTokenVerifier;
+import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.JwtException;
 import org.springframework.messaging.Message;
@@ -43,13 +44,9 @@ public class UserChanelInterceptor implements ChannelInterceptor {
             var token = header.replace(jwtConfig.getPrefix(), "");
             try {
                 var authoritiesAndUsername = tokenVerifier.getAuthoritiesFromToken(token);
-                var userAuthority = authoritiesAndUsername
-                        .getFirst().stream()
-                        .map(SimpleGrantedAuthority::getAuthority)
-                        .filter(auth -> auth.startsWith(USER_TOPIC_PREFIX))
-                        .findFirst()
+                var authorities = authoritiesAndUsername.getFirst();
+                var userId = AuthoritiesUtils.getIdFromAuthorities(authorities)
                         .orElseThrow(this::exceptionSupplier);
-                var userId = userAuthority.replace(USER_TOPIC_PREFIX, "");
 
                 var prefixToReplace = getUserPrefixToReplace();
                 var destinationId = Objects.requireNonNull(headerAccessor.getDestination())

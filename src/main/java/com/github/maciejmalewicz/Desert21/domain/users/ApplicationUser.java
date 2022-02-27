@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.github.maciejmalewicz.Desert21.config.Constants.USER_TOPIC_PREFIX;
+import static com.github.maciejmalewicz.Desert21.config.Constants.USER_ID_AUTH_PREFIX;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class ApplicationUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(
-          new SimpleGrantedAuthority(USER_TOPIC_PREFIX + id)
+          new SimpleGrantedAuthority(USER_ID_AUTH_PREFIX + id)
         );
     }
 
