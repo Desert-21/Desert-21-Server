@@ -22,7 +22,7 @@ public class GameGeneratorController {
 
     @GetMapping
     public Game generate() {
-        var generated = gameGeneratorService.generateGame("61fff82fc758dd5627fb2183", "6205520af0463022c73219b9");
+        var generated = gameGeneratorService.generateGame("6223a21ab9efff203d05a29c", "6224829c2eddc5530b04ba0b");
         return generated;
     }
 }

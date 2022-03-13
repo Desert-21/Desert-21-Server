@@ -1,0 +1,55 @@
+factoryConfig:
+  cost:
+    level1: -1
+    level2: 40
+    level3: 160
+    level4: 480
+  production:
+    level1: 15
+    level2: 25
+    level3: 45
+    level4: 75
+
+towerConfig:
+  cost:
+    level1: 700
+    level2: 50
+    level3: 200
+    level4: 600
+  baseProtection:
+    level1: 300
+    level2: 1000
+    level3: 2300
+    level4: 5000
+  unitBonus:
+    level1: 0.1
+    level2: 0.3
+    level3: 0.55
+    level4: 0.9
+
+homeBaseConfig:
+  cost:
+    level1: -1
+    level2: -1
+    level3: -1
+    level4: -1
+  baseProtection:
+    level1: 300
+    level2: 1000
+    level3: 2300
+    level4: 5000
+  unitBonus:
+    level1: 0.1
+    level2: 0.3
+    level3: 0.55
+    level4: 0.9
+  production: 20
+
+rocketLauncherConfig:
+  cost:
+    level1: -1
+    level2: -1
+    level3: -1
+    level4: -1
+  firstUseCost: 300
+  nextUseCostIncrease: 200

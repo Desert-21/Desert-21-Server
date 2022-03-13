@@ -6,4 +6,8 @@ public class RandomGenerator {
         return (int)(Math.random()*(max-min+1) + min);
     }
 
+    public static boolean generateTrueOrFalse() {
+        return generateBetween(0, 1) == 0;
+    }
+
 }

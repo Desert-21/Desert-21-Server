@@ -6,6 +6,7 @@ import org.springframework.data.util.Pair;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class LocationUtils {
 
@@ -33,5 +34,39 @@ public class LocationUtils {
         return IntStream.rangeClosed(0, yDiff)
                 .mapToObj(i -> new Location(yList.get(i), xList.get(i)))
                 .collect(Collectors.toList());
+    }
+
+    public static List<Location> get1stLevelNeighbouringLocations(Location location) {
+        return List.of(
+                new Location(location.row() + 1, location.col()),
+                new Location(location.row() - 1, location.col()),
+                new Location(location.row(), location.col() - 1),
+                new Location(location.row(), location.col() + 1)
+        );
+    }
+
+    public static List<Location> get2ndLevelNeighbouringLocations(Location location) {
+        return List.of(
+                new Location(location.row() + 1, location.col() + 1),
+                new Location(location.row() + 1, location.col() - 1),
+                new Location(location.row() - 1, location.col() + 1),
+                new Location(location.row() - 1, location.col() - 1)
+        );
+    }
+
+    public static List<Location> getUpTo2ndLevelNeighbouringLocations(Location location) {
+        return generateLocationsSquare(
+                location.row() - 1,
+                location.row() + 1,
+                location.col() - 1,
+                location.col() + 1
+        );
+    }
+
+    public static boolean isWithinBounds(Location location, int yMin, int yMax, int xMin, int xMax) {
+        return location.row() >= yMin
+                && location.row() <= yMax
+                && location.col() >= xMin
+                && location.col() <= xMax;
     }
 }

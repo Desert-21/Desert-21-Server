@@ -21,7 +21,7 @@ public class PlayersQueueController {
 
     @PostMapping
     public ResponseEntity<Void> addPlayerToTheQueue(Authentication authentication) throws NotAcceptableException {
-        var playersId = AuthoritiesUtils.getIdAuthorityFromAuthorities(authentication.getAuthorities())
+        var playersId = AuthoritiesUtils.getIdFromAuthorities(authentication.getAuthorities())
                         .orElseThrow(() -> new NotAcceptableException("Could not recognize the player!"));
         playersQueueService.addPlayerToQueue(playersId);
         return ResponseEntity.ok().build();
@@ -30,7 +30,7 @@ public class PlayersQueueController {
     @RequestMapping("/cancel")
     @PostMapping
     public ResponseEntity<Void> cancelPlayerQueue(Authentication authentication) throws NotAcceptableException {
-        var playersId = AuthoritiesUtils.getIdAuthorityFromAuthorities(authentication.getAuthorities())
+        var playersId = AuthoritiesUtils.getIdFromAuthorities(authentication.getAuthorities())
                 .orElseThrow(() -> new NotAcceptableException("Could not recognize the player!"));
         playersQueueService.removePlayerFromQueue(playersId);
         return ResponseEntity.ok().build();

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
+
 @Service
 public class NextTurnStarterService {
 
@@ -37,7 +39,7 @@ public class NextTurnStarterService {
         var notifiable = new Notifiable() {
             @Override
             public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>("NEXT_TURN", notification));
+                return List.of(new Notification<>(NEXT_TURN_NOTIFICATION, notification));
             }
         };
         playersNotifier.notifyPlayers(game, notifiable);

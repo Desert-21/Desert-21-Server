@@ -1,0 +1,26 @@
+droidsConfig:
+  cost: 5
+  power: 30
+  turnsToTrain: 1
+  fieldsTraveledPerTurn: 2
+  smallProduction: 10
+  mediumProduction: 40
+  massProduction: 100
+
+tanksConfig:
+  cost: 20
+  power: 220
+  turnsToTrain: 3
+  fieldsTraveledPerTurn: 1
+  smallProduction: 4
+  mediumProduction: 11
+  massProduction: 25
+
+cannonsConfig:
+  cost: 10
+  power: 50
+  turnsToTrain: 2
+  fieldsTraveledPerTurn: 3
+  smallProduction: 10
+  mediumProduction: 30
+  massProduction: 50
