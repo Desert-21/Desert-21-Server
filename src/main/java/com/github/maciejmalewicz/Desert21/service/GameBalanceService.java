@@ -1,7 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.dto.balance.AllBuildingsBalanceDto;
-import com.github.maciejmalewicz.Desert21.dto.balance.AllCombatConfigDto;
+import com.github.maciejmalewicz.Desert21.dto.balance.AllCombatBalanceDto;
 import com.github.maciejmalewicz.Desert21.dto.balance.GameBalanceDto;
 import com.github.maciejmalewicz.Desert21.misc.balance.*;
 import com.github.maciejmalewicz.Desert21.misc.balance.buildings.FactoryConfig;
@@ -47,7 +47,7 @@ public class GameBalanceService {
                         homeBaseConfig,
                         rocketLauncherConfig
                 ),
-                new AllCombatConfigDto(
+                new AllCombatBalanceDto(
                         droidsConfig,
                         tanksConfig,
                         cannonsConfig

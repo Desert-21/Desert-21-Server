@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.github.maciejmalewicz.Desert21.misc.balance.CombatUnitConfig;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public record AllCombatConfigDto(
+public record AllCombatBalanceDto(
         CombatUnitConfig droids,
         CombatUnitConfig tanks,
         CombatUnitConfig cannons
