@@ -1,8 +1,12 @@
+name: on-push
+on: [push]
 jobs:
-  build:
+  check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      # This step checks out a copy of your repository.
       - uses: actions/checkout@v2
-      # This step references the directory that contains the action.
-      - script: ECHO 'Hello world'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
