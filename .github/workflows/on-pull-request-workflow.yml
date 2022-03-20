@@ -1,5 +1,8 @@
-name: on-push
-on: [push]
+name: on-pull-request
+on:
+  pull_request:
+    types:
+      - opened
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
