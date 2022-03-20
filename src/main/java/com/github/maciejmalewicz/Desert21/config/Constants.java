@@ -7,6 +7,4 @@ public class Constants {
 
     public static final String NEXT_TURN_NOTIFICATION = "NEXT_TURN";
     public static final String START_GAME_NOTIFICATION = "START_GAME";
-
-    public static final String USELESS_CONST = "aa";
 }
