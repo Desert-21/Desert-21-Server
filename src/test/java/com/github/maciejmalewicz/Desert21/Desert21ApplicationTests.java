@@ -30,6 +30,7 @@ class Desert21ApplicationTests {
         ));
         var requests = repository.findAll();
         assertEquals(requests.size(), 1);
+        assertEquals(2, 1);
     }
 
     @Test
