@@ -14,6 +14,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+          cache: maven
       - name: Create docker container
         run: docker run --name mongodb -d -p 27017:27017 mongo:5.0.6
       - name: Build with Maven
