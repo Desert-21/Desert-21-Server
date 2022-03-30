@@ -9,11 +9,6 @@ dockerspring:
     mongodb:
       uri: mongodb://127.0.0.1:27017/test
 spring:
-#  data:
-#    mongodb:
-#      host: host.docker.internal
-#      port: 27017
-#      database: desert_21
   main:
     allow-circular-references: true
   authentication:

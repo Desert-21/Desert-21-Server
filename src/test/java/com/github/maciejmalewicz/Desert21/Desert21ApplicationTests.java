@@ -2,8 +2,9 @@ package com.github.maciejmalewicz.Desert21;
 
 import com.github.maciejmalewicz.Desert21.domain.accountManagement.AccountAcceptanceRequest;
 import com.github.maciejmalewicz.Desert21.repository.AccountAcceptanceRequestRepository;
-import org.junit.jupiter.api.Assertions;
+import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
+@ExtendWith({AfterEachDatabaseCleanupExtension.class})
 class Desert21ApplicationTests {
 
     @Value("${spring.addresses.baseUrl}")
@@ -21,7 +23,7 @@ class Desert21ApplicationTests {
     private AccountAcceptanceRequestRepository repository;
 
     @Test
-    public void isAbletoConnectToDb() {
+    public void isAbleToConnectToDb() {
         repository.save(new AccountAcceptanceRequest(
                 "Maciek@gmaail.com",
                 "macior",
@@ -30,7 +32,6 @@ class Desert21ApplicationTests {
         ));
         var requests = repository.findAll();
         assertEquals(requests.size(), 1);
-        assertEquals(2, 1);
     }
 
     @Test
