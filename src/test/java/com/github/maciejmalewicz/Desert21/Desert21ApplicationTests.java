@@ -2,10 +2,14 @@ package com.github.maciejmalewicz.Desert21;
 
 import com.github.maciejmalewicz.Desert21.domain.accountManagement.AccountAcceptanceRequest;
 import com.github.maciejmalewicz.Desert21.repository.AccountAcceptanceRequestRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @SpringBootTest
 class Desert21ApplicationTests {
@@ -24,6 +28,8 @@ class Desert21ApplicationTests {
                 "mienso12",
                 "ABCABC"
         ));
+        var requests = repository.findAll();
+        assertEquals(requests.size(), 1);
     }
 
     @Test
