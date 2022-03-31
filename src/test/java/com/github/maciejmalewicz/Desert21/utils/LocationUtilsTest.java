@@ -40,6 +40,19 @@ class LocationUtilsTest {
     }
 
     @Test
+    void generateLocationsDiagonalOppositeDirection() {
+        var expectedLocations = List.of(
+                new Location(1, 1),
+                new Location(2, 2),
+                new Location(3, 3)
+        );
+        var generatedLocations = LocationUtils.generateLocationsDiagonal(3, 3, 1, 1);
+        IntStream.range(0, 3).forEach(i -> {
+            assertEquals(expectedLocations.get(i), generatedLocations.get(i));
+        });
+    }
+
+    @Test
     void get1stLevelNeighbouringLocations() {
         var baseLocation = new Location(3, 3);
         var expectedLocations = List.of(
