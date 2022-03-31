@@ -1,0 +1,25 @@
+#debug: true
+application:
+  jwt:
+    secretKey: ${SECRET_KEY}
+    prefix: 'Bearer '
+    tokenExpirationAfterDays: 14
+dockerspring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/test
+spring:
+  main:
+    allow-circular-references: true
+  authentication:
+    email:
+      host: smtp.gmail.com
+      user: d21gsd21gs@gmail.com
+      password: ${EMAIL_PASSWORD}
+      port: 587
+  addresses:
+    baseUrl: localhost:4200
+
+server:
+  servlet:
+    context-path: /api
