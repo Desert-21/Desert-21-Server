@@ -60,7 +60,9 @@ public class LocationUtils {
                 location.row() + 1,
                 location.col() - 1,
                 location.col() + 1
-        );
+        ).stream()
+                .filter(l -> !l.equals(location))
+                .collect(Collectors.toList());
     }
 
     public static boolean isWithinBounds(Location location, int yMin, int yMax, int xMin, int xMax) {

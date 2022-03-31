@@ -21,14 +21,14 @@ public class BeanFactory {
         return getBean(map, toFind);
     }
 
-    public static <T> T getBean(Map<String, Object> mainMap, Class<T> toFind, String name) {
+    private static <T> T getBean(Map<String, Object> mainMap, Class<T> toFind, String name) {
         Map<String, Object> inside = (Map) mainMap.get(name);
 
         var mapper = new ObjectMapper();
         return mapper.convertValue(inside, toFind);
     }
 
-    public static <T> T getBean(Map<String, Object> mainMap, Class<T> toFind) {
+    private static <T> T getBean(Map<String, Object> mainMap, Class<T> toFind) {
         String target = toFind.getSimpleName();
         target = convertToCamel(target);
         Map<String, Object> inside = (Map) mainMap.get(target);
@@ -37,11 +37,11 @@ public class BeanFactory {
         return mapper.convertValue(inside, toFind);
     }
 
-    public static String convertToCamel(String toConvert) {
+    private static String convertToCamel(String toConvert) {
         return toConvert.substring(0, 1).toLowerCase() + toConvert.substring(1);
     }
 
-    public static HashMap<String, Object> buildMap(String sourceYAML) {
+    private static HashMap<String, Object> buildMap(String sourceYAML) {
         Yaml yaml = new Yaml();
         try {
             InputStream in = BeanFactory.class.getClassLoader()

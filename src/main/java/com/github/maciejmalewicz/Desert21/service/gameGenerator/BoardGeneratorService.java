@@ -4,6 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.RandomGenerator;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,10 @@ public class BoardGeneratorService {
     }
 
     public Field[][] generateBoard(Player player1, Player player2) {
-        var fieldsWithBuildings = feedFieldsWithBuildings(generateEmptyPlain(), config.getBoardLocationRules());
+        var fieldsWithBuildings = feedFieldsWithBuildings(
+                BoardUtils.generateEmptyPlain(config.getSize()),
+                config.getBoardLocationRules()
+        );
         assignFieldsToPlayer(player1, fieldsWithBuildings, config.getPLayer1Locations());
         assignFieldsToPlayer(player2, fieldsWithBuildings, config.getPLayer2Locations());
         return fieldsWithBuildings;
@@ -36,18 +40,9 @@ public class BoardGeneratorService {
         });
     }
 
-    private Field[][] generateEmptyPlain() {
-        return IntStream.range(0, config.getSize())
-                .mapToObj(list -> IntStream.range(0, config.getSize())
-                        .mapToObj(i -> new Field(new Building(EMPTY_FIELD)))
-                )
-                .map(stream -> stream.toArray(Field[]::new))
-                .toArray(Field[][]::new);
-    }
-
     //no fold in Java :(
     private Field[][] feedFieldsWithBuildings(Field[][] fields, List<BoardLocationRule> rules) {
-        for (BoardLocationRule rule: rules) {
+        for (BoardLocationRule rule : rules) {
             applyRuleToFields(fields, rule);
         }
         return fields;

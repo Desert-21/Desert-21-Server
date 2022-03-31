@@ -1,0 +1,7 @@
+exampleClass:
+  property1: "Some text"
+  property2: 123
+
+exampleClass2:
+  property1: "Some other text"
+  property2: 456
