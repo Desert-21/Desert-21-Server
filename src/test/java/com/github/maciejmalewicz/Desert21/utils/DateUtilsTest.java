@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DateUtilsTest {
 
-    private final Date testingDate = Date.from(LocalDate.of(2022, 3, 31).atStartOfDay(ZoneId.systemDefault()).toInstant());
+    private final Date testingDate = Date.from(LocalDate.of(2022, 3, 31)
+            .atStartOfDay(ZoneId.of("UTC")).toInstant());
 
     @BeforeEach
     void prepareDateUtils() throws Exception {
@@ -26,12 +27,12 @@ class DateUtilsTest {
     @Test
     void millisecondsFromNow() {
         var date = DateUtils.millisecondsFromNow(1000);
-        assertEquals(1648677601000L, date.getTime());
+        assertEquals(1648684801000L, date.getTime());
     }
 
     @Test
     void millisecondsTo() {
-        var ms = DateUtils.millisecondsTo(new Date(1648677601000L));
+        var ms = DateUtils.millisecondsTo(new Date(1648684801000L));
         assertEquals(1000L, ms);
     }
 }
