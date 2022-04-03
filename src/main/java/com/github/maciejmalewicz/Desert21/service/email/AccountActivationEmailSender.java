@@ -8,24 +8,24 @@ import javax.mail.MessagingException;
 @Service
 public class AccountActivationEmailSender {
 
-    @Value("${spring.addresses.baseUrl}")
-    private String baseUrl;
-
-    private final EmailSendingService emailSendingService;
-
     private final static String accountActivationPath = "/activate-code/";
     private final static String messageTemplate = """
             Hi %s,
-            
+                        
             Dude from Desert 21 here! Your account is almost there.
             Click on the link below to activate your account and start
             enjoying probably the first non pay-to-win and not real time
             strategic game in the internet:
             %s
-            
+                        
             Enjoy,
             Dude from Desert 21
             """;
+
+    private final EmailSendingService emailSendingService;
+
+    @Value("${spring.addresses.baseUrl}")
+    private String baseUrl;
 
     public AccountActivationEmailSender(EmailSendingService emailSendingService) {
         this.emailSendingService = emailSendingService;
