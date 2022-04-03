@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.maciejmalewicz.Desert21.misc.Location;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.basicRules.*;
 import com.github.maciejmalewicz.Desert21.utils.LocationUtils;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@JsonPropertyOrder(alphabetic = true)
 public class BasicBoardGeneratorConfig implements BoardGeneratorConfig {
 
     @Override

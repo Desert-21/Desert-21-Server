@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
+import com.github.maciejmalewicz.Desert21.misc.balance.GeneralConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
@@ -22,13 +23,15 @@ public class GameGeneratorService {
     private final GameRepository gameRepository;
     private final BasicGameTimer basicGameTimer;
     private final GameStartTimeoutExecutor gameStartTimeoutExecutor;
+    private final GeneralConfig generalConfig;
 
-    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GameStartTimeoutExecutor gameStartTimeoutExecutor) {
+    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GameStartTimeoutExecutor gameStartTimeoutExecutor, GeneralConfig generalConfig) {
         this.boardGeneratorService = boardGeneratorService;
         this.applicationUserRepository = applicationUserRepository;
         this.gameRepository = gameRepository;
         this.basicGameTimer = basicGameTimer;
         this.gameStartTimeoutExecutor = gameStartTimeoutExecutor;
+        this.generalConfig = generalConfig;
     }
 
     public Game generateGame(String userId1, String userId2) {
@@ -58,7 +61,11 @@ public class GameGeneratorService {
         return new Player(
                 user.getId(),
                 user.getNickname(),
-                new ResourceSet(60, 60, 60)
+                new ResourceSet(
+                        generalConfig.getStartingResources(),
+                        generalConfig.getStartingResources(),
+                        generalConfig.getStartingResources()
+                )
         );
     }
 

@@ -46,7 +46,6 @@
             <artifactId>spring-messaging</artifactId>
             <version>5.3.15</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -96,6 +95,12 @@
             <version>1.16.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.origin-energy</groupId>
+            <artifactId>java-snapshot-testing-junit5</artifactId>
+            <version>3.2.7</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -131,7 +136,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.32</minimum>
+                                            <minimum>0.5</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

@@ -27,7 +27,5 @@ public class AfterEachDatabaseCleanupExtension implements AfterEachCallback {
         mongoTemplate.dropCollection(AccountAcceptanceRequest.class);
         mongoTemplate.dropCollection(Game.class);
         mongoTemplate.dropCollection(ApplicationUser.class);
-
-        System.out.println("HIIII");
     }
 }
