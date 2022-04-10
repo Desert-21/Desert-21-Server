@@ -1,19 +1,10 @@
 package com.github.maciejmalewicz.Desert21.service.playersQueue;
 
-import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.GameGeneratorService;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.StartGameNotification;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import static com.github.maciejmalewicz.Desert21.config.Constants.START_GAME_NOTIFICATION;
 
 //very basic queue, definitely will be improved when the game has trillions of players :)
 @Service

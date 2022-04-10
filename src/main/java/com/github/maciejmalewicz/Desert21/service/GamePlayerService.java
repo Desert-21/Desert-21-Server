@@ -1,6 +1,5 @@
 package com.github.maciejmalewicz.Desert21.service;
 
-import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.misc.GamePlayerData;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
@@ -20,13 +19,13 @@ public class GamePlayerService {
     public GamePlayerData getGamePlayerData(String gameId, Authentication authentication) throws NotAcceptableException {
         var authorities = authentication.getAuthorities();
         var playerId = AuthoritiesUtils.getIdFromAuthorities(authorities)
-                .orElseThrow(() -> new NotAcceptableException("Player id could not be extracted!"));
+                .orElseThrow(() -> new NotAcceptableException("User could not be identified!"));
         var game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new NotAcceptableException("Game not found!"));
         var player = game.getPlayers().stream()
                 .filter(p -> p.getId().equals(playerId))
                 .findAny()
-                .orElseThrow(() -> new NotAcceptableException("Player not part of the game!"));
+                .orElseThrow(() -> new NotAcceptableException("User is not participating in selected game!"));
         return new GamePlayerData(
                 game,
                 player

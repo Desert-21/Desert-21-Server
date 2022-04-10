@@ -5,6 +5,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTime
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.GameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.FirstTurnStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.StateTransitionService;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,11 @@ import java.util.List;
 public class GameStartTimeoutExecutable implements TimeoutExecutable {
 
     private final GameTimer gameTimer;
+    private final FirstTurnStartService firstTurnStartService;
 
-    public GameStartTimeoutExecutable(BasicGameTimer gameTimer) {
+    public GameStartTimeoutExecutable(BasicGameTimer gameTimer, FirstTurnStartService firstTurnStartService) {
         this.gameTimer = gameTimer;
+        this.firstTurnStartService = firstTurnStartService;
     }
 
     @Override
@@ -31,11 +34,11 @@ public class GameStartTimeoutExecutable implements TimeoutExecutable {
 
     @Override
     public StateTransitionService getStateTransitionService(Game game) {
-        return null;
+        return firstTurnStartService;
     }
 
     @Override
     public long getExecutionOffset() {
-        return 0;
+        return gameTimer.getInitialTime();
     }
 }

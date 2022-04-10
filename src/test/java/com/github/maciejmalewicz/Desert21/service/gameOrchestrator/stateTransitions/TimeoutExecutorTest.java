@@ -9,10 +9,8 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.StateTransitionService;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -45,7 +43,7 @@ class TimeoutExecutorTest {
     void setupTested() {
         var executablePicker = mock(TimeoutExecutablePicker.class);
         stateTransitionService = mock(StateTransitionService.class);
-//        doNothing().when(stateTransitionService).stateTransition(any(Game.class));
+        doNothing().when(stateTransitionService).stateTransition(any(Game.class));
         notifiable = new Notifiable() {};
         var executable = new TimeoutExecutable() {
             @Override
