@@ -20,9 +20,9 @@ public class GameGeneratorController {
         this.gameGeneratorService = gameGeneratorService;
     }
 
-    @GetMapping
-    public Game generate() {
-        var generated = gameGeneratorService.generateGame("6223a21ab9efff203d05a29c", "6224829c2eddc5530b04ba0b");
-        return generated;
-    }
+//    @GetMapping
+//    public Game generate() {
+//        var generated = gameGeneratorService.generateGame("6223a21ab9efff203d05a29c", "6224829c2eddc5530b04ba0b");
+//        return generated;
+//    }
 }

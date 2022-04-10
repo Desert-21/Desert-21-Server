@@ -58,19 +58,13 @@ class GameGeneratorServiceTest {
 
     @Test
     void generateGame() {
-        var game = tested.generateGame(user1.getId(), user2.getId());
+        tested.generateGame(user1.getId(), user2.getId());
         var allSavedGames = gameRepository.findAll();
-
-        //what has been returned
-        validateGame(game);
 
         //what has been saved
         assertEquals(1, allSavedGames.size());
         var savedGame = allSavedGames.get(0);
         validateGame(savedGame);
-
-        //both
-        assertEquals(game, savedGame);
     }
 
     void validateGame(Game game) {

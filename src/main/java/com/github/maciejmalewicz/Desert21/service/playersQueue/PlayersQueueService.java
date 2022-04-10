@@ -22,12 +22,10 @@ public class PlayersQueueService {
     private String playerIdInQueue = null;
 
     private final GameGeneratorService gameGeneratorService;
-    private final PlayersNotifier playersNotifier;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public PlayersQueueService(GameGeneratorService gameGeneratorService, PlayersNotifier playersNotifier) {
+    public PlayersQueueService(GameGeneratorService gameGeneratorService) {
         this.gameGeneratorService = gameGeneratorService;
-        this.playersNotifier = playersNotifier;
     }
 
     public void addPlayerToQueue(String id) {
@@ -37,8 +35,7 @@ public class PlayersQueueService {
                 return; //ignoring
             }
             if (playerIdInQueue != null) {
-                var game = gameGeneratorService.generateGame(playerIdInQueue, id);
-                notifyPLayersAboutGameStart(game);
+                gameGeneratorService.generateGame(playerIdInQueue, id);
                 playerIdInQueue = null;
                 return;
             }
@@ -57,18 +54,5 @@ public class PlayersQueueService {
         } finally {
             lock.writeLock().unlock();
         }
-    }
-
-    private void notifyPLayersAboutGameStart(Game game) {
-        var notifiable = new Notifiable() {
-            @Override
-            public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>(
-                        START_GAME_NOTIFICATION,
-                        new StartGameNotification(game.getId())
-                ));
-            }
-        };
-        playersNotifier.notifyPlayers(game, notifiable);
     }
 }
