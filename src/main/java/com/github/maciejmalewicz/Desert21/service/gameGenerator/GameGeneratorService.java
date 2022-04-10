@@ -6,8 +6,7 @@ import com.github.maciejmalewicz.Desert21.misc.balance.GeneralConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.gameStateTimeout.GameStartTimeoutExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.gameStateTimeout.GameStateTimeout;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.GameStartService;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +21,19 @@ public class GameGeneratorService {
     private final ApplicationUserRepository applicationUserRepository;
     private final GameRepository gameRepository;
     private final BasicGameTimer basicGameTimer;
-    private final GameStartTimeoutExecutor gameStartTimeoutExecutor;
     private final GeneralConfig generalConfig;
+    private final GameStartService gameStartService;
 
-    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GameStartTimeoutExecutor gameStartTimeoutExecutor, GeneralConfig generalConfig) {
+    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GeneralConfig generalConfig, GameStartService gameStartService) {
         this.boardGeneratorService = boardGeneratorService;
         this.applicationUserRepository = applicationUserRepository;
         this.gameRepository = gameRepository;
         this.basicGameTimer = basicGameTimer;
-        this.gameStartTimeoutExecutor = gameStartTimeoutExecutor;
         this.generalConfig = generalConfig;
+        this.gameStartService = gameStartService;
     }
 
-    public Game generateGame(String userId1, String userId2) {
+    public void generateGame(String userId1, String userId2) {
         //noinspection OptionalGetWithoutIsPresent
         var players = Stream.of(userId1, userId2)
                 .map(applicationUserRepository::findById)
@@ -43,18 +42,14 @@ public class GameGeneratorService {
                 .toList();
         var board = boardGeneratorService.generateBoard(players.get(0), players.get(1));
         var stateManager = new StateManager(
-                GameState.WAITING_TO_START,
-                DateUtils.millisecondsFromNow(basicGameTimer.getInitialTime()),
+                GameState.CREATED,
+                null,
                 null,
                 null
         );
         var game = new Game(players, board, stateManager);
-        var savedGame = gameRepository.save(game);
-        var timeout = generateGameStartTimeout(game);
-        savedGame.getStateManager().setCurrentStateTimeoutId(timeout.timeoutId());
-        savedGame = gameRepository.save(savedGame);
-        gameStartTimeoutExecutor.executeTimeout(timeout);
-        return savedGame;
+        //todo dalej service
+        gameStartService.stateTransition(game);
     }
 
     private Player createPlayerFromUser(ApplicationUser user) {
@@ -68,14 +63,4 @@ public class GameGeneratorService {
                 )
         );
     }
-
-    private GameStateTimeout generateGameStartTimeout(Game game) {
-        return new GameStateTimeout(
-                UUID.randomUUID().toString(),
-                DateUtils.millisecondsFromNow(basicGameTimer.getInitialTime()),
-                game.getId()
-        );
-    }
-
-
 }
