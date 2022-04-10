@@ -19,7 +19,7 @@ public class UsersService {
     public UsersData getUsersData(String email) throws NotAcceptableException {
         return userRepository.findFirstByEmail(email)
                 .map(this::mapToUsersData)
-                .orElseThrow(() -> new NotAcceptableException("Username not found!"));
+                .orElseThrow(() -> new NotAcceptableException("User not found!"));
     }
 
     private UsersData mapToUsersData(ApplicationUser user) {

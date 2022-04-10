@@ -35,7 +35,7 @@ public class RegistrationService {
         this.accountActivationEmailSender = accountActivationEmailSender;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void registerUser(RegistrationDto dto) throws NotAcceptableException {
         validateEmailAndNickname(dto);
         var activationCode = UUID.randomUUID().toString();
