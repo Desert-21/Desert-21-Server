@@ -7,11 +7,9 @@ import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.GameStartService;
-import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service

@@ -34,9 +34,4 @@ class Desert21ApplicationTests {
         assertEquals(requests.size(), 1);
     }
 
-    @Test
-    void contextLoads() {
-        System.out.println(address);
-    }
-
 }

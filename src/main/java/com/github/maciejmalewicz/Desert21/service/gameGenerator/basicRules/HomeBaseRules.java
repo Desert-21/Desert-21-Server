@@ -1,6 +1,5 @@
 package com.github.maciejmalewicz.Desert21.service.gameGenerator.basicRules;
 
-import com.github.maciejmalewicz.Desert21.misc.BuildingType;
 import com.github.maciejmalewicz.Desert21.misc.Location;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.BoardLocationRule;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.RuleSupplier;

@@ -8,11 +8,9 @@ import com.github.maciejmalewicz.Desert21.dto.game.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.misc.Location;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
-import com.github.maciejmalewicz.Desert21.utils.LocationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

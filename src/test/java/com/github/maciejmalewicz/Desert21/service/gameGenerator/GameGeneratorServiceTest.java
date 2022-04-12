@@ -9,7 +9,6 @@ import com.github.maciejmalewicz.Desert21.misc.balance.GeneralConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
