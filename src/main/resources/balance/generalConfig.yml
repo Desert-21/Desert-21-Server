@@ -1,2 +1,5 @@
 generalConfig:
   startingResources: 60
+
+  fogOfWar1: 30
+  fogOfWar2: 60

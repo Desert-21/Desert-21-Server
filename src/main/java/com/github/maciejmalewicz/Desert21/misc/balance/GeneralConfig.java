@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 public class GeneralConfig {
 
     private int startingResources;
+
+    private int fogOfWar1;
+    private int fogOfWar2;
 }

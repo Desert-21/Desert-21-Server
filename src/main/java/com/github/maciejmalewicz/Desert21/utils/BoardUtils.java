@@ -3,7 +3,6 @@ package com.github.maciejmalewicz.Desert21.utils;
 import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
-import com.github.maciejmalewicz.Desert21.dto.game.BuildingDto;
 import com.github.maciejmalewicz.Desert21.misc.Location;
 
 import java.util.List;

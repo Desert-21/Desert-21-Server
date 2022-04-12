@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameSnapshot;
 
+import com.github.maciejmalewicz.Desert21.config.gameBalance.GeneralConfiguration;
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
@@ -7,7 +8,6 @@ import com.github.maciejmalewicz.Desert21.misc.Location;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.LocationUtils;
 import com.github.maciejmalewicz.Desert21.utils.RandomGenerator;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,12 @@ import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.ownsAtLeastOne
 
 @Service
 public class ArmySnapshotProcessingService {
+
+    private final GeneralConfiguration generalConfiguration;
+
+    public ArmySnapshotProcessingService(GeneralConfiguration generalConfiguration) {
+        this.generalConfiguration = generalConfiguration;
+    }
 
     public Army snapshotArmy(Player player, Field[][] allFields, Location location) {
         if (!BoardUtils.isWithinBoardBounds(allFields, location)) {
@@ -65,9 +71,9 @@ public class ArmySnapshotProcessingService {
         int to;
         if (isUpperRange) {
             from = 100;
-            to = Math.round(100 / (1f-bias));
+            to = Math.round(10000f / (100f-bias));
         } else {
-            from = Math.round(100 / (1f+bias));
+            from = Math.round(10000f / (100f+bias));
             to = 100;
         }
         return Pair.of(from, to);
@@ -75,10 +81,10 @@ public class ArmySnapshotProcessingService {
 
     private int getBiasPercentage(int distance) {
         if (distance == 1) {
-            return 30;
+            return generalConfiguration.generalConfig().getFogOfWar1();
         }
         if (distance == 2) {
-            return 60;
+            return generalConfiguration.generalConfig().getFogOfWar2();
         }
         return 0;
     }

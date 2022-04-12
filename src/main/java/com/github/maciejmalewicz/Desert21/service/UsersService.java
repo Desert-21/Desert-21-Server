@@ -4,7 +4,6 @@ import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.misc.UsersData;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service

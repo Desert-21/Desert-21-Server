@@ -1,7 +1,6 @@
 package com.github.maciejmalewicz.Desert21.misc.balance.buildings;
 
 import com.github.maciejmalewicz.Desert21.misc.balance.LeveledValue;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.BuildingConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
