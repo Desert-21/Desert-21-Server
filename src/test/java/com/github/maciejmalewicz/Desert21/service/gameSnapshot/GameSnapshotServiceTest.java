@@ -4,7 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.dto.game.BuildingDto;
 import com.github.maciejmalewicz.Desert21.dto.game.FieldDto;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
-import com.github.maciejmalewicz.Desert21.misc.BuildingType;
+import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;

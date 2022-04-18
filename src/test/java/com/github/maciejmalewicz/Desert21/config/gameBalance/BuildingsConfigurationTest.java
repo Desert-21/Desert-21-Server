@@ -1,9 +1,9 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance;
 
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.FactoryConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.HomeBaseConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.RocketLauncherConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.TowerConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.FactoryConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.HomeBaseConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.RocketLauncherConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.TowerConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

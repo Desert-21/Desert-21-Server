@@ -17,15 +17,25 @@ public class PlayersNotifier {
         this.messageSendingOperations = messageSendingOperations;
     }
 
+    public void notifyPlayers(Game game, Notification<?> notification) {
+        game.getPlayers().forEach(p -> {
+            var id = p.getId();
+            var topic = String.format("/topics/users/%s", id);
+            messageSendingOperations.convertAndSend(topic, notification);
+        });
+    }
+
+    public void notifyPlayer(String playerId, Notification<?> notification) {
+        var topic = String.format("/topics/users/%s", playerId);
+        messageSendingOperations.convertAndSend(topic, notification);
+    }
+
+    //todo: remove that and refactor
     public void notifyPlayers(Game game, Notifiable notifiable) {
         game.getPlayers().forEach(p -> {
             var id = p.getId();
             var topic = String.format("/topics/users/%s", id);
             messageSendingOperations.convertAndSend(topic, notifiable.forBoth());
         });
-    }
-
-    public void notifyPlayers(Game game, Notifiable notifiable, String invokersId) {
-
     }
 }

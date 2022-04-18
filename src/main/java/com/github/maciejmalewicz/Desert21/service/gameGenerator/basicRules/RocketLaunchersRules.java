@@ -1,12 +1,12 @@
 package com.github.maciejmalewicz.Desert21.service.gameGenerator.basicRules;
 
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.BoardLocationRule;
 import com.github.maciejmalewicz.Desert21.service.gameGenerator.RuleSupplier;
 
 import java.util.List;
 
-import static com.github.maciejmalewicz.Desert21.misc.BuildingType.ROCKET_LAUNCHER;
+import static com.github.maciejmalewicz.Desert21.models.BuildingType.ROCKET_LAUNCHER;
 
 public class RocketLaunchersRules implements RuleSupplier {
 

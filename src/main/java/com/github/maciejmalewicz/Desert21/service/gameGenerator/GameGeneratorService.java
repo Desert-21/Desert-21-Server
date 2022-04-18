@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
-import com.github.maciejmalewicz.Desert21.misc.balance.GeneralConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;

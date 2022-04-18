@@ -1,7 +1,7 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
-import com.github.maciejmalewicz.Desert21.misc.UsersData;
+import com.github.maciejmalewicz.Desert21.models.UsersData;
 import com.github.maciejmalewicz.Desert21.service.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

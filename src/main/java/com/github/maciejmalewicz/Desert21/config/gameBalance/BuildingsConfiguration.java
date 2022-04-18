@@ -1,9 +1,9 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance;
 
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.FactoryConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.HomeBaseConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.RocketLauncherConfig;
-import com.github.maciejmalewicz.Desert21.misc.balance.buildings.TowerConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.FactoryConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.HomeBaseConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.RocketLauncherConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.buildings.TowerConfig;
 import com.github.maciejmalewicz.Desert21.utils.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

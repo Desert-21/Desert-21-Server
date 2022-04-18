@@ -3,7 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

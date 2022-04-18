@@ -1,9 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameSnapshot;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
-import com.github.maciejmalewicz.Desert21.misc.BuildingType;
-import com.github.maciejmalewicz.Desert21.misc.Location;
-import com.github.maciejmalewicz.Desert21.misc.balance.GeneralConfig;
+import com.github.maciejmalewicz.Desert21.models.BuildingType;
+import com.github.maciejmalewicz.Desert21.models.Location;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

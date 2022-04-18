@@ -30,9 +30,9 @@ towerConfig:
 homeBaseConfig:
   cost:
     level1: -1
-    level2: -1
-    level3: -1
-    level4: -1
+    level2: 50
+    level3: 200
+    level4: 600
   baseProtection:
     level1: 300
     level2: 1000

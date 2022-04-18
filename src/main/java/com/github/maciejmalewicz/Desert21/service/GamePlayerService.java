@@ -1,7 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
-import com.github.maciejmalewicz.Desert21.misc.GamePlayerData;
+import com.github.maciejmalewicz.Desert21.models.GamePlayerData;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
 import org.springframework.security.core.Authentication;

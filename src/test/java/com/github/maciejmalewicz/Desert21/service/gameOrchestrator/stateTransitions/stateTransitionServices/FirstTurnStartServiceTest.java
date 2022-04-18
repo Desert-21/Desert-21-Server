@@ -8,7 +8,6 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -108,9 +108,10 @@ class FirstTurnStartServiceTest {
                 .findAny()
                 .orElseThrow();
         assertEquals(game, calledGame);
-        assertEquals(0, calledNotifiable.forFieldOwner().size());
+        assertEquals(0, calledNotifiable.forSpecificPlayer().getSecond().size());
         assertEquals(0, calledNotifiable.forProducer().size());
+        assertEquals(0, calledNotifiable.forOpponent().size());
         assertEquals(1, calledNotifiable.forBoth().size());
-        assertEquals("START_GAME", calledNotifiable.forBoth().get(0).type());
+        assertEquals(NEXT_TURN_NOTIFICATION, calledNotifiable.forBoth().get(0).type());
     }
 }

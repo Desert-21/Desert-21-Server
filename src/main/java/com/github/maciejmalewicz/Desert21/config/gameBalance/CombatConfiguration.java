@@ -1,6 +1,6 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance;
 
-import com.github.maciejmalewicz.Desert21.misc.balance.CombatUnitConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
 import com.github.maciejmalewicz.Desert21.utils.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
