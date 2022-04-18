@@ -6,7 +6,7 @@ import com.github.maciejmalewicz.Desert21.utils.LocationUtils;
 
 import java.util.List;
 
-import static com.github.maciejmalewicz.Desert21.misc.BuildingType.TOWER;
+import static com.github.maciejmalewicz.Desert21.models.BuildingType.TOWER;
 
 public class BetweenPartsTowersRules implements RuleSupplier {
 

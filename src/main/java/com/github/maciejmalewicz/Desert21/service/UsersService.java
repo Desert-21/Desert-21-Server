@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
-import com.github.maciejmalewicz.Desert21.misc.UsersData;
+import com.github.maciejmalewicz.Desert21.models.UsersData;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import org.springframework.stereotype.Service;
 

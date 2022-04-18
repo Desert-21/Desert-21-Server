@@ -3,7 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.RandomGenerator;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.github.maciejmalewicz.Desert21.misc.BuildingType.EMPTY_FIELD;
+import static com.github.maciejmalewicz.Desert21.models.BuildingType.EMPTY_FIELD;
 
 @Service
 public class BoardGeneratorService {

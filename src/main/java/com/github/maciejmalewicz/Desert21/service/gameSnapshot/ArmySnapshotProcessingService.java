@@ -4,7 +4,7 @@ import com.github.maciejmalewicz.Desert21.config.gameBalance.GeneralConfiguratio
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.LocationUtils;
 import com.github.maciejmalewicz.Desert21.utils.RandomGenerator;

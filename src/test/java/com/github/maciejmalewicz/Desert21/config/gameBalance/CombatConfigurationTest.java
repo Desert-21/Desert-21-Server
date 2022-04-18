@@ -1,6 +1,6 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance;
 
-import com.github.maciejmalewicz.Desert21.misc.balance.CombatUnitConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

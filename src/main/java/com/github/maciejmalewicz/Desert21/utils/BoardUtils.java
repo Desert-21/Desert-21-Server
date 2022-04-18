@@ -3,13 +3,14 @@ package com.github.maciejmalewicz.Desert21.utils;
 import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.Location;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.github.maciejmalewicz.Desert21.misc.BuildingType.EMPTY_FIELD;
+import static com.github.maciejmalewicz.Desert21.models.BuildingType.EMPTY_FIELD;
 
 public class BoardUtils {
 
@@ -17,6 +18,13 @@ public class BoardUtils {
         return fieldsAtLocations(allFields, locations).stream()
                 .filter(f -> player.getId().equals(f.getOwnerId()))
                 .anyMatch(p -> true);
+    }
+
+    public static Field fieldAtLocation(Field[][] allFields, Location location) throws NotAcceptableException {
+        if (!isWithinBoardBounds(allFields, location)){
+            throw new NotAcceptableException("Selected field is not within board bounds!");
+        }
+        return allFields[location.row()][location.col()];
     }
 
     public static List<Field> fieldsAtLocations(Field[][] allFields, List<Location> locations) {

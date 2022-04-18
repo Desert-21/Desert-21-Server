@@ -1,5 +1,8 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions;
 
+import lombok.Getter;
+
+@Getter
 public enum ActionType {
     LAB_EVENT(LabAction.class),
     BUILD(BuildAction.class),
@@ -9,6 +12,9 @@ public enum ActionType {
     ATTACK(AttackAction.class),
     FIRE_ROCKET(FireRocketAction.class);
 
+    private final Class<? extends Action> actionClass;
+
     ActionType(Class<? extends Action> action) {
+        this.actionClass = action;
     }
 }

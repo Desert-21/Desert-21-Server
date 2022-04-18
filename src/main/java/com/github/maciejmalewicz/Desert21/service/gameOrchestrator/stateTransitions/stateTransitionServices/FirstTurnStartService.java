@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
+
 @Service
 public class FirstTurnStartService extends StateTransitionService {
 
@@ -32,7 +34,7 @@ public class FirstTurnStartService extends StateTransitionService {
         return new Notifiable() {
             @Override
             public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>("START_GAME", notification));
+                return List.of(new Notification<>(NEXT_TURN_NOTIFICATION, notification));
             }
         };
     }

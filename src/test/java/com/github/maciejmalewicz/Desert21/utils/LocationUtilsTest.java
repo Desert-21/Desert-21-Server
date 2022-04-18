@@ -1,6 +1,6 @@
 package com.github.maciejmalewicz.Desert21.utils;
 
-import com.github.maciejmalewicz.Desert21.misc.Location;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

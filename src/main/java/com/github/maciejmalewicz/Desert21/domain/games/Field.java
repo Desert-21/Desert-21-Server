@@ -15,4 +15,9 @@ public class Field {
         this.building = building;
         this.ownerId = null;
     }
+
+    public Field(Building building, String ownerId) {
+        this.building = building;
+        this.ownerId = ownerId;
+    }
 }

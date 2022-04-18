@@ -1,4 +1,4 @@
-package com.github.maciejmalewicz.Desert21.misc.balance;
+package com.github.maciejmalewicz.Desert21.models.balance;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

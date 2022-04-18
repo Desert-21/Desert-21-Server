@@ -1,4 +1,4 @@
-package com.github.maciejmalewicz.Desert21.misc;
+package com.github.maciejmalewicz.Desert21.models;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
