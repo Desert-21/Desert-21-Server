@@ -3,15 +3,18 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransit
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class StateTransitionService {
 
-    protected abstract Notifiable getNotifications(Game game);
+    protected abstract Optional<PlayersNotificationPair> getNotifications(Game game);
     protected abstract long getTimeToWaitForTimeout(Game game);
     protected abstract Game changeGameState(Game game);
 
@@ -25,13 +28,13 @@ public abstract class StateTransitionService {
         this.gameRepository = gameRepository;
     }
 
-    public void stateTransition(Game game) {
+    public void stateTransition(Game gameBefore) {
         //change game state if necessary
-        game = changeGameState(game);
+        var game = changeGameState(gameBefore);
 
         //handle notifications
         var notifiable = getNotifications(game);
-        playersNotifier.notifyPlayers(game, notifiable);
+        notifiable.ifPresent(notification -> playersNotifier.notifyPlayers(game, notification));
 
         //handle new timeout
         var toWait = getTimeToWaitForTimeout(game);

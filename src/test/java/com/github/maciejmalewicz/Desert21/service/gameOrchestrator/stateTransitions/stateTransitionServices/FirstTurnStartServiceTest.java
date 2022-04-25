@@ -4,7 +4,10 @@ import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
@@ -83,7 +86,7 @@ class FirstTurnStartServiceTest {
     @Test
     void testStateTransition() {
         var gameCaptor = ArgumentCaptor.forClass(Game.class);
-        var notifiableCaptor = ArgumentCaptor.forClass(Notifiable.class);
+        var notifiableCaptor = ArgumentCaptor.forClass(PlayersNotificationPair.class);
 
         tested.stateTransition(game);
 
@@ -104,14 +107,22 @@ class FirstTurnStartServiceTest {
         var calledGame = gameCaptor.getAllValues().stream()
                 .findAny()
                 .orElseThrow();
-        var calledNotifiable = notifiableCaptor.getAllValues().stream()
+        var calledNotification = notifiableCaptor.getAllValues().stream()
                 .findAny()
                 .orElseThrow();
+
         assertEquals(game, calledGame);
-        assertEquals(0, calledNotifiable.forSpecificPlayer().getSecond().size());
-        assertEquals(0, calledNotifiable.forProducer().size());
-        assertEquals(0, calledNotifiable.forOpponent().size());
-        assertEquals(1, calledNotifiable.forBoth().size());
-        assertEquals(NEXT_TURN_NOTIFICATION, calledNotifiable.forBoth().get(0).type());
+
+        var forCurrentPLayer = calledNotification.forCurrentPlayer();
+        assertEquals(NEXT_TURN_NOTIFICATION, forCurrentPLayer.type());
+        var notificationContent1 = (NextTurnNotification) forCurrentPLayer.content();
+        assertNotNull(notificationContent1.timeout());
+        assertEquals("AA", notificationContent1.currentPlayerId());
+
+        var forOpponent = calledNotification.forCurrentPlayer();
+        assertEquals(NEXT_TURN_NOTIFICATION, forOpponent.type());
+        var notificationContent2 = (NextTurnNotification) forOpponent.content();
+        assertNotNull(notificationContent2.timeout());
+        assertEquals("AA", notificationContent2.currentPlayerId());
     }
 }

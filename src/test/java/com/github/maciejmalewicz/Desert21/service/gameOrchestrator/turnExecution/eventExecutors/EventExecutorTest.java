@@ -1,13 +1,16 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors;
 
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.util.Pair;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ class EventExecutorTest {
     void getExecutableClass() {
         var eventExecutor = new EventExecutor<AnyClass>() {
             @Override
-            public TurnExecutionContext execute(List<AnyClass> events, TurnExecutionContext context) throws NotAcceptableException {
+            public EventExecutionResult execute(List<AnyClass> events, TurnExecutionContext context) throws NotAcceptableException {
                 return null;
             }
         };

@@ -10,6 +10,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameStartTimeoutExecutable implements TimeoutExecutable {
@@ -23,13 +24,8 @@ public class GameStartTimeoutExecutable implements TimeoutExecutable {
     }
 
     @Override
-    public Notifiable getNotifications(Game game) {
-        return new Notifiable() {
-            @Override
-            public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>("PREPARATION_PHASE_TIMEOUT", null));
-            }
-        };
+    public Optional<Notification<?>> getNotifications(Game game) {
+        return Optional.of(new Notification<>("PREPARATION_PHASE_TIMEOUT", null));
     }
 
     @Override

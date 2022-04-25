@@ -2,12 +2,14 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.EventExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +49,8 @@ class GameEventsExecutionServiceTest {
 
     static class MockUpgradeExecutor extends BuildingUpgradeExecutor {
         @Override
-        public TurnExecutionContext execute(List<BuildingUpgradeEvent> events, TurnExecutionContext context) throws NotAcceptableException {
-            return context;
+        public EventExecutionResult execute(List<BuildingUpgradeEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
         }
 
         @Override

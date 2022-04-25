@@ -54,8 +54,13 @@ public class PlayerTurnService {
         if (!mayExecuteActions) {
             throw new NotAcceptableException("Could not execute actions! Stop trying to hack this game, or you will get banned! -,-");
         }
-        var updatedContext = gameEventsExecutionService.executeEvents(actions, context);
+        var eventExecutionResults = gameEventsExecutionService.executeEvents(actions, context);
+        var updatedContext = eventExecutionResults.context();
+        var eventResults = eventExecutionResults.results();
         var updatedGame = updatedContext.game();
+
+        //setting up for the next phase
+        updatedGame.setCurrentEventResults(eventResults);
 
         var savedGame = gameRepository.save(updatedGame);
         turnResolutionPhaseStartService.stateTransition(savedGame);

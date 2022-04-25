@@ -1,11 +1,13 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution;
 
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.EventExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class GameEventsExecutionService {
         executors = List.of(paymentExecutor, buildingUpgradeExecutor);
     }
 
-    public TurnExecutionContext executeEvents(Collection<Action> actions, TurnExecutionContext context) throws NotAcceptableException {
+    public EventExecutionResult executeEvents(Collection<Action> actions, TurnExecutionContext context) throws NotAcceptableException {
         //gather all events
         var events = new ArrayList<GameEvent>();
         for (Action action: actions) {
@@ -46,17 +48,20 @@ public class GameEventsExecutionService {
                 .filter(e -> !e.shouldTriggerNow())
                 .toList();
 
+        var eventResults = new ArrayList<EventResult>();
         //execute current events
         for (EventExecutor<?> executor: executors) {
-            context = executeSingleExecutor(executor, currentTurnEvents, context);
+            var executionResultPair = executeSingleExecutor(executor, currentTurnEvents, context);
+            context = executionResultPair.context();
+            eventResults.addAll(executionResultPair.results());
         }
 
         //save future ones
         context.game().setEventQueue(otherTurnEvents);
-        return context;
+        return new EventExecutionResult(context, eventResults);
     }
 
-    private <T extends GameEvent> TurnExecutionContext executeSingleExecutor(
+    private <T extends GameEvent> EventExecutionResult executeSingleExecutor(
             EventExecutor<T> executor,
             List<GameEvent> events,
             TurnExecutionContext context

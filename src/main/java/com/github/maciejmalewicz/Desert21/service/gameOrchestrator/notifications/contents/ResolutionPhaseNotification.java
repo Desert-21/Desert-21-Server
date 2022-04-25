@@ -1,6 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents;
 
-import java.util.Date;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 
-public record ResolutionPhaseNotification(Date timeout) {
+import java.util.Date;
+import java.util.List;
+
+public record ResolutionPhaseNotification(Date timeout, List<Notification<?>> notifications) {
 }

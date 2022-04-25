@@ -7,6 +7,8 @@ import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators.FieldOwnershipValidator;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.BuildingUpgradeEventResult;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +31,7 @@ class BuildingUpgradeExecutorTest {
 
     @Autowired
     private BuildingUpgradeExecutor tested;
+    private List<EventResult> results;
 
     @BeforeEach
     void setup() {
@@ -62,9 +66,16 @@ class BuildingUpgradeExecutorTest {
                 new BuildingUpgradeEvent(new Location(0, 0)),
                 new BuildingUpgradeEvent(new Location(0, 1))
         );
-        context = tested.execute(events, context);
+        var eventExecutionResult = tested.execute(events, context);
+        context = eventExecutionResult.context();
+        var eventResults = eventExecutionResult.results();
+
         assertEquals(2, context.game().getFields()[0][0].getBuilding().getLevel());
         assertEquals(2, context.game().getFields()[0][1].getBuilding().getLevel());
+        var expectedResults = new ArrayList<EventResult>();
+        expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 0)));
+        expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 1)));
+        assertEquals(expectedResults, eventResults);
     }
 
     @Test
@@ -74,8 +85,15 @@ class BuildingUpgradeExecutorTest {
                 new BuildingUpgradeEvent(new Location(0, 1)),
                 new BuildingUpgradeEvent(new Location(12, 12))
         );
-        context = tested.execute(events, context);
+        var eventExecutionResult = tested.execute(events, context);
+        context = eventExecutionResult.context();
+        var eventResults = eventExecutionResult.results();
+
         assertEquals(2, context.game().getFields()[0][0].getBuilding().getLevel());
         assertEquals(2, context.game().getFields()[0][1].getBuilding().getLevel());
+        var expectedResults = new ArrayList<EventResult>();
+        expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 0)));
+        expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 1)));
+        assertEquals(expectedResults, eventResults);
     }
 }
