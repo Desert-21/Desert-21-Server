@@ -1,25 +1,23 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
-import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersActionDto;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.GamePlayerData;
+import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +37,13 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith({AfterEachDatabaseCleanupExtension.class})
 class PlayerTurnServiceTest {
+
+    private record MockResult(String prop) implements EventResult {
+        @Override
+        public long millisecondsToView() {
+            return 1000;
+        }
+    };
 
     private GameRepository gameRepository;
 
@@ -60,6 +66,8 @@ class PlayerTurnServiceTest {
 
     private Player player;
 
+    private List<EventResult> eventResults;
+
     void setupAuth() {
         var authorities = List.of(
                 new SimpleGrantedAuthority("USER_AA"),
@@ -76,13 +84,14 @@ class PlayerTurnServiceTest {
         validatingService = mock(PlayersActionsValidatingService.class);
         doReturn(true).when(validatingService).validatePlayersActions(any(), any());
 
+        eventResults = List.of(new MockResult("AA"), new MockResult("BB")); //todo add checking assertions in tests
         eventsExecutionService = mock(GameEventsExecutionService.class);
-        var answer = new Answer<TurnExecutionContext>() {
-            public TurnExecutionContext answer(InvocationOnMock invocation) {
+        var answer = new Answer<EventExecutionResult>() {
+            public EventExecutionResult answer(InvocationOnMock invocation) {
                 //applying random change
                 var context = invocation.getArgument(1, TurnExecutionContext.class);
                 context.game().getFields()[0][0] = new Field(new Building(BuildingType.TOWER));
-                return context;
+                return new EventExecutionResult(context, eventResults);
             }
         };
         doAnswer(answer)
@@ -145,6 +154,7 @@ class PlayerTurnServiceTest {
         verify(gameRepository, times(1)).save(gameArgumentCaptor.capture());
         var savedGame = gameArgumentCaptor.getAllValues().get(0);
         assertEquals(new Field(new Building(BuildingType.TOWER)), savedGame.getFields()[0][0]);
+        assertEquals(eventResults, savedGame.getCurrentEventResults());
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
     }

@@ -6,6 +6,7 @@ import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
 
@@ -29,14 +31,11 @@ public class FirstTurnStartService extends StateTransitionService {
     }
 
     @Override
-    protected Notifiable getNotifications(Game game) {
-        var notification = new NextTurnNotification(game.getStateManager().getCurrentPlayerId(), new Date());
-        return new Notifiable() {
-            @Override
-            public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>(NEXT_TURN_NOTIFICATION, notification));
-            }
-        };
+    protected Optional<PlayersNotificationPair> getNotifications(Game game) {
+        var content = new NextTurnNotification(game.getStateManager().getCurrentPlayerId(), new Date());
+        return Optional.of(PlayersNotificationPair.forBoth(
+                new Notification<>(NEXT_TURN_NOTIFICATION, content))
+        );
     }
 
     @Override

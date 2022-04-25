@@ -6,12 +6,14 @@ import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.StartGameNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.START_GAME_NOTIFICATION;
 
@@ -29,16 +31,13 @@ public class GameStartService extends StateTransitionService {
     }
 
     @Override
-    protected Notifiable getNotifications(Game game) {
-        return new Notifiable() {
-            @Override
-            public List<Notification<?>> forBoth() {
-                return List.of(new Notification<>(
+    protected Optional<PlayersNotificationPair> getNotifications(Game game) {
+        return Optional.of(PlayersNotificationPair.forBoth(
+                new Notification<>(
                         START_GAME_NOTIFICATION,
                         new StartGameNotification(game.getId())
-                ));
-            }
-        };
+                )
+        ));
     }
 
     @Override

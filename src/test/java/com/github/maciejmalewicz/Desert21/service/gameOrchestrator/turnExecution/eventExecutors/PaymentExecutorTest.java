@@ -61,14 +61,18 @@ class PaymentExecutorTest {
                 new PaymentEvent(new ResourceSet(10, 10, 20)),
                 new PaymentEvent(new ResourceSet(20, 0, 0))
         );
-        context = tested.execute(events, context);
+        var eventExecutionResult = tested.execute(events, context);
+        context = eventExecutionResult.context();
         assertEquals(new ResourceSet(30, 50, 40), context.player().getResources());
+        assertEquals(0, eventExecutionResult.results().size());
     }
 
     @Test
     void executeNoEvents() throws NotAcceptableException {
         var events = new ArrayList<PaymentEvent>();
-        context = tested.execute(events, context);
+        var eventExecutionResult = tested.execute(events, context);
+        context = eventExecutionResult.context();
         assertEquals(new ResourceSet(60, 60, 60), context.player().getResources());
+        assertEquals(0, eventExecutionResult.results().size());
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Notifiable {
 
-    default List<Notification<?>> forProducer() {
+    default List<Notification<?>> forCurrentPlayer() {
         return new ArrayList<>();
     }
 

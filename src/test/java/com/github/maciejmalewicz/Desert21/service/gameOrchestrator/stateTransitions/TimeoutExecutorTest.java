@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransit
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.executables.GameStartTimeoutExecutable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.executables.TimeoutExecutable;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,17 +39,17 @@ class TimeoutExecutorTest {
 
     private PlayersNotifier playersNotifier;
 
-    private Notifiable notifiable;
+    private Notification<?> notification;
 
     void setupTested() {
         var executablePicker = mock(TimeoutExecutablePicker.class);
         stateTransitionService = mock(StateTransitionService.class);
         doNothing().when(stateTransitionService).stateTransition(any(Game.class));
-        notifiable = new Notifiable() {};
+        notification = new Notification<>("NOTIFICATION_TYPE", null);
         var executable = new TimeoutExecutable() {
             @Override
-            public Notifiable getNotifications(Game game) {
-                return notifiable;
+            public Optional<Notification<?>> getNotifications(Game game) {
+                return Optional.of(notification);
             }
 
             @Override
@@ -183,7 +184,7 @@ class TimeoutExecutorTest {
         verify(
                 playersNotifier,
                 never()
-        ).notifyPlayers(any(Game.class), any(Notifiable.class));
+        ).notifyPlayers(any(Game.class), any(Notification.class));
     }
 
     void verifyExecuted() {
@@ -194,6 +195,6 @@ class TimeoutExecutorTest {
         verify(
                 playersNotifier,
                 times(1)
-        ).notifyPlayers(game, notifiable);
+        ).notifyPlayers(game, notification);
     }
 }

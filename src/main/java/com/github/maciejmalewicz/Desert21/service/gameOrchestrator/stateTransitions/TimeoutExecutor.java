@@ -47,7 +47,7 @@ public class TimeoutExecutor {
             transitionService.stateTransition(game);
 
             var timeoutNotifiable = executable.getNotifications(game);
-            playersNotifier.notifyPlayers(game, timeoutNotifiable);
+            timeoutNotifiable.ifPresent(notification -> playersNotifier.notifyPlayers(game, notification));
         });
         thread.start();
     }

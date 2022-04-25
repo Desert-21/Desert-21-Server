@@ -2,8 +2,8 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransit
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.ResolutionPhaseNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.RESOLUTION_PHASE_NOTIFICATION;
@@ -29,18 +30,26 @@ class TurnResolutionPhaseStartServiceTest {
 
     private TurnResolutionPhaseStartService tested;
 
+    private ResolutionPhaseNotificationService resolutionPhaseNotificationService;
+
     @Autowired
     private GameRepository gameRepository;
 
     private Game game;
 
     void setupTested() {
+        resolutionPhaseNotificationService = mock(ResolutionPhaseNotificationService.class);
+        doReturn(new ResolutionPhaseNotificationPair(
+                List.of(new Notification<>("N1", null)),
+                List.of(new Notification<>("N2", null))
+        )).when(resolutionPhaseNotificationService).createNotifications(any(Game.class));
+
         playersNotifier = mock(PlayersNotifier.class);
         tested = new TurnResolutionPhaseStartService(
                 playersNotifier,
                 mock(TimeoutExecutor.class),
-                gameRepository
-        );
+                gameRepository,
+                resolutionPhaseNotificationService);
     }
 
     void setupGame() {
@@ -70,15 +79,26 @@ class TurnResolutionPhaseStartServiceTest {
     }
 
     @Test
-    void testGetTimeToWaitForTimeout() {
+    void testGetTimeToWaitForTimeoutEmptyEventList() {
         var timeout = tested.getTimeToWaitForTimeout(game);
-        assertEquals(5_000, timeout);
+        assertEquals(0, timeout);
+    }
+
+    @Test
+    void testGetTimeToWaitForTimeoutFilledEventList() {
+        game.setCurrentEventResults(List.of(
+                () -> 2_000,
+                () -> 3_000,
+                () -> 1_000
+        ));
+        var timeout = tested.getTimeToWaitForTimeout(game);
+        assertEquals(6_000, timeout);
     }
 
     @Test
     void testStateTransition() {
         var gameCaptor = ArgumentCaptor.forClass(Game.class);
-        var notifiableCaptor = ArgumentCaptor.forClass(Notifiable.class);
+        var notifiableCaptor = ArgumentCaptor.forClass(PlayersNotificationPair.class);
 
         tested.stateTransition(game);
 
@@ -100,16 +120,23 @@ class TurnResolutionPhaseStartServiceTest {
         var calledGame = gameCaptor.getAllValues().stream()
                 .findAny()
                 .orElseThrow();
-        var calledNotifiable = notifiableCaptor.getAllValues().stream()
+        var calledNotification = notifiableCaptor.getAllValues().stream()
                 .findAny()
                 .orElseThrow();
         assertEquals(game, calledGame);
-        assertEquals(0, calledNotifiable.forSpecificPlayer().getSecond().size());
-        assertEquals(0, calledNotifiable.forProducer().size());
-        assertEquals(0, calledNotifiable.forOpponent().size());
-        assertEquals(1, calledNotifiable.forBoth().size());
-        assertEquals(RESOLUTION_PHASE_NOTIFICATION, calledNotifiable.forBoth().get(0).type());
+
+        var forCurrentPlayer = calledNotification.forCurrentPlayer();
+        assertEquals(RESOLUTION_PHASE_NOTIFICATION, forCurrentPlayer.type());
+        var resPhaseNotification1 = (ResolutionPhaseNotification) forCurrentPlayer.content();
+        assertNotNull(resPhaseNotification1.timeout());
+        var actionsNotifications1 = resPhaseNotification1.notifications();
+        assertEquals(List.of(new Notification<>("N1", null)), actionsNotifications1);
+
+        var forOpponent = calledNotification.forOpponent();
+        assertEquals(RESOLUTION_PHASE_NOTIFICATION, forOpponent.type());
+        var resPhaseNotification2 = (ResolutionPhaseNotification) forOpponent.content();
+        assertNotNull(resPhaseNotification1.timeout().getTime());
+        var actionsNotifications2 = resPhaseNotification2.notifications();
+        assertEquals(List.of(new Notification<>("N2", null)), actionsNotifications2);
     }
-
-
 }
