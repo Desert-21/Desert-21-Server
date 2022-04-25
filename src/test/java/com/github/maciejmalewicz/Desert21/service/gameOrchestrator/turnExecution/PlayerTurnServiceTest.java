@@ -160,6 +160,33 @@ class PlayerTurnServiceTest {
     }
 
     @Test
+    void executeTurnWrongGameState() {
+        game.getStateManager().setGameState(GameState.RESOLVED);
+        var dto = new PlayersTurnDto(
+                "IGNORED",
+                new ArrayList<>()
+        );
+        var exception = assertThrows(NotAcceptableException.class, () -> {
+            tested.executeTurn(authentication, dto);
+        });
+        assertEquals("Cannot execute turn now!", exception.getMessage());
+    }
+
+    @Test
+    void executeTurnWrongPlayer() {
+        game.getStateManager().setCurrentPlayerId("BB");
+        var dto = new PlayersTurnDto(
+                "IGNORED",
+                new ArrayList<>()
+        );
+        var exception = assertThrows(NotAcceptableException.class, () -> {
+            tested.executeTurn(authentication, dto);
+        });
+        assertEquals("Cannot execute turn now!", exception.getMessage());
+    }
+
+
+    @Test
     void executeTurnGamePlayerFailing() throws NotAcceptableException {
         doThrow(new NotAcceptableException("TEST ERROR")).when(gamePlayerService).getGamePlayerData(anyString(), any());
         var dto = new PlayersTurnDto(
