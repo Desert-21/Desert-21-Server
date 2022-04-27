@@ -5,6 +5,11 @@ application:
     tokenExpirationAfterDays: 14
 
 spring:
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: desert21
   main:
     allow-circular-references: true
   authentication:

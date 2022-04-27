@@ -4,11 +4,12 @@ application:
     secretKey: ${SECRET_KEY}
     prefix: 'Bearer '
     tokenExpirationAfterDays: 14
-dockerspring:
+spring:
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/test
-spring:
+      host: 127.0.0.1
+      port: 27017
+      database: test
   main:
     allow-circular-references: true
   authentication:

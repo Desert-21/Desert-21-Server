@@ -32,10 +32,6 @@ public abstract class StateTransitionService {
         //change game state if necessary
         var game = changeGameState(gameBefore);
 
-        //handle notifications
-        var notifiable = getNotifications(game);
-        notifiable.ifPresent(notification -> playersNotifier.notifyPlayers(game, notification));
-
         //handle new timeout
         var toWait = getTimeToWaitForTimeout(game);
         var executionDate = DateUtils.millisecondsFromNow(toWait);
@@ -43,5 +39,9 @@ public abstract class StateTransitionService {
         game.getStateManager().setCurrentStateTimeoutId(UUID.randomUUID().toString());
         gameRepository.save(game);
         timeoutExecutor.executeTimeoutOnGame(game);
+
+        //handle notifications
+        var notifiable = getNotifications(game);
+        notifiable.ifPresent(notification -> playersNotifier.notifyPlayers(game, notification));
     }
 }

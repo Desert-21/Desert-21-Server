@@ -10,6 +10,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.ResolutionPhaseNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
