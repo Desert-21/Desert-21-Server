@@ -7,6 +7,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.FirstTurnStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.StateTransitionService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

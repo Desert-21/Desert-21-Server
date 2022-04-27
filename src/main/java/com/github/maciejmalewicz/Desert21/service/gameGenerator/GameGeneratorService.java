@@ -46,7 +46,7 @@ public class GameGeneratorService {
                 null
         );
         var game = new Game(players, board, stateManager);
-        //todo dalej service
+        game = gameRepository.save(game);
         gameStartService.stateTransition(game);
     }
 

@@ -8,7 +8,7 @@ public class BasicGameTimer implements GameTimer {
 
     @Override
     public long getInitialTime() {
-        return 150_000;
+        return 15_000;
     }
 
     @Override
