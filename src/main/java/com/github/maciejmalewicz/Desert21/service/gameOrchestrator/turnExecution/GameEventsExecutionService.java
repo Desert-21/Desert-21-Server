@@ -7,6 +7,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.EventExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ResourcesProductionExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,10 @@ public class GameEventsExecutionService {
 
     public GameEventsExecutionService(
            PaymentExecutor paymentExecutor,
-           BuildingUpgradeExecutor buildingUpgradeExecutor
+           BuildingUpgradeExecutor buildingUpgradeExecutor,
+           ResourcesProductionExecutor resourcesProductionExecutor
     ) {
-        executors = List.of(paymentExecutor, buildingUpgradeExecutor);
+        executors = List.of(paymentExecutor, buildingUpgradeExecutor, resourcesProductionExecutor);
     }
 
     public EventExecutionResult executeEvents(Collection<Action> actions, TurnExecutionContext context) throws NotAcceptableException {

@@ -10,6 +10,7 @@ public class Constants {
     public static final String RESOLUTION_PHASE_NOTIFICATION = "RESOLUTION_PHASE";
 
     public static final String BUILDING_UPGRADED_NOTIFICATION = "BUILDING_UPGRADED";
+    public static final String RESOURCES_PRODUCED_NOTIFICATION = "RESOURCES_PRODUCED";
 
     public static final String USELESS = "";
 }

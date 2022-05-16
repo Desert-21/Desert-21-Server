@@ -19,4 +19,11 @@ public class Building {
         this.type = type;
         this.level = level;
     }
+
+    public boolean isFactory() {
+        return type == BuildingType.METAL_FACTORY
+                || type == BuildingType.BUILDING_MATERIALS_FACTORY
+                || type == BuildingType.ELECTRICITY_FACTORY;
+    }
+
 }

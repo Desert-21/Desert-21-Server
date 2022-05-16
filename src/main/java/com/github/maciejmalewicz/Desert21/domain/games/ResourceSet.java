@@ -13,6 +13,11 @@ public class ResourceSet {
     private int buildingMaterials;
     private int electricity;
 
+    //todo: refactor constructors
+    public static ResourceSet ofEachResourceAmount(int amount) {
+        return new ResourceSet(amount, amount, amount);
+    }
+
     public ResourceSet add(ResourceSet other) {
         return new ResourceSet(
                 metal + other.getMetal(),
@@ -26,6 +31,14 @@ public class ResourceSet {
                 metal - other.getMetal(),
                 buildingMaterials - other.getBuildingMaterials(),
                 electricity - other.getElectricity()
+        );
+    }
+
+    public ResourceSet multiplyBy(double multiplier) {
+        return new ResourceSet(
+                (int) Math.round(metal * multiplier),
+                (int) Math.round(buildingMaterials * multiplier),
+                (int) Math.round(electricity * multiplier)
         );
     }
 

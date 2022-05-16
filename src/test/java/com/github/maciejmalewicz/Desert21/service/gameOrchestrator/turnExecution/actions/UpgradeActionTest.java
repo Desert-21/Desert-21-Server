@@ -68,7 +68,7 @@ class UpgradeActionTest {
         var exception = assertThrows(NotAcceptableException.class, () -> {
             upgradeAction.getActionValidatables(context);
         });
-        assertEquals("Empty field is not upgradable!", exception.getMessage());
+        assertEquals("Empty field is does not have a config!", exception.getMessage());
     }
 
     @Test
@@ -115,7 +115,7 @@ class UpgradeActionTest {
         var exception = assertThrows(NotAcceptableException.class, () -> {
             upgradeAction.getEventExecutables(context);
         });
-        assertEquals("Empty field is not upgradable!", exception.getMessage());
+        assertEquals("Empty field is does not have a config!", exception.getMessage());
     }
 
     @Test

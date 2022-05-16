@@ -3,7 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameSnapshot;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.Location;
-import com.github.maciejmalewicz.Desert21.models.balance.GeneralConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralBalanceConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ class ArmySnapshotProcessingServiceTest {
     private ArmySnapshotProcessingService tested;
 
     @Autowired
-    private GeneralConfig generalConfig;
+    private GeneralBalanceConfig generalConfig;
 
     private Player player;
     private Player enemy;
