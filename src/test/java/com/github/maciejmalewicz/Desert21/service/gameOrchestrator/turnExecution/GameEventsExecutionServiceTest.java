@@ -7,17 +7,16 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionCont
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.EventExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ResourcesProductionExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ResourcesProductionEvent;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,8 @@ class GameEventsExecutionServiceTest {
     private BuildingUpgradeEvent futureActionEvent;
     private BuildingUpgradeEvent futureQueueEvent;
 
-    private MockUpgradeExecutor mockExecutor;
+    private MockUpgradeExecutor mockUpgradeExecutor;
+    private MockResourcesProductionExecutor mockResourceProductionExecutor;
 
     static class MockUpgradeExecutor extends BuildingUpgradeExecutor {
         @Override
@@ -59,12 +59,27 @@ class GameEventsExecutionServiceTest {
         }
     }
 
+    static class MockResourcesProductionExecutor extends ResourcesProductionExecutor {
+        @Override
+        public Class<ResourcesProductionEvent> getExecutableClass() {
+            return ResourcesProductionEvent.class;
+        }
+
+        @Override
+        public EventExecutionResult execute(List<ResourcesProductionEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+    }
+
     void setupTested() {
-        mockExecutor = new MockUpgradeExecutor();
-        mockExecutor = spy(mockExecutor);
+        mockUpgradeExecutor = new MockUpgradeExecutor();
+        mockUpgradeExecutor = spy(mockUpgradeExecutor);
+        mockResourceProductionExecutor = new MockResourcesProductionExecutor();
+        mockResourceProductionExecutor = spy(mockResourceProductionExecutor);
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
-                mockExecutor
+                mockUpgradeExecutor,
+                mockResourceProductionExecutor
         );
     }
 
@@ -129,7 +144,8 @@ class GameEventsExecutionServiceTest {
     @Test
     void executeEventsHappyPath() throws NotAcceptableException {
         tested.executeEvents(actions, context);
-        verify(mockExecutor, times(1)).execute(List.of(actionEvent, queueEvent), context);
+        verify(mockUpgradeExecutor, times(1)).execute(List.of(actionEvent, queueEvent), context);
+        verify(mockResourceProductionExecutor, times(1)).execute(anyList(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());

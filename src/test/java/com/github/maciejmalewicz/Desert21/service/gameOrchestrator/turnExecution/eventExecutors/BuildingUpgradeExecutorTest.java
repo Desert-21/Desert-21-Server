@@ -6,6 +6,7 @@ import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.turnResolution.BuildingUpgradedNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators.FieldOwnershipValidator;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.BuildingUpgradeEventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.BUILDING_UPGRADED_NOTIFICATION;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -76,6 +78,13 @@ class BuildingUpgradeExecutorTest {
         expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 0)));
         expectedResults.add(new BuildingUpgradeEventResult(1, 2, new Location(0, 1)));
         assertEquals(expectedResults, eventResults);
+
+        var firstNotification = eventResults.get(0).forBoth().get(0);
+        assertEquals(BUILDING_UPGRADED_NOTIFICATION, firstNotification.type());
+        var notificationContent = (BuildingUpgradedNotification) firstNotification.content();
+        assertEquals(1, notificationContent.getFromLevel());
+        assertEquals(2, notificationContent.getToLevel());
+        assertEquals(new Location(0, 0), notificationContent.getLocation());
     }
 
     @Test

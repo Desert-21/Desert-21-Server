@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
-import com.github.maciejmalewicz.Desert21.models.balance.GeneralConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralBalanceConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
@@ -19,10 +19,10 @@ public class GameGeneratorService {
     private final ApplicationUserRepository applicationUserRepository;
     private final GameRepository gameRepository;
     private final BasicGameTimer basicGameTimer;
-    private final GeneralConfig generalConfig;
+    private final GeneralBalanceConfig generalConfig;
     private final GameStartService gameStartService;
 
-    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GeneralConfig generalConfig, GameStartService gameStartService) {
+    public GameGeneratorService(BoardGeneratorService boardGeneratorService, ApplicationUserRepository applicationUserRepository, GameRepository gameRepository, BasicGameTimer basicGameTimer, GeneralBalanceConfig generalConfig, GameStartService gameStartService) {
         this.boardGeneratorService = boardGeneratorService;
         this.applicationUserRepository = applicationUserRepository;
         this.gameRepository = gameRepository;

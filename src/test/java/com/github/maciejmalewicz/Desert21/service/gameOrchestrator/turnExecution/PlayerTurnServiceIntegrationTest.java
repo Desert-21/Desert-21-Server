@@ -18,6 +18,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.ActionType;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.UpgradeAction;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
+import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,7 @@ class PlayerTurnServiceIntegrationTest {
                         new Player("BB",
                                 "schabina123456",
                                 new ResourceSet(60, 60, 60))),
-                new Field[9][9],
+                BoardUtils.generateEmptyPlain(9),
                 new StateManager(
                         GameState.AWAITING,
                         DateUtils.millisecondsFromNow(10_000),
@@ -83,6 +84,7 @@ class PlayerTurnServiceIntegrationTest {
                 )
         );
         game.getFields()[0][0] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY, 1), "AA");
+
         gameRepository.save(game);
     }
 
@@ -118,7 +120,7 @@ class PlayerTurnServiceIntegrationTest {
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
 
-        assertEquals(new ResourceSet(60, 20, 60), savedGame.getCurrentPlayer().get().getResources());
+        assertEquals(new ResourceSet(80, 40, 105), savedGame.getCurrentPlayer().get().getResources());
         assertEquals(new Building(BuildingType.ELECTRICITY_FACTORY, 2), savedGame.getFields()[0][0].getBuilding());
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);

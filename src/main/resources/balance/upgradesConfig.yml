@@ -1,0 +1,35 @@
+combatBranchBalanceConfig:
+  reusablePartsUnitsFractionSaved: 0.4
+
+  improvedDroidsBaseDefenceBonus: 0.25
+  improvedDroidsBaseAtTowerDefenceBonus: 0.4
+  improvedTanksPowerBonus: 0.5
+
+  improvedCannonsBombardingPowerFraction: 0.5
+
+  advancedTacticsReferencePower: 100
+  advancedTacticsPowerBonusPerReferencePower: 0.01
+
+
+controlBranchBalanceConfig:
+  scarabScannersPowerDecreaseRatio: 0.5
+
+  goldDiggersProductionPerFieldBonus: 2
+
+  towerCreatorMaxTowersBuilt: 2
+
+
+productionBranchBalanceConfig:
+  homeSweetHomeProductionBonus: 0.5
+
+  moreMetalProductionRelativeBonus: 0.3
+  moreBuildingMaterialsProductionRelativeBonus: 0.3
+  moreElectricityProductionRelativeBonus: 0.3
+  moreMetalProductionStaticBonus: 10
+  moreBuildingMaterialsProductionStaticBonus: 10
+  moreElectricityProductionStaticBonus: 10
+
+  productionManagersProductionBonus: 0.2
+  factoryBuildingMaxFactoriesBuilt: 4
+
+  productionAiIncreasePerTurn: 20

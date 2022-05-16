@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GeneralConfig {
+public class GeneralBalanceConfig {
 
     private int startingResources;
 
     private int fogOfWar1;
     private int fogOfWar2;
+
+    private int productionPerField;
 }

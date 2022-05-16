@@ -5,7 +5,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
 import com.github.maciejmalewicz.Desert21.domain.users.LoginData;
-import com.github.maciejmalewicz.Desert21.models.balance.GeneralConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralBalanceConfig;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
@@ -33,7 +33,7 @@ class GameGeneratorServiceTest {
     private GameRepository gameRepository;
 
     @Autowired
-    private GeneralConfig generalConfig;
+    private GeneralBalanceConfig generalConfig;
 
     @Autowired
     private BasicBoardGeneratorConfig boardGeneratorConfig;

@@ -14,7 +14,7 @@ public class BuildingToConfigMappingUtils {
             case HOME_BASE -> buildings.homeBase();
             case ROCKET_LAUNCHER -> buildings.rocketLauncher();
             case METAL_FACTORY, BUILDING_MATERIALS_FACTORY, ELECTRICITY_FACTORY -> buildings.factory();
-            case EMPTY_FIELD -> throw new NotAcceptableException("Empty field is not upgradable!");
+            case EMPTY_FIELD -> throw new NotAcceptableException("Empty field is does not have a config!");
         };
     }
 }
