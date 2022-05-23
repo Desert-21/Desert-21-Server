@@ -20,6 +20,9 @@ public class TimeoutExecutor {
         this.timeoutExecutablePicker = timeoutExecutablePicker;
         this.gameRepository = gameRepository;
         this.playersNotifier = playersNotifier;
+
+        //critical line when the app reloads
+        wakeUpStateTransitions();
     }
 
     public void executeTimeoutOnGame(Game gameBeforeExecution) {
@@ -44,6 +47,8 @@ public class TimeoutExecutor {
                 return;
             }
 
+            game.getStateManager().setCurrentlyTimedOut(true); //important flag for further logic
+
             var transitionService = executable.getStateTransitionService(game);
             transitionService.stateTransition(game);
 
@@ -51,5 +56,11 @@ public class TimeoutExecutor {
             timeoutNotifiable.ifPresent(notification -> playersNotifier.notifyPlayers(game, notification));
         });
         thread.start();
+    }
+
+    private void wakeUpStateTransitions() {
+        gameRepository
+                .findAll()
+                .forEach(this::executeTimeoutOnGame);
     }
 }

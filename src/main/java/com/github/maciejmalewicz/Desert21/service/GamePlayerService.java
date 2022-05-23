@@ -17,6 +17,9 @@ public class GamePlayerService {
     }
 
     public GamePlayerData getGamePlayerData(String gameId, Authentication authentication) throws NotAcceptableException {
+        if (gameId == null || authentication == null) {
+            throw new NotAcceptableException("Could not identify game or the user!");
+        }
         var authorities = authentication.getAuthorities();
         var playerId = AuthoritiesUtils.getIdFromAuthorities(authorities)
                 .orElseThrow(() -> new NotAcceptableException("User could not be identified!"));
