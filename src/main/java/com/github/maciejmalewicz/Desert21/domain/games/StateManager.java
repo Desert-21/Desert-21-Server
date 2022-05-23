@@ -16,4 +16,13 @@ public class StateManager {
     private String currentPlayerId;
 
     private String currentStateTimeoutId;
+
+    private boolean isCurrentlyTimedOut = false;
+
+    public StateManager(GameState gameState, Date timeout, String currentPlayerId, String currentStateTimeoutId) {
+        this.gameState = gameState;
+        this.timeout = timeout;
+        this.currentPlayerId = currentPlayerId;
+        this.currentStateTimeoutId = currentStateTimeoutId;
+    }
 }

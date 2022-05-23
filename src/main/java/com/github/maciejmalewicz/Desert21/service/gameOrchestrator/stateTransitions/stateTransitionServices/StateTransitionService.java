@@ -37,6 +37,7 @@ public abstract class StateTransitionService {
         var executionDate = DateUtils.millisecondsFromNow(toWait);
         game.getStateManager().setTimeout(executionDate);
         game.getStateManager().setCurrentStateTimeoutId(UUID.randomUUID().toString());
+        game.getStateManager().setCurrentlyTimedOut(false);
         gameRepository.save(game);
         timeoutExecutor.executeTimeoutOnGame(game);
 
