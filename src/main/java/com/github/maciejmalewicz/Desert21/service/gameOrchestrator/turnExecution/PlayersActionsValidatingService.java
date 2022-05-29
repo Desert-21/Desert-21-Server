@@ -21,14 +21,23 @@ public class PlayersActionsValidatingService {
             CostValidator costValidator,
             FieldOwnershipValidator fieldOwnershipValidator,
             LocationBoundsValidator locationBoundsValidator,
-            SingleUpgradePerLocationValidator singleUpgradePerLocationValidator
+            SingleUpgradePerLocationValidator singleUpgradePerLocationValidator,
+            BuildingSufficientForUnitsTrainingValidator buildingSufficientForUnitsTrainingValidator,
+            NoPendingTrainingsValidator noPendingTrainingsValidator,
+            ProductionTypeUpgradesOwnershipValidator productionTypeUpgradesOwnershipValidator,
+            SingleTrainingPerLocationValidator singleTrainingPerLocationValidator
+
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
                 fieldOwnershipValidator,
                 singleUpgradePerLocationValidator,
                 buildingUpgradableValidator,
-                costValidator
+                costValidator,
+                singleTrainingPerLocationValidator,
+                buildingSufficientForUnitsTrainingValidator,
+                productionTypeUpgradesOwnershipValidator,
+                noPendingTrainingsValidator
         );
     }
 
