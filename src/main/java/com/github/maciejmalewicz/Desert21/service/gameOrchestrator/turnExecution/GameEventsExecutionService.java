@@ -4,10 +4,7 @@ import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.EventExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ResourcesProductionExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.EventResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.stereotype.Service;
@@ -24,9 +21,10 @@ public class GameEventsExecutionService {
     public GameEventsExecutionService(
            PaymentExecutor paymentExecutor,
            BuildingUpgradeExecutor buildingUpgradeExecutor,
-           ResourcesProductionExecutor resourcesProductionExecutor
+           ResourcesProductionExecutor resourcesProductionExecutor,
+           ArmyTrainingExecutor armyTrainingExecutor
     ) {
-        executors = List.of(paymentExecutor, buildingUpgradeExecutor, resourcesProductionExecutor);
+        executors = List.of(paymentExecutor, buildingUpgradeExecutor, resourcesProductionExecutor, armyTrainingExecutor);
     }
 
     public EventExecutionResult executeEvents(Collection<Action> actions, TurnExecutionContext context) throws NotAcceptableException {

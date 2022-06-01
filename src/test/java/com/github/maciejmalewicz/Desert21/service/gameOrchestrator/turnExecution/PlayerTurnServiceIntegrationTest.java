@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
 import com.github.maciejmalewicz.Desert21.domain.users.LoginData;
@@ -16,7 +17,10 @@ import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.ActionType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.TrainAction;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.UpgradeAction;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
@@ -84,6 +88,7 @@ class PlayerTurnServiceIntegrationTest {
                 )
         );
         game.getFields()[0][0] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY, 1), "AA");
+        game.getFields()[0][1] = new Field(new Building(BuildingType.HOME_BASE, 3), "AA");
 
         gameRepository.save(game);
     }
@@ -120,8 +125,25 @@ class PlayerTurnServiceIntegrationTest {
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
 
-        assertEquals(new ResourceSet(80, 40, 105), savedGame.getCurrentPlayer().get().getResources());
+        assertEquals(new ResourceSet(82, 42, 107), savedGame.getCurrentPlayer().get().getResources());
         assertEquals(new Building(BuildingType.ELECTRICITY_FACTORY, 2), savedGame.getFields()[0][0].getBuilding());
+
+        verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
+    }
+
+    @Test
+    void integrationTrainArmy() throws NotAcceptableException {
+        var trainContent = new TrainAction(new Location(0, 1), UnitType.DROID, TrainingMode.SMALL_PRODUCTION);
+        var map = new ObjectMapper().convertValue(trainContent, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.TRAIN, map))
+        );
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+
+        assertEquals(new ResourceSet(32, 82, 97), savedGame.getCurrentPlayer().get().getResources());
+        assertEquals(new Army(10, 0, 0), savedGame.getFields()[0][1].getArmy());
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
     }

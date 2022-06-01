@@ -6,9 +6,11 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionRes
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ArmyTrainingExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ResourcesProductionExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ResourcesProductionEvent;
@@ -46,6 +48,19 @@ class GameEventsExecutionServiceTest {
 
     private MockUpgradeExecutor mockUpgradeExecutor;
     private MockResourcesProductionExecutor mockResourceProductionExecutor;
+    private MockArmyTrainingExecutor mockArmyTrainingExecutor;
+
+    static class MockArmyTrainingExecutor extends ArmyTrainingExecutor {
+        @Override
+        public EventExecutionResult execute(List<ArmyTrainingEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<ArmyTrainingEvent> getExecutableClass() {
+            return ArmyTrainingEvent.class;
+        }
+    }
 
     static class MockUpgradeExecutor extends BuildingUpgradeExecutor {
         @Override
@@ -76,10 +91,13 @@ class GameEventsExecutionServiceTest {
         mockUpgradeExecutor = spy(mockUpgradeExecutor);
         mockResourceProductionExecutor = new MockResourcesProductionExecutor();
         mockResourceProductionExecutor = spy(mockResourceProductionExecutor);
+        mockArmyTrainingExecutor = new MockArmyTrainingExecutor();
+        mockArmyTrainingExecutor = spy(mockArmyTrainingExecutor);
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
-                mockResourceProductionExecutor
+                mockResourceProductionExecutor,
+                mockArmyTrainingExecutor
         );
     }
 
@@ -146,6 +164,7 @@ class GameEventsExecutionServiceTest {
         tested.executeEvents(actions, context);
         verify(mockUpgradeExecutor, times(1)).execute(List.of(actionEvent, queueEvent), context);
         verify(mockResourceProductionExecutor, times(1)).execute(anyList(), eq(context));
+        verify(mockArmyTrainingExecutor, times(1)).execute(anyList(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());
