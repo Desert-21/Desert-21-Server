@@ -2,9 +2,11 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class GameEvent {

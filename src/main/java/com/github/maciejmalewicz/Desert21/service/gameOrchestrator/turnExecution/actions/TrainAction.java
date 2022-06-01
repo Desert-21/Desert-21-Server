@@ -1,12 +1,17 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions;
 
 import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
+import com.github.maciejmalewicz.Desert21.dto.balance.AllCombatBalanceDto;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
+import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,19 +59,42 @@ public class TrainAction implements Action {
         );
     }
 
+    @Override
+    public List<GameEvent> getEventExecutables(TurnExecutionContext context) throws NotAcceptableException {
+        var combatBalance = context.gameBalance().combat();
+        var config = getCombatUnitConfig(combatBalance);
+
+        var actualTurnsToTrain = (config.getTurnsToTrain() - 1) * 2;
+        var producedUnits = getProducedUnitsAmount(config);
+
+        return List.of(
+                new PaymentEvent(getTrainingCost(context)),
+                new ArmyTrainingEvent(actualTurnsToTrain, location, unitType, producedUnits)
+        );
+    }
+
+
     private ResourceSet getTrainingCost(TurnExecutionContext context) {
         var combatBalance = context.gameBalance().combat();
-        var config = switch (unitType) {
-            case DROID -> combatBalance.droids();
-            case TANK -> combatBalance.tanks();
-            case CANNON -> combatBalance.cannons();
-        };
-        var producedUnits = switch (trainingMode) {
+        var config = getCombatUnitConfig(combatBalance);
+        var producedUnits = getProducedUnitsAmount(config);
+        var metalCost = config.getCost() * producedUnits;
+        return new ResourceSet(metalCost, 0, 0);
+    }
+
+    private int getProducedUnitsAmount(CombatUnitConfig config) {
+        return switch (trainingMode) {
             case SMALL_PRODUCTION -> config.getSmallProduction();
             case MEDIUM_PRODUCTION -> config.getMediumProduction();
             case MASS_PRODUCTION -> config.getMassProduction();
         };
-        var metalCost = config.getCost() * producedUnits;
-        return new ResourceSet(metalCost, 0, 0);
+    }
+
+    private CombatUnitConfig getCombatUnitConfig(AllCombatBalanceDto combatBalance) {
+        return switch (unitType) {
+            case DROID -> combatBalance.droids();
+            case TANK -> combatBalance.tanks();
+            case CANNON -> combatBalance.cannons();
+        };
     }
 }

@@ -33,7 +33,6 @@ class BuildingUpgradeExecutorTest {
 
     @Autowired
     private BuildingUpgradeExecutor tested;
-    private List<EventResult> results;
 
     @BeforeEach
     void setup() {

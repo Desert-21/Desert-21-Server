@@ -8,10 +8,13 @@ import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -100,6 +103,53 @@ public class TrainActionTest {
                 UnitType.TANK
         ), validatables.get(4));
         assertEquals(new ProductionTypeUpgradesOwnershipValidatable(TrainingMode.MASS_PRODUCTION), validatables.get(5));
+    }
 
+    @Test
+    void getEventExecutablesHappyPathDroids() throws NotAcceptableException {
+        var trainAction = new TrainAction(new Location(0, 0), UnitType.DROID, TrainingMode.SMALL_PRODUCTION);
+        var executables = trainAction.getEventExecutables(context);
+        assertEquals(2, executables.size());
+
+        var paymentEvent = (PaymentEvent) executables.get(0);
+        assertEquals(new ResourceSet(50, 0, 0), paymentEvent.getResourceSet());
+
+        var trainingEvent = (ArmyTrainingEvent) executables.get(1);
+        assertEquals(0, trainingEvent.getTurnsToExecute());
+        assertEquals(new Location(0, 0), trainingEvent.getLocation());
+        assertEquals(UnitType.DROID, trainingEvent.getUnitType());
+        assertEquals(10, trainingEvent.getAmount());
+    }
+
+    @Test
+    void getEventExecutablesHappyPathTanks() throws NotAcceptableException {
+        var trainAction = new TrainAction(new Location(0, 0), UnitType.TANK, TrainingMode.MEDIUM_PRODUCTION);
+        var executables = trainAction.getEventExecutables(context);
+        assertEquals(2, executables.size());
+
+        var paymentEvent = (PaymentEvent) executables.get(0);
+        assertEquals(new ResourceSet(220, 0, 0), paymentEvent.getResourceSet());
+
+        var trainingEvent = (ArmyTrainingEvent) executables.get(1);
+        assertEquals(4, trainingEvent.getTurnsToExecute());
+        assertEquals(new Location(0, 0), trainingEvent.getLocation());
+        assertEquals(UnitType.TANK, trainingEvent.getUnitType());
+        assertEquals(11, trainingEvent.getAmount());
+    }
+
+    @Test
+    void getEventExecutablesHappyPathCannons() throws NotAcceptableException {
+        var trainAction = new TrainAction(new Location(0, 0), UnitType.CANNON, TrainingMode.MASS_PRODUCTION);
+        var executables = trainAction.getEventExecutables(context);
+        assertEquals(2, executables.size());
+
+        var paymentEvent = (PaymentEvent) executables.get(0);
+        assertEquals(new ResourceSet(500, 0, 0), paymentEvent.getResourceSet());
+
+        var trainingEvent = (ArmyTrainingEvent) executables.get(1);
+        assertEquals(2, trainingEvent.getTurnsToExecute());
+        assertEquals(new Location(0, 0), trainingEvent.getLocation());
+        assertEquals(UnitType.CANNON, trainingEvent.getUnitType());
+        assertEquals(50, trainingEvent.getAmount());
     }
 }
