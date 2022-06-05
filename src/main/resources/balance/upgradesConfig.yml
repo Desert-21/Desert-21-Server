@@ -15,6 +15,7 @@ controlBranchBalanceConfig:
   scarabScannersPowerDecreaseRatio: 0.5
 
   goldDiggersProductionPerFieldBonus: 2
+  factoryTurretTowerLevel: 2
 
   towerCreatorMaxTowersBuilt: 2
 

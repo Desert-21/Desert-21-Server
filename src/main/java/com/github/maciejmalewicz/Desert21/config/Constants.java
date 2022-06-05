@@ -13,4 +13,7 @@ public class Constants {
     public static final String RESOURCES_PRODUCED_NOTIFICATION = "RESOURCES_PRODUCED";
 
     public static final String USELESS = "";
+
+    public static final String UPGRADE_EVENT = "UPGRADE";
+    public static final String TRAINING_EVENT = "TRAINING";
 }

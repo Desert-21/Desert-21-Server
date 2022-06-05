@@ -8,11 +8,17 @@ import com.github.maciejmalewicz.Desert21.dto.game.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.github.maciejmalewicz.Desert21.config.Constants.TRAINING_EVENT;
+import static com.github.maciejmalewicz.Desert21.config.Constants.UPGRADE_EVENT;
 
 @Service
 public class GameSnapshotService {
@@ -33,7 +39,8 @@ public class GameSnapshotService {
                 gameId,
                 processPlayers(game.getPlayers()),
                 processFields(game.getFields(), player),
-                processStateManager(game.getStateManager())
+                processStateManager(game.getStateManager()),
+                processEventQueue(game.getEventQueue())
         );
     }
 
@@ -41,7 +48,8 @@ public class GameSnapshotService {
         return players.stream().map(p -> new PlayerDto(
                 p.getId(),
                 p.getNickname(),
-                p.getResources()
+                p.getResources(),
+                p.getOwnedUpgrades()
         )).collect(Collectors.toList());
     }
 
@@ -77,5 +85,21 @@ public class GameSnapshotService {
                 stateManager.getTimeout(),
                 stateManager.getCurrentPlayerId()
         );
+    }
+
+    private List<EventDto> processEventQueue(List<GameEvent> eventQueue) {
+        return eventQueue.stream()
+                .map(e -> new EventDto(getEventLabel(e), e))
+                .toList();
+    }
+
+    private String getEventLabel(GameEvent event) {
+        if (event instanceof BuildingUpgradeEvent) {
+            return UPGRADE_EVENT;
+        }
+        if (event instanceof ArmyTrainingEvent) {
+            return TRAINING_EVENT;
+        }
+        return "";
     }
 }
