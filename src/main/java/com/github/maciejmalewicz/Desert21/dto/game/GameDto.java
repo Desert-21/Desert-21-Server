@@ -6,6 +6,7 @@ public record GameDto(
         String gameId,
         List<PlayerDto> players,
         FieldDto[][] fields,
-        StateManagerDto stateManager
+        StateManagerDto stateManager,
+        List<EventDto> events
 ) {
 }

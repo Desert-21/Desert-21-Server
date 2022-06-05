@@ -9,6 +9,7 @@ public class ControlBranchBalanceConfig {
     private double scarabScannersPowerDecreaseRatio;
 
     private int goldDiggersProductionPerFieldBonus;
+    private int factoryTurretTowerLevel;
 
     private int towerCreatorMaxTowersBuilt;
 }
