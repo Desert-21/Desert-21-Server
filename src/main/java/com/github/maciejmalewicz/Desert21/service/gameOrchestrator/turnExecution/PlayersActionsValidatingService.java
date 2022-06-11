@@ -25,7 +25,11 @@ public class PlayersActionsValidatingService {
             BuildingSufficientForUnitsTrainingValidator buildingSufficientForUnitsTrainingValidator,
             NoPendingTrainingsValidator noPendingTrainingsValidator,
             ProductionTypeUpgradesOwnershipValidator productionTypeUpgradesOwnershipValidator,
-            SingleTrainingPerLocationValidator singleTrainingPerLocationValidator
+            SingleTrainingPerLocationValidator singleTrainingPerLocationValidator,
+            EnoughUnitsValidator enoughUnitsValidator,
+            PathFromAndToConvergenceValidator pathFromAndToConvergenceValidator,
+            PathContinuityValidator pathContinuityValidator,
+            PathLengthValidator pathLengthValidator
 
     ) {
         actionValidators = List.of(
@@ -37,7 +41,11 @@ public class PlayersActionsValidatingService {
                 singleTrainingPerLocationValidator,
                 buildingSufficientForUnitsTrainingValidator,
                 productionTypeUpgradesOwnershipValidator,
-                noPendingTrainingsValidator
+                noPendingTrainingsValidator,
+                enoughUnitsValidator,
+                pathFromAndToConvergenceValidator,
+                pathContinuityValidator,
+                pathLengthValidator
         );
     }
 

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.github.maciejmalewicz.Desert21.utils.LocationUtils.areNeighbours;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocationUtilsTest {
@@ -134,5 +135,16 @@ class LocationUtilsTest {
         var location = new Location(3, 10);
         var isWithinBounds = LocationUtils.isWithinBounds(location, 0, 9, 0, 9);
         assertFalse(isWithinBounds);
+    }
+
+    @Test
+    void areNeighboursAllCases() {
+        assertTrue(areNeighbours(new Location(1, 1), new Location(1, 2)));
+        assertTrue(areNeighbours(new Location(1, 1), new Location(1, 0)));
+        assertTrue(areNeighbours(new Location(1, 1), new Location(0, 1)));
+        assertTrue(areNeighbours(new Location(1, 1), new Location(2, 1)));
+
+        assertFalse(areNeighbours(new Location(1, 1), new Location(1, 1)));
+        assertFalse(areNeighbours(new Location(1, 1), new Location(1, 4)));
     }
 }

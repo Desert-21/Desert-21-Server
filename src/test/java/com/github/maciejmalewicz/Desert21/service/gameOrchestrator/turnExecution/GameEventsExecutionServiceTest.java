@@ -6,14 +6,8 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionRes
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ArmyTrainingExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.BuildingUpgradeExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.PaymentExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.ResourcesProductionExecutor;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ResourcesProductionEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.*;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +43,32 @@ class GameEventsExecutionServiceTest {
     private MockUpgradeExecutor mockUpgradeExecutor;
     private MockResourcesProductionExecutor mockResourceProductionExecutor;
     private MockArmyTrainingExecutor mockArmyTrainingExecutor;
+    private MockArmyLeavingExecutor mockArmyLeavingExecutor;
+    private MockArmyEnteringExecutor mockArmyEnteringExecutor;
+
+    static class MockArmyEnteringExecutor extends ArmyEnteringExecutor {
+        @Override
+        public EventExecutionResult execute(List<ArmyEnteringEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<ArmyEnteringEvent> getExecutableClass() {
+            return ArmyEnteringEvent.class;
+        }
+    }
+
+    static class MockArmyLeavingExecutor extends ArmyLeavingExecutor {
+        @Override
+        public EventExecutionResult execute(List<ArmyLeavingEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<ArmyLeavingEvent> getExecutableClass() {
+            return ArmyLeavingEvent.class;
+        }
+    }
 
     static class MockArmyTrainingExecutor extends ArmyTrainingExecutor {
         @Override
@@ -87,17 +107,18 @@ class GameEventsExecutionServiceTest {
     }
 
     void setupTested() {
-        mockUpgradeExecutor = new MockUpgradeExecutor();
-        mockUpgradeExecutor = spy(mockUpgradeExecutor);
-        mockResourceProductionExecutor = new MockResourcesProductionExecutor();
-        mockResourceProductionExecutor = spy(mockResourceProductionExecutor);
-        mockArmyTrainingExecutor = new MockArmyTrainingExecutor();
-        mockArmyTrainingExecutor = spy(mockArmyTrainingExecutor);
+        mockUpgradeExecutor = spy(new MockUpgradeExecutor());
+        mockResourceProductionExecutor = spy(new MockResourcesProductionExecutor());
+        mockArmyTrainingExecutor = spy(new MockArmyTrainingExecutor());
+        mockArmyLeavingExecutor = spy(new MockArmyLeavingExecutor());
+        mockArmyEnteringExecutor = spy(new MockArmyEnteringExecutor());
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
                 mockResourceProductionExecutor,
-                mockArmyTrainingExecutor
+                mockArmyTrainingExecutor,
+                mockArmyLeavingExecutor,
+                mockArmyEnteringExecutor
         );
     }
 
@@ -165,6 +186,8 @@ class GameEventsExecutionServiceTest {
         verify(mockUpgradeExecutor, times(1)).execute(List.of(actionEvent, queueEvent), context);
         verify(mockResourceProductionExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockArmyTrainingExecutor, times(1)).execute(anyList(), eq(context));
+        verify(mockArmyLeavingExecutor, times(1)).execute(anyList(), eq(context));
+        verify(mockArmyEnteringExecutor, times(1)).execute(anyList(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());
