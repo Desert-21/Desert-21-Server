@@ -22,9 +22,18 @@ public class GameEventsExecutionService {
            PaymentExecutor paymentExecutor,
            BuildingUpgradeExecutor buildingUpgradeExecutor,
            ResourcesProductionExecutor resourcesProductionExecutor,
-           ArmyTrainingExecutor armyTrainingExecutor
+           ArmyTrainingExecutor armyTrainingExecutor,
+           ArmyLeavingExecutor armyLeavingExecutor,
+           ArmyEnteringExecutor armyEnteringExecutor
     ) {
-        executors = List.of(paymentExecutor, buildingUpgradeExecutor, resourcesProductionExecutor, armyTrainingExecutor);
+        executors = List.of(
+                paymentExecutor,
+                buildingUpgradeExecutor,
+                resourcesProductionExecutor,
+                armyTrainingExecutor,
+                armyLeavingExecutor,
+                armyEnteringExecutor
+        );
     }
 
     public EventExecutionResult executeEvents(Collection<Action> actions, TurnExecutionContext context) throws NotAcceptableException {

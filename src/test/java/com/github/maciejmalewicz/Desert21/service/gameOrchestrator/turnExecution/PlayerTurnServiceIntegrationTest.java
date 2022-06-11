@@ -17,6 +17,7 @@ import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.ActionType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.MoveUnitsAction;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.TrainAction;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.UpgradeAction;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
@@ -24,6 +25,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -146,6 +148,30 @@ class PlayerTurnServiceIntegrationTest {
         assertEquals(new Army(10, 0, 0), savedGame.getFields()[0][1].getArmy());
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
+    }
+
+    @Test
+    void integrationMoveArmy() throws NotAcceptableException {
+        game.getFields()[0][0].setArmy(new Army(20, 10, 15));
+        game.getFields()[0][1].setArmy(new Army(5, 0, 0));
+        var moveContent = new MoveUnitsAction(
+                new Location(0, 0),
+                new Location(0, 1),
+                List.of(new Location(0, 0), new Location(0, 1)),
+                new Army(10, 5, 5)
+        );
+        var map = new ObjectMapper().convertValue(moveContent, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.MOVE_UNITS, map)
+        ));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var fromField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(0, 0));
+        var toField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(0, 1));
+        assertEquals(new Army(10, 5, 10), fromField.getArmy());
+        assertEquals(new Army(15, 5, 5), toField.getArmy());
     }
 
 }

@@ -70,4 +70,11 @@ public class LocationUtils {
                 && location.col() >= xMin
                 && location.col() <= xMax;
     }
+
+    public static boolean areNeighbours(Location l1, Location l2) {
+        var yDiff = Math.abs(l1.row() - l2.row());
+        var xDiff = Math.abs(l1.col() - l2.col());
+        var totalDiff = xDiff + yDiff;
+        return totalDiff == 1;
+    }
 }
