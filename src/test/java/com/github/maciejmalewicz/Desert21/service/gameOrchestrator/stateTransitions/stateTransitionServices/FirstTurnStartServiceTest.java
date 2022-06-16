@@ -96,6 +96,8 @@ class FirstTurnStartServiceTest {
         var stateManager = savedGame.getStateManager();
         assertEquals(GameState.AWAITING, stateManager.getGameState());
         assertEquals("AA", stateManager.getCurrentPlayerId());
+        assertEquals(1, stateManager.getTurnCounter());
+        assertEquals("AA", stateManager.getFirstPlayerId());
         assertNotNull(stateManager.getCurrentStateTimeoutId());
         assertNotNull(stateManager.getTimeout());
 

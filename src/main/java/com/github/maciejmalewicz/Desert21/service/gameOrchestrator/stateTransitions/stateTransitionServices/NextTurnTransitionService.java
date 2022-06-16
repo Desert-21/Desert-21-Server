@@ -40,7 +40,15 @@ public class NextTurnTransitionService extends StateTransitionService {
     @Override
     protected Game changeGameState(Game game) {
         var idOpt = game.getOtherPlayer().map(Player::getId);
-        idOpt.ifPresent(id -> game.getStateManager().setCurrentPlayerId(id));
+        idOpt.ifPresent(id -> {
+            game.getStateManager().setCurrentPlayerId(id);
+            var isFirstPlayer = game.getStateManager().getCurrentPlayerId().equals(
+                    game.getStateManager().getFirstPlayerId()
+            );
+            if (isFirstPlayer) {
+                game.getStateManager().setTurnCounter(game.getStateManager().getTurnCounter() + 1);
+            }
+        });
         game.getStateManager().setGameState(GameState.AWAITING);
         return game;
     }
