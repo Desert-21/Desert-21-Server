@@ -7,6 +7,7 @@ import java.util.Date;
 public record StateManagerDto(
         GameState gameState,
         Date timeout,
-        String currentPlayerId
+        String currentPlayerId,
+        int turnCounter
 ) {
 }
