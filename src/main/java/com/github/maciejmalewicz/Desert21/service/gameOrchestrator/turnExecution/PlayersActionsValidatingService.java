@@ -20,6 +20,7 @@ public class PlayersActionsValidatingService {
             BuildingUpgradableValidator buildingUpgradableValidator,
             CostValidator costValidator,
             FieldOwnershipValidator fieldOwnershipValidator,
+            FieldNonOwnershipValidator fieldNonOwnershipValidator,
             LocationBoundsValidator locationBoundsValidator,
             SingleUpgradePerLocationValidator singleUpgradePerLocationValidator,
             BuildingSufficientForUnitsTrainingValidator buildingSufficientForUnitsTrainingValidator,
@@ -35,6 +36,7 @@ public class PlayersActionsValidatingService {
         actionValidators = List.of(
                 locationBoundsValidator,
                 fieldOwnershipValidator,
+                fieldNonOwnershipValidator,
                 singleUpgradePerLocationValidator,
                 buildingUpgradableValidator,
                 costValidator,

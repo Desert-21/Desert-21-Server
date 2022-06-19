@@ -10,7 +10,7 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionRes
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.ResourcesProducedResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ResourcesProductionEvent;
-import com.github.maciejmalewicz.Desert21.utils.BuildingToConfigMappingUtils;
+import com.github.maciejmalewicz.Desert21.utils.BuildingUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -89,7 +89,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
 
     private ResourceSet getProductionOfFactory(Building building, TurnExecutionContext context) {
         try {
-            var config = (FactoryConfig) BuildingToConfigMappingUtils.buildingTypeToConfig(building.getType(), context.gameBalance());
+            var config = (FactoryConfig) BuildingUtils.buildingTypeToConfig(building.getType(), context.gameBalance());
             var production = config.getProduction().getAtLevel(building.getLevel());
             return switch (building.getType()) {
                 case METAL_FACTORY -> getMetalFactoryAdjustedProduction(production, context);

@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance;
 
 import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralCombatConfig;
 import com.github.maciejmalewicz.Desert21.models.balance.ScarabConfig;
 import com.github.maciejmalewicz.Desert21.utils.BeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -27,5 +28,10 @@ public class CombatConfiguration {
     @Bean(name = "scarabsConfig")
     public ScarabConfig scarabsConfig() {
         return BeanFactory.getBean("balance/combatConfig.yml", ScarabConfig.class, "scarabsConfig");
+    }
+
+    @Bean(name = "generalCombatConfig")
+    public GeneralCombatConfig generalCombatConfig() {
+        return BeanFactory.getBean("balance/combatConfig.yml", GeneralCombatConfig.class, "generalCombatConfig");
     }
 }

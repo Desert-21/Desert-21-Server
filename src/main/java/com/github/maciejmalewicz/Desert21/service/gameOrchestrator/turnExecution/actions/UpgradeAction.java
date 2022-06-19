@@ -9,7 +9,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
-import com.github.maciejmalewicz.Desert21.utils.BuildingToConfigMappingUtils;
+import com.github.maciejmalewicz.Desert21.utils.BuildingUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class UpgradeAction implements Action {
 
         var singleUpgradePerLocation = new SingleUpgradePerLocationValidatable(location);
 
-        var buildingConfig = BuildingToConfigMappingUtils
+        var buildingConfig = BuildingUtils
                 .buildingTypeToConfig(building.getType(), context.gameBalance());
 
         var nextLevel = building.getLevel() + 1;
@@ -56,7 +56,7 @@ public class UpgradeAction implements Action {
         var fields = context.game().getFields();
         var field = BoardUtils.fieldAtLocation(fields, location);
         var building = field.getBuilding();
-        var buildingConfig = BuildingToConfigMappingUtils
+        var buildingConfig = BuildingUtils
                 .buildingTypeToConfig(building.getType(), context.gameBalance());
         var nextLevel = building.getLevel() + 1;
         var buildingMaterialsCost = buildingConfig.costAtLevel(nextLevel);

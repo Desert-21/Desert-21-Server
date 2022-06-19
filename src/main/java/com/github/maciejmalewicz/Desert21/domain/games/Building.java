@@ -26,4 +26,8 @@ public class Building {
                 || type == BuildingType.ELECTRICITY_FACTORY;
     }
 
+    public boolean isDefensive() {
+        return type == BuildingType.TOWER || type == BuildingType.HOME_BASE;
+    }
+
 }

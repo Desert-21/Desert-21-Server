@@ -9,6 +9,7 @@ import com.github.maciejmalewicz.Desert21.dto.balance.AllUpgradesBalanceDto;
 import com.github.maciejmalewicz.Desert21.dto.balance.GameBalanceDto;
 import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
 import com.github.maciejmalewicz.Desert21.models.balance.GeneralBalanceConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.GeneralCombatConfig;
 import com.github.maciejmalewicz.Desert21.models.balance.ScarabConfig;
 import com.github.maciejmalewicz.Desert21.models.balance.buildings.FactoryConfig;
 import com.github.maciejmalewicz.Desert21.models.balance.buildings.HomeBaseConfig;
@@ -54,6 +55,10 @@ public class GameBalanceService {
     private ScarabConfig scarabsConfig;
 
     @Autowired
+    @Qualifier("generalCombatConfig")
+    private GeneralCombatConfig generalCombatConfig;
+
+    @Autowired
     private CombatBranchConfig combatBranchConfig;
 
     @Autowired
@@ -64,6 +69,8 @@ public class GameBalanceService {
 
     @Autowired
     private GeneralBalanceConfig generalBalanceConfig;
+
+
 
     public GameBalanceDto getGameBalance() {
         return new GameBalanceDto(
@@ -77,7 +84,8 @@ public class GameBalanceService {
                         droidsConfig,
                         tanksConfig,
                         cannonsConfig,
-                        scarabsConfig
+                        scarabsConfig,
+                        generalCombatConfig
                 ),
                 new AllUpgradesBalanceDto(
                         combatBranchConfig,
