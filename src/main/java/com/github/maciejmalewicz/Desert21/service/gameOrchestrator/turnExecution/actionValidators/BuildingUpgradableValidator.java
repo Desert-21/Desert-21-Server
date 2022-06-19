@@ -3,7 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.BuildingUpgradableValidatable;
-import com.github.maciejmalewicz.Desert21.utils.BuildingToConfigMappingUtils;
+import com.github.maciejmalewicz.Desert21.utils.BuildingUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class BuildingUpgradableValidator implements ActionValidator<BuildingUpgr
         var level = building.getLevel();
         var nextLevel = level + 1;
         try {
-            var config = BuildingToConfigMappingUtils.buildingTypeToConfig(
+            var config = BuildingUtils.buildingTypeToConfig(
                     building.getType(),
                     context.gameBalance()
             );

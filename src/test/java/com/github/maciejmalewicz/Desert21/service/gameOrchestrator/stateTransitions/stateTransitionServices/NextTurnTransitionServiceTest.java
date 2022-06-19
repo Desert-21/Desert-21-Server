@@ -61,6 +61,8 @@ class NextTurnTransitionServiceTest {
                         "TIMEOUTID"
                 )
         );
+        game.getStateManager().setFirstPlayerId("AA");
+        game.getStateManager().setTurnCounter(1);
         game = gameRepository.save(game);
     }
 
@@ -71,7 +73,7 @@ class NextTurnTransitionServiceTest {
     }
 
     @Test
-    void testStateTransition() {
+    void testStateTransitionFromFirstToSecondPLayer() {
         tested.stateTransition(game);
 
         var fromRepo = gameRepository.findAll().stream()
@@ -93,5 +95,33 @@ class NextTurnTransitionServiceTest {
         var notificationContent = (NextTurnNotification) notification.content();
         assertNotNull(notificationContent.timeout());
         assertEquals("BB", notificationContent.currentPlayerId());
+        assertEquals(1, game.getStateManager().getTurnCounter());
+    }
+
+    @Test
+    void testStateTransitionFromSecondToFirstPlayer() {
+        game.getStateManager().setCurrentPlayerId("BB");
+        tested.stateTransition(game);
+
+        var fromRepo = gameRepository.findAll().stream()
+                .findAny()
+                .orElseThrow();
+
+        assertEquals(GameState.AWAITING, fromRepo.getStateManager().getGameState());
+        assertEquals("AA", fromRepo.getStateManager().getCurrentPlayerId());
+
+        var argumentCaptor = ArgumentCaptor.forClass(PlayersNotificationPair.class);
+        verify(playersNotifier, times(1)).notifyPlayers(
+                eq(fromRepo),
+                argumentCaptor.capture()
+        );
+        var notificationPair = argumentCaptor.getAllValues().stream().findFirst().orElseThrow();
+        assertEquals(notificationPair.forCurrentPlayer(), notificationPair.forOpponent());
+        var notification = notificationPair.forCurrentPlayer();
+        assertEquals(NEXT_TURN_NOTIFICATION, notification.type());
+        var notificationContent = (NextTurnNotification) notification.content();
+        assertNotNull(notificationContent.timeout());
+        assertEquals("AA", notificationContent.currentPlayerId());
+        assertEquals(2, fromRepo.getStateManager().getTurnCounter());
     }
 }

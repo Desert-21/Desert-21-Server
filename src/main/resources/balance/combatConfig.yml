@@ -24,3 +24,15 @@ cannonsConfig:
   smallProduction: 10
   mediumProduction: 30
   massProduction: 50
+
+scarabsConfig:
+  power: 10
+  baseGeneration: 10
+  additionalGenerationPerTurn: 2
+  generationBias: 0.15
+
+generalCombatConfig:
+  destructionFunctionPolynomial:
+    - 0.4
+    - 0.6
+    - 0.0

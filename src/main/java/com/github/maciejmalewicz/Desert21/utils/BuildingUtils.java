@@ -5,7 +5,7 @@ import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.balance.buildings.BuildingConfig;
 
-public class BuildingToConfigMappingUtils {
+public class BuildingUtils {
 
     public static BuildingConfig buildingTypeToConfig(BuildingType type, GameBalanceDto gameBalance) throws NotAcceptableException {
         var buildings = gameBalance.buildings();

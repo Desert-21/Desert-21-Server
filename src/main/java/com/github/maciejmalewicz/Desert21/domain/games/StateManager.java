@@ -19,6 +19,9 @@ public class StateManager {
 
     private boolean isCurrentlyTimedOut = false;
 
+    private String firstPlayerId;
+    private int turnCounter;
+
     public StateManager(GameState gameState, Date timeout, String currentPlayerId, String currentStateTimeoutId) {
         this.gameState = gameState;
         this.timeout = timeout;

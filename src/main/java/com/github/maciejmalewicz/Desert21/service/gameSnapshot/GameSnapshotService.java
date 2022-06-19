@@ -83,7 +83,8 @@ public class GameSnapshotService {
         return new StateManagerDto(
                 stateManager.getGameState(),
                 stateManager.getTimeout(),
-                stateManager.getCurrentPlayerId()
+                stateManager.getCurrentPlayerId(),
+                stateManager.getTurnCounter()
         );
     }
 

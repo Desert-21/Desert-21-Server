@@ -50,6 +50,8 @@ public class FirstTurnStartService extends StateTransitionService {
         var stateManager = game.getStateManager();
         var player = game.getPlayers().get(0);
         stateManager.setGameState(GameState.AWAITING);
+        stateManager.setFirstPlayerId(player.getId());
+        stateManager.setTurnCounter(1);
         stateManager.setCurrentPlayerId(player.getId());
         return game;
     }
