@@ -24,7 +24,8 @@ public class GameEventsExecutionService {
            ResourcesProductionExecutor resourcesProductionExecutor,
            ArmyTrainingExecutor armyTrainingExecutor,
            ArmyLeavingExecutor armyLeavingExecutor,
-           ArmyEnteringExecutor armyEnteringExecutor
+           ArmyEnteringExecutor armyEnteringExecutor,
+           AttackingExecutor attackingExecutor
     ) {
         executors = List.of(
                 paymentExecutor,
@@ -32,7 +33,8 @@ public class GameEventsExecutionService {
                 resourcesProductionExecutor,
                 armyTrainingExecutor,
                 armyLeavingExecutor,
-                armyEnteringExecutor
+                armyEnteringExecutor,
+                attackingExecutor
         );
     }
 

@@ -6,7 +6,9 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionRes
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BattleExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.components.FieldConquestService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.*;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +47,23 @@ class GameEventsExecutionServiceTest {
     private MockArmyTrainingExecutor mockArmyTrainingExecutor;
     private MockArmyLeavingExecutor mockArmyLeavingExecutor;
     private MockArmyEnteringExecutor mockArmyEnteringExecutor;
+    private MockAttackingExecutor mockAttackingExecutor;
+
+    static class MockAttackingExecutor extends AttackingExecutor {
+        public MockAttackingExecutor() {
+            super(mock(BattleExecutor.class), mock(FieldConquestService.class));
+        }
+
+        @Override
+        public EventExecutionResult execute(List<AttackingEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<AttackingEvent> getExecutableClass() {
+            return AttackingEvent.class;
+        }
+    }
 
     static class MockArmyEnteringExecutor extends ArmyEnteringExecutor {
         @Override
@@ -112,13 +131,15 @@ class GameEventsExecutionServiceTest {
         mockArmyTrainingExecutor = spy(new MockArmyTrainingExecutor());
         mockArmyLeavingExecutor = spy(new MockArmyLeavingExecutor());
         mockArmyEnteringExecutor = spy(new MockArmyEnteringExecutor());
+        mockAttackingExecutor = spy(new MockAttackingExecutor());
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
                 mockResourceProductionExecutor,
                 mockArmyTrainingExecutor,
                 mockArmyLeavingExecutor,
-                mockArmyEnteringExecutor
+                mockArmyEnteringExecutor,
+                mockAttackingExecutor
         );
     }
 
@@ -188,6 +209,7 @@ class GameEventsExecutionServiceTest {
         verify(mockArmyTrainingExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockArmyLeavingExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockArmyEnteringExecutor, times(1)).execute(anyList(), eq(context));
+        verify(mockAttackingExecutor, times(1)).execute(anyList(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());

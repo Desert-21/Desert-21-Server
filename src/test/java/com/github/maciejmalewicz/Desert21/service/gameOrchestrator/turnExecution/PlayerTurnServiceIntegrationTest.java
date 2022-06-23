@@ -16,10 +16,7 @@ import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.ActionType;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.MoveUnitsAction;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.TrainAction;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.UpgradeAction;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
@@ -91,6 +88,7 @@ class PlayerTurnServiceIntegrationTest {
         );
         game.getFields()[0][0] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY, 1), "AA");
         game.getFields()[0][1] = new Field(new Building(BuildingType.HOME_BASE, 3), "AA");
+        game.getFields()[1][1] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY), "BB");
 
         gameRepository.save(game);
     }
@@ -172,6 +170,35 @@ class PlayerTurnServiceIntegrationTest {
         var toField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(0, 1));
         assertEquals(new Army(10, 5, 10), fromField.getArmy());
         assertEquals(new Army(15, 5, 5), toField.getArmy());
+    }
+
+    @Test
+    void integrationAttack() throws NotAcceptableException {
+        game.getFields()[0][1].setArmy(new Army(20, 10, 15));
+        game.getFields()[1][1].setArmy(new Army(5, 2, 10));
+        var attackContent = new AttackAction(
+                new Location(0, 1),
+                new Location(1, 1),
+                List.of(new Location(0, 1), new Location(1, 1)),
+                new Army(10, 5, 10)
+        );
+        var map = new ObjectMapper().convertValue(attackContent, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.ATTACK, map)
+        ));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var fromField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(0, 1));
+        var toField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(1, 1));
+        assertEquals(new Army(10, 5, 5), fromField.getArmy());
+        // after calculations...
+        assertEquals(new Army(5, 2, 5), toField.getArmy());
+        assertEquals("AA", fromField.getOwnerId());
+        assertEquals("AA", toField.getOwnerId());
+
+        verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
     }
 
 }
