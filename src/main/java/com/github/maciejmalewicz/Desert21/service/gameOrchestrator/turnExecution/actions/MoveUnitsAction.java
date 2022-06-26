@@ -43,8 +43,8 @@ public class MoveUnitsAction implements Action {
         var fieldOwnershipValidatables = path.stream()
                 .map(l -> new FieldOwnershipValidatable(getFieldAtLocationChecked(context, l), context.player()))
                 .toList();
-        var fromField = BoardUtils.fieldAtLocation(context.game().getFields(), from);
-        var enoughUnitsValidatable = new EnoughUnitsValidatable(army, fromField);
+
+        var enoughUnitsValidatable = new EnoughUnitsValidatable(army, from);
         var allSingleValueValidatables = List.of(
                 pathConvergenceValidatable,
                 pathContinuityValidatable,

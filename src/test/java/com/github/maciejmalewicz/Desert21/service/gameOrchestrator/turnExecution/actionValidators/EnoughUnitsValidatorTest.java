@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.EnoughUnitsValidatable;
@@ -56,9 +57,9 @@ class EnoughUnitsValidatorTest {
     @Test
     void validateHappyPath() {
         var validatables = List.of(
-                new EnoughUnitsValidatable(new Army(10, 0, 0), context.game().getFields()[0][0]),
-                new EnoughUnitsValidatable(new Army(0, 2, 2), context.game().getFields()[0][0]),
-                new EnoughUnitsValidatable(new Army(0, 0, 2), context.game().getFields()[0][0])
+                new EnoughUnitsValidatable(new Army(10, 0, 0), new Location(0, 0)),
+                new EnoughUnitsValidatable(new Army(0, 2, 2), new Location(0, 0)),
+                new EnoughUnitsValidatable(new Army(0, 0, 2), new Location(0, 0))
         );
         assertTrue(tested.validate(validatables, context));
     }
@@ -66,9 +67,19 @@ class EnoughUnitsValidatorTest {
     @Test
     void validateUnhappyPath() {
         var validatables = List.of(
-                new EnoughUnitsValidatable(new Army(10, 0, 0), context.game().getFields()[0][0]),
-                new EnoughUnitsValidatable(new Army(0, 2, 2), context.game().getFields()[0][0]),
-                new EnoughUnitsValidatable(new Army(0, 0, 20), context.game().getFields()[0][0])
+                new EnoughUnitsValidatable(new Army(10, 0, 0), new Location(0, 0)),
+                new EnoughUnitsValidatable(new Army(0, 2, 2), new Location(0, 0)),
+                new EnoughUnitsValidatable(new Army(0, 0, 20), new Location(0, 0))
+        );
+        assertFalse(tested.validate(validatables, context));
+    }
+
+    @Test
+    void validateWhenLocationIsOutOfBounds() {
+        var validatables = List.of(
+                new EnoughUnitsValidatable(new Army(10, 0, 0), new Location(0, 0)),
+                new EnoughUnitsValidatable(new Army(0, 2, 2), new Location(-99, 0)),
+                new EnoughUnitsValidatable(new Army(0, 0, 0), new Location(0, 0))
         );
         assertFalse(tested.validate(validatables, context));
     }

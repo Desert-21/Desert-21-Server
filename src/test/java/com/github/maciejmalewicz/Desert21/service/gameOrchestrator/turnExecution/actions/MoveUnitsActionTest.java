@@ -73,22 +73,6 @@ class MoveUnitsActionTest {
         assertEquals(new Army(10, 2, 4), toEvent.getArmy());
     }
 
-    @Test
-    void getActionValidatablesShouldThrowErrorOnFromLocationOutOfBounds() {
-        context.game().getFields()[0][0] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
-        context.game().getFields()[0][1] = new Field(new Building(BuildingType.HOME_BASE), "AA");
-        context.game().getFields()[1][1] = new Field(new Building(BuildingType.TOWER), "AA");
-        var action = new MoveUnitsAction(
-                new Location(99, 0),
-                new Location(1, 1),
-                List.of(new Location(99, 1), new Location(0, 0), new Location(1, 1)),
-                new Army(10, 2, 4)
-        );
-        var exception = assertThrows(NotAcceptableException.class, () -> {
-           action.getActionValidatables(context);
-        });
-        assertEquals("Selected field is not within board bounds!", exception.getMessage());
-    }
 
     @Test //handled by the validatables later
     void getActionValidatablesShouldNotBreakOnLocationOutOfBounds() throws NotAcceptableException {
@@ -186,7 +170,7 @@ class MoveUnitsActionTest {
                 .map(EnoughUnitsValidatable.class::cast)
                 .findAny()
                 .orElseThrow();
-        assertEquals(context.game().getFields()[0][0], enoughUnitsValidatable.field());
+        assertEquals(new Location(0, 0), enoughUnitsValidatable.location());
         assertEquals(new Army(10, 2, 4), enoughUnitsValidatable.army());
     }
 }
