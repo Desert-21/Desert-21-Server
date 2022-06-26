@@ -2,8 +2,11 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
+import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.EnoughUnitsValidatable;
+import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +20,25 @@ public class EnoughUnitsValidator implements ActionValidator<EnoughUnitsValidata
     @Override
     public boolean validate(List<EnoughUnitsValidatable> validatables, TurnExecutionContext context) {
         var groupedByFields = validatables.stream()
-                .collect(groupingBy(EnoughUnitsValidatable::field));
-        return groupedByFields.entrySet().stream().allMatch(this::validate);
+                .collect(groupingBy(EnoughUnitsValidatable::location));
+        return groupedByFields.entrySet().stream().allMatch(entry -> validate(entry, context));
     }
 
-    private boolean validate(Map.Entry<Field, List<EnoughUnitsValidatable>> entry) {
-        var field = entry.getKey();
+    private boolean validate(Map.Entry<Location, List<EnoughUnitsValidatable>> entry, TurnExecutionContext context) {
+        var location = entry.getKey();
         var validatables = entry.getValue();
         var troopsNeeded = validatables.stream()
                 .map(EnoughUnitsValidatable::army)
                 .reduce(new Army(0, 0, 0), Army::combineWith);
-        var troopsOnField = field.getArmy();
-        return troopsOnField.getDroids() >= troopsNeeded.getDroids()
-                && troopsOnField.getTanks() >= troopsNeeded.getTanks()
-                && troopsOnField.getCannons() >= troopsNeeded.getCannons();
+        try {
+            var field = BoardUtils.fieldAtLocation(context.game().getFields(), location);
+            var troopsOnField = field.getArmy();
+            return troopsOnField.getDroids() >= troopsNeeded.getDroids()
+                    && troopsOnField.getTanks() >= troopsNeeded.getTanks()
+                    && troopsOnField.getCannons() >= troopsNeeded.getCannons();
+        } catch (NotAcceptableException e) {
+            return false;
+        }
+
     }
 }

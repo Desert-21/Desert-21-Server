@@ -57,9 +57,7 @@ public class AttackAction implements Action {
                 context.player()
         );
 
-        // enough units?
-        var fromField = BoardUtils.fieldAtLocation(context.game().getFields(), from);
-        var enoughUnitsValidatable = new EnoughUnitsValidatable(army, fromField);
+        var enoughUnitsValidatable = new EnoughUnitsValidatable(army, from);
 
         var allSingleUnitsValidatables = List.of(
                 pathLengthValidatable,

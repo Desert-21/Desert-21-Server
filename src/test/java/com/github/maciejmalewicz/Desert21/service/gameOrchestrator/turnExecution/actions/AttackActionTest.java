@@ -88,20 +88,6 @@ class AttackActionTest {
     }
 
     @Test
-    void getActionValidatablesFromFieldOutOfBounds() {
-        var fromLocation = new Location(-1, 99);
-        var toLocation = new Location(1, 1);
-        var path = List.of(new Location(0, 0), new Location(1, 0), new Location(1, 1));
-        var army = new Army(10, 2, 4);
-
-        var action = new AttackAction(fromLocation, toLocation, path, army);
-        var exception = assertThrows(NotAcceptableException.class, () -> {
-            action.getActionValidatables(context);
-        });
-        assertEquals("Selected field is not within board bounds!", exception.getMessage());
-    }
-
-    @Test
     void getActionValidatablesToFieldOutOfBounds() {
         var fromLocation = new Location(1, 0);
         var toLocation = new Location(-1, 99);
@@ -179,7 +165,7 @@ class AttackActionTest {
         assertThat(expectedFieldNonOwnershipValidatable, sameBeanAs(fieldNonOwnershipValidatable));
 
         var enoughUnitsValidatable = findWithinCollection(validatables, EnoughUnitsValidatable.class);
-        var expectedEnoughUnitsValidatable = new EnoughUnitsValidatable(army, context.game().getFields()[0][0]);
+        var expectedEnoughUnitsValidatable = new EnoughUnitsValidatable(army, new Location(0, 0));
         assertThat(expectedEnoughUnitsValidatable, sameBeanAs(enoughUnitsValidatable));
     }
 }

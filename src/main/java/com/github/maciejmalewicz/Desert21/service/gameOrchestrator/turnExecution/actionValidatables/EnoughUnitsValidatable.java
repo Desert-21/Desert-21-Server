@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
+import com.github.maciejmalewicz.Desert21.models.Location;
 
-public record EnoughUnitsValidatable(Army army, Field field) implements ActionValidatable {
+public record EnoughUnitsValidatable(Army army, Location location) implements ActionValidatable {
 }
