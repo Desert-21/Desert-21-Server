@@ -1,10 +1,8 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
-import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
-import com.github.maciejmalewicz.Desert21.domain.users.LoginData;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersActionDto;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
@@ -17,12 +15,12 @@ import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.*;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.LabUpgradeExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.TrainingMode;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -200,5 +198,29 @@ class PlayerTurnServiceIntegrationTest {
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
     }
+
+    @Test
+    void integrationLabUpgrade() throws NotAcceptableException {
+        player.getOwnedUpgrades().add(LabUpgrade.HOME_SWEET_HOME);
+        player.setResources(new ResourceSet(10, 100, 300));
+
+        var labUpgradeContent = new LabAction(LabUpgrade.SCARAB_SCANNERS);
+        var map = new ObjectMapper().convertValue(labUpgradeContent, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.LAB_EVENT, map)
+        ));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var currentPlayer = savedGame.getCurrentPlayer().orElseThrow();
+        var upgrades = currentPlayer.getOwnedUpgrades();
+        assertEquals(2, upgrades.size());
+        assertEquals(LabUpgrade.HOME_SWEET_HOME, upgrades.get(0));
+        assertEquals(LabUpgrade.SCARAB_SCANNERS, upgrades.get(1));
+
+        assertEquals(new ResourceSet(42, 132, 247), currentPlayer.getResources());
+    }
+
 
 }

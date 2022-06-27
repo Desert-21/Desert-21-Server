@@ -8,6 +8,16 @@ public interface LabBranchConfig {
     List<LabUpgrade> getSecondTierUpgrades();
     LabUpgrade getSuperUpgrade();
 
+    Object getBalanceConfig();
+    Object getCostConfig();
+
+    default boolean containsUpgrade(LabUpgrade upgrade) {
+        return getBaseUpgrade().equals(upgrade)
+                || getFirstTierUpgrades().contains(upgrade)
+                || getSecondTierUpgrades().contains(upgrade)
+                || getSuperUpgrade().equals(upgrade);
+    }
+
     default boolean isAllowedToUpgrade(LabUpgrade upgrade, List<LabUpgrade> ownedUpgrades) {
         if (upgrade.equals(getBaseUpgrade())) {
             return true;

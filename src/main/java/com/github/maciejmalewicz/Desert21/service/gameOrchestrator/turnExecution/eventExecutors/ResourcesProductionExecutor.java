@@ -52,7 +52,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
         var gameBalance = context.gameBalance();
         var baseProduction = gameBalance.buildings().homeBase().getProduction();
         var potentialBonus = gameBalance.upgrades().production()
-                .getProductionBranchConfig()
+                .getBalanceConfig()
                 .getHomeSweetHomeProductionBonus();
         var productionAfterUpgrade = (int) Math.round(baseProduction * (1 + potentialBonus));
         var productionOfEach =
@@ -66,7 +66,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
         var gameBalance = context.gameBalance();
         var baseProduction = gameBalance.general().getProductionPerField();
         var goldDiggersBonus = gameBalance.upgrades().control()
-                .getControlBranchConfig()
+                .getBalanceConfig()
                 .getGoldDiggersProductionPerFieldBonus();
         var upgradedProduction = baseProduction + goldDiggersBonus;
         var actualProductionPerField = context.player().ownsUpgrade(LabUpgrade.GOLD_DIGGERS) ?
@@ -104,7 +104,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
 
     private ResourceSet getMetalFactoryAdjustedProduction(int baseProduction, TurnExecutionContext context) {
         var ownsMetalUpgrade = context.player().ownsUpgrade(LabUpgrade.MORE_METAL);
-        var productionBranch = context.gameBalance().upgrades().production().getProductionBranchConfig();
+        var productionBranch = context.gameBalance().upgrades().production().getBalanceConfig();
         var staticBonus = productionBranch.getMoreMetalProductionStaticBonus();
         var relativeBonus = productionBranch.getMoreMetalProductionRelativeBonus();
         var production = ownsMetalUpgrade ?
@@ -118,7 +118,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
         var productionBranch = context.gameBalance()
                 .upgrades()
                 .production()
-                .getProductionBranchConfig();
+                .getBalanceConfig();
         var staticBonus = productionBranch.getMoreBuildingMaterialsProductionStaticBonus();
         var relativeBonus = productionBranch.getMoreBuildingMaterialsProductionRelativeBonus();
         var production = ownsBMUpgrade ?
@@ -133,7 +133,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
                 .gameBalance()
                 .upgrades()
                 .production()
-                .getProductionBranchConfig();
+                .getBalanceConfig();
         var staticBonus = productionBranch.getMoreElectricityProductionStaticBonus();
         var relativeBonus = productionBranch.getMoreElectricityProductionRelativeBonus();
         var production = ownsElectricityUpgrade ?
@@ -152,7 +152,7 @@ public class ResourcesProductionExecutor implements EventExecutor<ResourcesProdu
     private ResourceSet appendProductionManagersUpgrade(ResourceSet baseTotalResourceSet, TurnExecutionContext context) {
         var ownsUpgrade = context.player().ownsUpgrade(LabUpgrade.PRODUCTION_MANAGERS);
         var productionBonus = context.gameBalance().upgrades().production()
-                .getProductionBranchConfig()
+                .getBalanceConfig()
                 .getProductionManagersProductionBonus();
         return ownsUpgrade ?
                 baseTotalResourceSet.multiplyBy(1 + productionBonus) :

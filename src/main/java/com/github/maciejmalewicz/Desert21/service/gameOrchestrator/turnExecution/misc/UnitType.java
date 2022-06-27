@@ -1,4 +1,4 @@
-package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components;
+package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -3,7 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.ProductionTypeUpgradesOwnershipValidatable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.TrainingMode;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.TrainingMode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

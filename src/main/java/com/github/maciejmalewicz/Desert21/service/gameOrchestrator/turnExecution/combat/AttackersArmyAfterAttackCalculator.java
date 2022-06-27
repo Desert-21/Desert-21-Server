@@ -12,7 +12,7 @@ public class AttackersArmyAfterAttackCalculator {
         if (!attackerHasWon) {
             return new FightingArmy(0, 0, 0, 0);
         }
-        double reusablePartsDamageRatio = 1 - gameBalance.upgrades().combat().getCombatBranchConfig().getReusablePartsUnitsFractionSaved();
+        double reusablePartsDamageRatio = 1 - gameBalance.upgrades().combat().getBalanceConfig().getReusablePartsUnitsFractionSaved();
         double actualDestructionRatio = attacker.ownsUpgrade(LabUpgrade.REUSABLE_PARTS)
                 ? destructionRatio * reusablePartsDamageRatio
                 : destructionRatio;

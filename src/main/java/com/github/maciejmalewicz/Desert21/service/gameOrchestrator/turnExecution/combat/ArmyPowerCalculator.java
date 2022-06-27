@@ -111,7 +111,7 @@ public class ArmyPowerCalculator {
             return armyPower;
         }
         var towerConfig = balance.buildings().tower();
-        var towerLevel = balance.upgrades().control().getControlBranchConfig().getFactoryTurretTowerLevel();
+        var towerLevel = balance.upgrades().control().getBalanceConfig().getFactoryTurretTowerLevel();
         var baseProtection = towerConfig.getBaseProtection().getAtLevel(towerLevel);
         var unitBonus = towerConfig.getUnitBonus().getAtLevel(towerLevel);
 
@@ -127,7 +127,7 @@ public class ArmyPowerCalculator {
         if (!player.ownsUpgrade(LabUpgrade.IMPROVED_DROIDS)) {
             return armyPower;
         }
-        var config = balance.upgrades().combat().getCombatBranchConfig();
+        var config = balance.upgrades().combat().getBalanceConfig();
         var bonus = building.isDefensive() ?
                 config.getImprovedDroidsBaseAtTowerDefenceBonus() :
                 config.getImprovedDroidsBaseDefenceBonus();
@@ -143,7 +143,7 @@ public class ArmyPowerCalculator {
         if (!player.ownsUpgrade(LabUpgrade.IMPROVED_TANKS)) {
             return armyPower;
         }
-        var tanksPowerBonus = balanceDto.combat().getCombatBranchConfig().getImprovedTanksPowerBonus();
+        var tanksPowerBonus = balanceDto.combat().getBalanceConfig().getImprovedTanksPowerBonus();
         var tanksPowerRatio = 1 + tanksPowerBonus;
         return new ArmyPower(
                 armyPower.droids(),
@@ -157,7 +157,7 @@ public class ArmyPowerCalculator {
         if (!player.ownsUpgrade(LabUpgrade.ADVANCED_TACTICS)) {
             return power;
         }
-        var combatConfig = balanceDto.combat().getCombatBranchConfig();
+        var combatConfig = balanceDto.combat().getBalanceConfig();
         var powerPerStep = combatConfig.getAdvancedTacticsPowerBonusPerReferencePower();
         var step = (double) combatConfig.getAdvancedTacticsReferencePower();
         var amountOfSteps = Math.floor(power / step);

@@ -1,8 +1,6 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance.lab;
 
-import com.github.maciejmalewicz.Desert21.models.balance.lab.CombatBranchBalanceConfig;
-import com.github.maciejmalewicz.Desert21.models.balance.lab.ControlBranchBalanceConfig;
-import com.github.maciejmalewicz.Desert21.models.balance.lab.ProductionBranchBalanceConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.lab.*;
 import com.github.maciejmalewicz.Desert21.utils.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,18 +13,23 @@ public class LabConfiguration {
     @Bean
     public CombatBranchConfig combatBranchConfig() {
         var config = BeanFactory.getBean(PATH, CombatBranchBalanceConfig.class);
-        return new CombatBranchConfig(config);
+        var costConfig = BeanFactory.getBean(PATH, CombatBranchCostConfig.class);
+        return new CombatBranchConfig(config, costConfig);
     }
 
     @Bean
     public ControlBranchConfig controlBranchConfig() {
         var config = BeanFactory.getBean(PATH, ControlBranchBalanceConfig.class);
-        return new ControlBranchConfig(config);
+        var costConfig = BeanFactory.getBean(PATH, ControlBranchCostConfig.class);
+        return new ControlBranchConfig(config, costConfig);
     }
 
     @Bean
     public ProductionBranchConfig productionBranchConfig() {
         var config = BeanFactory.getBean(PATH, ProductionBranchBalanceConfig.class);
-        return new ProductionBranchConfig(config);
+        var costConfig = BeanFactory.getBean(PATH, ProductionBranchCostConfig.class);
+        return new ProductionBranchConfig(config, costConfig);
     }
+
+
 }

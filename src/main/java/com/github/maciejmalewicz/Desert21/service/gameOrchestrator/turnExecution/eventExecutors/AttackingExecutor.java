@@ -7,7 +7,7 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionRes
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BattleExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BattleResult;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.components.FieldConquestService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.FieldConquestService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.AttackingEvent;
 import org.springframework.data.util.Pair;

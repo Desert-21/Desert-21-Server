@@ -1,7 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents;
 
 import com.github.maciejmalewicz.Desert21.models.Location;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.components.UnitType;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
