@@ -1,4 +1,4 @@
-package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.components;
+package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc;
 
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;

@@ -3,6 +3,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.ActionValidatable;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.LabUpgradeNotRepeatedValidatable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,10 @@ public class PlayersActionsValidatingService {
             EnoughUnitsValidator enoughUnitsValidator,
             PathFromAndToConvergenceValidator pathFromAndToConvergenceValidator,
             PathContinuityValidator pathContinuityValidator,
-            PathLengthValidator pathLengthValidator
-
+            PathLengthValidator pathLengthValidator,
+            LabUpgradeHierarchyValidator labUpgradeHierarchyValidator,
+            SingleUpgradePerBranchValidator singleUpgradePerBranchValidator,
+            LabUpgradeNotRepeatedValidator labUpgradeNotRepeatedValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -47,7 +50,10 @@ public class PlayersActionsValidatingService {
                 enoughUnitsValidator,
                 pathFromAndToConvergenceValidator,
                 pathContinuityValidator,
-                pathLengthValidator
+                pathLengthValidator,
+                labUpgradeHierarchyValidator,
+                singleUpgradePerBranchValidator,
+                labUpgradeNotRepeatedValidator
         );
     }
 

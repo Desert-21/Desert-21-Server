@@ -19,8 +19,7 @@ public class Constants {
     public static final String PLAYERS_CONQUEST_FAILED_NOTIFICATION = "PLAYERS_CONQUEST_FAILED_NOTIFICATION";
     public static final String ENEMY_CONQUEST_SUCCEEDED_NOTIFICATION = "ENEMY_CONQUEST_SUCCEEDED_NOTIFICATION";
     public static final String PLAYERS_CONQUEST_SUCCEEDED_NOTIFICATION = "PLAYERS_CONQUEST_SUCCEEDED_NOTIFICATION";
-
-    public static final String USELESS = "";
+    public static final String LAB_UPGRADE_NOTIFICATION = "LAB_UPGRADE";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";

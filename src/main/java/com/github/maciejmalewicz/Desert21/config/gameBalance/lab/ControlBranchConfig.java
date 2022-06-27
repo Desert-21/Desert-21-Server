@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance.lab;
 
 import com.github.maciejmalewicz.Desert21.models.balance.lab.ControlBranchBalanceConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.lab.ControlBranchCostConfig;
 import lombok.Getter;
 
 import java.util.List;
@@ -8,10 +9,12 @@ import java.util.List;
 @Getter
 public class ControlBranchConfig implements LabBranchConfig {
 
-    private final ControlBranchBalanceConfig controlBranchConfig;
+    private final ControlBranchBalanceConfig balanceConfig;
+    private final ControlBranchCostConfig costConfig;
 
-    public ControlBranchConfig(ControlBranchBalanceConfig controlBranchConfig) {
-        this.controlBranchConfig = controlBranchConfig;
+    public ControlBranchConfig(ControlBranchBalanceConfig balanceConfig, ControlBranchCostConfig costConfig) {
+        this.balanceConfig = balanceConfig;
+        this.costConfig = costConfig;
     }
 
     @Override

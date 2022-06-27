@@ -16,7 +16,7 @@ public class ScarabsPowerCalculator {
             return scarabsPower;
         }
 
-        var scarabScannersBonus = context.gameBalance().upgrades().control().getControlBranchConfig().getScarabScannersPowerDecreaseRatio();
+        var scarabScannersBonus = context.gameBalance().upgrades().control().getBalanceConfig().getScarabScannersPowerDecreaseRatio();
         var scarabsPowerRatio = 1 - scarabScannersBonus;
         return (int) Math.round(scarabsPower * scarabsPowerRatio);
     }

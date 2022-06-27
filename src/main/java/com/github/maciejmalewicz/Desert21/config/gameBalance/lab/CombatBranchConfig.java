@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.config.gameBalance.lab;
 
 import com.github.maciejmalewicz.Desert21.models.balance.lab.CombatBranchBalanceConfig;
+import com.github.maciejmalewicz.Desert21.models.balance.lab.CombatBranchCostConfig;
 import lombok.Getter;
 
 import java.util.List;
@@ -8,10 +9,12 @@ import java.util.List;
 @Getter
 public class CombatBranchConfig implements LabBranchConfig {
 
-    private final CombatBranchBalanceConfig combatBranchConfig;
+    private final CombatBranchBalanceConfig balanceConfig;
+    private final CombatBranchCostConfig costConfig;
 
-    public CombatBranchConfig(CombatBranchBalanceConfig combatBranchConfig) {
-        this.combatBranchConfig = combatBranchConfig;
+    public CombatBranchConfig(CombatBranchBalanceConfig balanceConfig, CombatBranchCostConfig costConfig) {
+        this.balanceConfig = balanceConfig;
+        this.costConfig = costConfig;
     }
 
     @Override

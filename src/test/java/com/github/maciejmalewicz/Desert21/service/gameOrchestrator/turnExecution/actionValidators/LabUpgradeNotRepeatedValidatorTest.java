@@ -1,12 +1,10 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators;
 
+import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
-import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.NoPendingTrainingsValidatable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.LabUpgradeNotRepeatedValidatable;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,19 +16,21 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class NoPendingTrainingsValidatorTest {
+class LabUpgradeNotRepeatedValidatorTest {
 
     @Autowired
     private GameBalanceService gameBalanceService;
 
     private TurnExecutionContext context;
 
+    private Player player;
+
     @Autowired
-    private NoPendingTrainingsValidator tested;
+    private LabUpgradeNotRepeatedValidator tested;
 
     @BeforeEach
     void setup() {
-        var player = new Player("AA",
+        player = new Player("AA",
                 "macior123456",
                 new ResourceSet(60, 60, 60));
         context = new TurnExecutionContext(
@@ -51,31 +51,35 @@ class NoPendingTrainingsValidatorTest {
                 ),
                 player
         );
+        player.getOwnedUpgrades().add(LabUpgrade.HOME_SWEET_HOME);
     }
 
     @Test
     void validateHappyPath() {
         var validatables = List.of(
-                new NoPendingTrainingsValidatable(new Location(0, 0)),
-                new NoPendingTrainingsValidatable(new Location(0, 1))
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.MORE_METAL),
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.REUSABLE_PARTS)
         );
-        context.game().setEventQueue(List.of(
-                new ArmyTrainingEvent(2, new Location(8, 8), UnitType.CANNON, 10)
-        ));
-        var result = tested.validate(validatables, context);
-        assertTrue(result);
+        assertTrue(tested.validate(validatables, context));
     }
 
     @Test
-    void validateLocationsClashing() {
+    void validateRepeatedBetweenRequested() {
         var validatables = List.of(
-                new NoPendingTrainingsValidatable(new Location(0, 0)),
-                new NoPendingTrainingsValidatable(new Location(0, 1))
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.MORE_METAL),
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.REUSABLE_PARTS),
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.MORE_METAL)
         );
-        context.game().setEventQueue(List.of(
-                new ArmyTrainingEvent(2, new Location(0, 0), UnitType.CANNON, 10)
-        ));
-        var result = tested.validate(validatables, context);
-        assertFalse(result);
+        assertFalse(tested.validate(validatables, context));
+    }
+
+    @Test
+    void validateAlreadyUpgraded() {
+        var validatables = List.of(
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.MORE_METAL),
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.REUSABLE_PARTS),
+                new LabUpgradeNotRepeatedValidatable(LabUpgrade.HOME_SWEET_HOME)
+        );
+        assertFalse(tested.validate(validatables, context));
     }
 }
