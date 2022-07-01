@@ -15,4 +15,8 @@ public class GeneralBalanceConfig {
     private int fogOfWar2;
 
     private int productionPerField;
+
+    private double rocketStrikeDamage;
+    private int baseRocketStrikePrice;
+    private int rocketStrikePricePerUsage;
 }

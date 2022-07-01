@@ -31,6 +31,8 @@ import org.springframework.security.core.Authentication;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -222,5 +224,24 @@ class PlayerTurnServiceIntegrationTest {
         assertEquals(new ResourceSet(42, 132, 247), currentPlayer.getResources());
     }
 
+    @Test
+    void integrationRocketStrike() throws NotAcceptableException {
+        player.setResources(new ResourceSet(10, 100, 400));
+        game.getFields()[6][6] = new Field(new Building(BuildingType.ROCKET_LAUNCHER), "AA");
+        game.getFields()[5][5] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY), "BB");
+        game.getFields()[5][5].setArmy(new Army(10, 10, 10));
 
+        var rocketStrikeActionContent = new FireRocketAction(new Location(5, 5), false);
+        var map = new ObjectMapper().convertValue(rocketStrikeActionContent, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.FIRE_ROCKET, map)
+        ));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var currentPlayer = savedGame.getCurrentPlayer().orElseThrow();
+        assertThat(new Army(5, 5, 5), sameBeanAs(savedGame.getFields()[5][5].getArmy()));
+        assertEquals(new ResourceSet(34, 124, 139), currentPlayer.getResources());
+    }
 }

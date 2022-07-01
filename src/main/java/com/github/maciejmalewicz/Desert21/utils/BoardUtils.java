@@ -6,6 +6,8 @@ import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -45,5 +47,15 @@ public class BoardUtils {
                 )
                 .map(stream -> stream.toArray(Field[]::new))
                 .toArray(Field[][]::new);
+    }
+
+    public static List<Field> boardToFieldList(Field[][] fields) {
+        return Arrays.stream(fields).flatMap(Arrays::stream).toList();
+    }
+
+    public static List<Field> boardToOwnedFieldList(Field[][] fields, String playerId) {
+        return boardToFieldList(fields).stream()
+                .filter(f -> playerId.equals(f.getOwnerId()))
+                .toList();
     }
 }

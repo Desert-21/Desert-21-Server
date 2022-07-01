@@ -34,7 +34,11 @@ public class PlayersActionsValidatingService {
             PathLengthValidator pathLengthValidator,
             LabUpgradeHierarchyValidator labUpgradeHierarchyValidator,
             SingleUpgradePerBranchValidator singleUpgradePerBranchValidator,
-            LabUpgradeNotRepeatedValidator labUpgradeNotRepeatedValidator
+            LabUpgradeNotRepeatedValidator labUpgradeNotRepeatedValidator,
+            SingleRocketStrikePerTurnValidator singleRocketStrikePerTurnValidator,
+            RocketLauncherOwnershipValidator rocketLauncherOwnershipValidator,
+            SuperSonicUpgradeValidator superSonicUpgradeValidator,
+            RocketStrikeValidRocketStrikeTargetValidator rocketStrikeValidRocketStrikeTargetValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -53,7 +57,11 @@ public class PlayersActionsValidatingService {
                 pathLengthValidator,
                 labUpgradeHierarchyValidator,
                 singleUpgradePerBranchValidator,
-                labUpgradeNotRepeatedValidator
+                labUpgradeNotRepeatedValidator,
+                singleRocketStrikePerTurnValidator,
+                rocketLauncherOwnershipValidator,
+                superSonicUpgradeValidator,
+                rocketStrikeValidRocketStrikeTargetValidator
         );
     }
 

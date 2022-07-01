@@ -1,4 +1,63 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions;
 
+import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
+import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.Location;
+import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.RocketStrikeEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator.calculateRocketCost;
+import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.boardToOwnedFieldList;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class FireRocketAction implements Action {
+    private Location target;
+    private boolean isTargetingRocket;
+
+    @Override
+    public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {
+        var singleRocketStrikePerTurnValidatable = new SingleRocketStrikePerTurnValidatable(target);
+
+        var ownedFields = boardToOwnedFieldList(context.game().getFields(), context.player().getId());
+        var rocketStrikesPerformed = context.player().getRocketStrikesDone();
+        var electricityCost = calculateRocketCost(context.gameBalance(), rocketStrikesPerformed, ownedFields);
+        var costValidatable = new CostValidatable(new ResourceSet(0, 0, electricityCost));
+
+        var rocketLauncherOwnershipValidatable = new RocketLauncherOwnershipValidatable(ownedFields);
+
+        var validTargetValidatable = new RocketStrikeValidRocketStrikeTargetValidatable(target, isTargetingRocket);
+
+        var superSonicUpgradeValidatable = new SuperSonicUpgradeValidatable(isTargetingRocket);
+        return List.of(
+                singleRocketStrikePerTurnValidatable,
+                costValidatable,
+                rocketLauncherOwnershipValidatable,
+                validTargetValidatable,
+                superSonicUpgradeValidatable
+        );
+    }
+
+    @Override
+    public List<GameEvent> getEventExecutables(TurnExecutionContext context) throws NotAcceptableException {
+        var ownedFields = boardToOwnedFieldList(context.game().getFields(), context.player().getId());
+        var rocketStrikesPerformed = context.player().getRocketStrikesDone();
+        var electricityCost = calculateRocketCost(context.gameBalance(), rocketStrikesPerformed, ownedFields);
+        var paymentEvent = new PaymentEvent(new ResourceSet(0, 0, electricityCost));
+
+        var rocketStrikeEvent = new RocketStrikeEvent(target, isTargetingRocket);
+
+        return List.of(paymentEvent, rocketStrikeEvent);
+    }
 }
