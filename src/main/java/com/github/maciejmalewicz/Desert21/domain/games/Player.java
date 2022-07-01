@@ -22,6 +22,8 @@ public class Player {
     //beginning of the game, to be ignored later
     private Boolean isReady;
 
+    private int rocketStrikesDone;
+
     public Player(String id, String nickname, ResourceSet resources) {
         this.id = id;
         this.nickname = nickname;
@@ -29,6 +31,7 @@ public class Player {
         this.isReady = false;
         this.ownedUpgrades = new ArrayList<>();
         this.productionAI = new ProductionAI();
+        this.rocketStrikesDone = 0;
     }
 
     public boolean ownsUpgrade(LabUpgrade upgrade) {

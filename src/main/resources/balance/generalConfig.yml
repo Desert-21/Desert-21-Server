@@ -5,3 +5,7 @@ generalBalanceConfig:
   fogOfWar2: 60
 
   productionPerField: 2
+
+  rocketStrikeDamage: 0.5
+  baseRocketStrikePrice: 300
+  rocketStrikePricePerUsage: 200
