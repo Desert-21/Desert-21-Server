@@ -9,6 +9,7 @@ public record PlayerDto(
         String id,
         String nickname,
         ResourceSet resources,
-        List<LabUpgrade> upgrades
+        List<LabUpgrade> upgrades,
+        int rocketStrikesDone
 ) {
 }

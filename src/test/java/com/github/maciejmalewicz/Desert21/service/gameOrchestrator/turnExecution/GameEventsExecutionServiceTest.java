@@ -50,6 +50,7 @@ class GameEventsExecutionServiceTest {
     private MockAttackingExecutor mockAttackingExecutor;
     private MockLabUpgradeExecutor mockLabUpgradeExecutor;
     private MockRocketStrikeExecutor mockRocketStrikeExecutor;
+    private MockBuildBuildingExecutor mockBuildBuildingExecutor;
 
     static class MockAttackingExecutor extends AttackingExecutor {
         public MockAttackingExecutor() {
@@ -151,6 +152,18 @@ class GameEventsExecutionServiceTest {
         }
     }
 
+    static class MockBuildBuildingExecutor extends BuildBuildingExecutor {
+        @Override
+        public EventExecutionResult execute(List<BuildBuildingEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<BuildBuildingEvent> getExecutableClass() {
+            return BuildBuildingEvent.class;
+        }
+    }
+
     void setupTested() {
         mockUpgradeExecutor = spy(new MockUpgradeExecutor());
         mockResourceProductionExecutor = spy(new MockResourcesProductionExecutor());
@@ -160,6 +173,7 @@ class GameEventsExecutionServiceTest {
         mockAttackingExecutor = spy(new MockAttackingExecutor());
         mockLabUpgradeExecutor = spy(new MockLabUpgradeExecutor());
         mockRocketStrikeExecutor = spy(new MockRocketStrikeExecutor());
+        mockBuildBuildingExecutor = spy(new MockBuildBuildingExecutor());
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
@@ -169,7 +183,8 @@ class GameEventsExecutionServiceTest {
                 mockArmyEnteringExecutor,
                 mockAttackingExecutor,
                 mockLabUpgradeExecutor,
-                mockRocketStrikeExecutor
+                mockRocketStrikeExecutor,
+                mockBuildBuildingExecutor
         );
     }
 
@@ -242,6 +257,7 @@ class GameEventsExecutionServiceTest {
         verify(mockAttackingExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockLabUpgradeExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockRocketStrikeExecutor, times(1)).execute(any(), eq(context));
+        verify(mockBuildBuildingExecutor, times(1)).execute(any(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());

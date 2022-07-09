@@ -16,6 +16,7 @@ import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.LabUpgradeExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -243,5 +245,47 @@ class PlayerTurnServiceIntegrationTest {
         var currentPlayer = savedGame.getCurrentPlayer().orElseThrow();
         assertThat(new Army(5, 5, 5), sameBeanAs(savedGame.getFields()[5][5].getArmy()));
         assertEquals(new ResourceSet(34, 124, 139), currentPlayer.getResources());
+        assertEquals(1, currentPlayer.getRocketStrikesDone());
+    }
+
+    @Test
+    void integrationBuildBuildingTurn1() throws NotAcceptableException {
+        player.setResources(new ResourceSet(60, 800, 60));
+        player.getOwnedUpgrades().add(LabUpgrade.FACTORY_BUILDERS);
+        game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
+
+        var buildBuildingAction = new BuildAction(new Location(7, 7), BuildingType.METAL_FACTORY);
+        var map = new ObjectMapper().convertValue(buildBuildingAction, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(
+                new PlayersActionDto(ActionType.BUILD, map)
+        ));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var eventQueue = savedGame.getEventQueue();
+        var expectedEventQueue = List.of(
+                new BuildBuildingEvent(1, new Location(7, 7), BuildingType.METAL_FACTORY)
+        );
+        assertThat(eventQueue, sameBeanAs(expectedEventQueue));
+    }
+
+    @Test
+    void integrationBuildBuildingTurn2() throws NotAcceptableException {
+        game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
+        game.getEventQueue().add(new BuildBuildingEvent(0, new Location(7, 7), BuildingType.METAL_FACTORY));
+
+        var dto = new PlayersTurnDto("IGNORED", new ArrayList<>());
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var eventQueue = savedGame.getEventQueue();
+        var expectedEventQueue = new ArrayList<>();
+        assertThat(eventQueue, sameBeanAs(expectedEventQueue));
+
+        var newBuilding = savedGame.getFields()[7][7].getBuilding();
+        assertEquals(1, newBuilding.getLevel());
+        assertEquals(BuildingType.METAL_FACTORY, newBuilding.getType());
     }
 }

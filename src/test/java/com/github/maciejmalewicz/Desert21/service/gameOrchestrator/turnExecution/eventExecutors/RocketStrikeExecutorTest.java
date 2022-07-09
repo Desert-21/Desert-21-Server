@@ -85,6 +85,7 @@ class RocketStrikeExecutorTest {
         var expectedArmy = new Army(5, 5, 5);
         assertThat(expectedArmy, sameBeanAs(currentArmy));
         assertEquals(BuildingType.ROCKET_LAUNCHER, updatedContext.game().getFields()[5][5].getBuilding().getType());
+        assertEquals(1, updatedContext.player().getRocketStrikesDone());
     }
 
     @Test
@@ -104,6 +105,7 @@ class RocketStrikeExecutorTest {
         var currentArmy = updatedContext.game().getFields()[5][5].getArmy();
         assertThat(null, sameBeanAs(currentArmy));
         assertEquals(BuildingType.ROCKET_LAUNCHER, updatedContext.game().getFields()[5][5].getBuilding().getType());
+        assertEquals(1, updatedContext.player().getRocketStrikesDone());
     }
 
     @Test
@@ -124,5 +126,6 @@ class RocketStrikeExecutorTest {
         var expectedArmy = new Army(10, 10, 10);
         assertThat(expectedArmy, sameBeanAs(currentArmy));
         assertEquals(BuildingType.EMPTY_FIELD, updatedContext.game().getFields()[5][5].getBuilding().getType());
+        assertEquals(1, updatedContext.player().getRocketStrikesDone());
     }
 }

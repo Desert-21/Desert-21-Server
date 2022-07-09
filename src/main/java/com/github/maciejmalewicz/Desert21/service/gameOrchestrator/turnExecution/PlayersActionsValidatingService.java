@@ -38,7 +38,11 @@ public class PlayersActionsValidatingService {
             SingleRocketStrikePerTurnValidator singleRocketStrikePerTurnValidator,
             RocketLauncherOwnershipValidator rocketLauncherOwnershipValidator,
             SuperSonicUpgradeValidator superSonicUpgradeValidator,
-            RocketStrikeValidRocketStrikeTargetValidator rocketStrikeValidRocketStrikeTargetValidator
+            RocketStrikeValidRocketStrikeTargetValidator rocketStrikeValidRocketStrikeTargetValidator,
+            IsBuildingBuildableValidator isBuildingBuildableValidator,
+            IsFieldEmptyValidator isFieldEmptyValidator,
+            HasUpgradeRequiredToBuildValidator hasUpgradeRequiredToBuildValidator,
+            SingleBuildPerLocationValidator singleBuildPerLocationValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -61,7 +65,11 @@ public class PlayersActionsValidatingService {
                 singleRocketStrikePerTurnValidator,
                 rocketLauncherOwnershipValidator,
                 superSonicUpgradeValidator,
-                rocketStrikeValidRocketStrikeTargetValidator
+                rocketStrikeValidRocketStrikeTargetValidator,
+                isBuildingBuildableValidator,
+                isFieldEmptyValidator,
+                hasUpgradeRequiredToBuildValidator,
+                singleBuildPerLocationValidator
         );
     }
 

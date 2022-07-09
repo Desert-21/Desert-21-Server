@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
@@ -8,12 +9,10 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.RocketStrikeEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator.calculateRocketCost;
@@ -24,6 +23,7 @@ import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.boardToOwnedFi
 @AllArgsConstructor
 public class FireRocketAction implements Action {
     private Location target;
+    @JsonProperty(value="isTargetingRocket")
     private boolean isTargetingRocket;
 
     @Override
