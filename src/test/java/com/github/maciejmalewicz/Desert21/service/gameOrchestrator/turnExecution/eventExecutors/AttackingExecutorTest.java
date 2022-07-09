@@ -33,7 +33,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class AttackingExecutorTest {
 
-    // todo: write tests
     private AttackingExecutor tested;
 
     @Autowired

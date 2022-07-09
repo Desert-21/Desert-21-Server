@@ -49,7 +49,8 @@ public class GameSnapshotService {
                 p.getId(),
                 p.getNickname(),
                 p.getResources(),
-                p.getOwnedUpgrades()
+                p.getOwnedUpgrades(),
+                p.getRocketStrikesDone()
         )).collect(Collectors.toList());
     }
 

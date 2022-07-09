@@ -22,6 +22,7 @@ public class Constants {
     public static final String LAB_UPGRADE_NOTIFICATION = "LAB_UPGRADE";
     public static final String ROCKET_STRIKE_NOTIFICATION = "ROCKET_STRIKE";
     public static final String ROCKET_STRIKE_DESTROYS_ROCKET_LAUNCHER_NOTIFICATION = "ROCKET_STRIKE_DESTROYS_ROCKET_LAUNCHER";
+    public static final String BUILDING_BUILT_NOTIFICATION = "BUILDING_BUILT";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";

@@ -1,6 +1,6 @@
 factoryConfig:
   cost:
-    level1: -1
+    level1: 600
     level2: 40
     level3: 160
     level4: 480
