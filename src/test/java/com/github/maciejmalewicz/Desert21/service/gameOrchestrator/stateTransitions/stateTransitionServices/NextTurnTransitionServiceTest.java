@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransit
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
@@ -37,11 +37,12 @@ class NextTurnTransitionServiceTest {
 
     void setupTested() {
         playersNotifier = mock(PlayersNotifier.class);
+        var gameTimer = mock(BasicGameTimer.class);
         tested = new NextTurnTransitionService(
               playersNotifier,
               mock(TimeoutExecutor.class),
-              gameRepository
-        );
+              gameRepository,
+                gameTimer);
     }
 
     void setupGame() {

@@ -10,6 +10,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
+import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class FirstTurnStartServiceTest {
                         new Player("BB",
                                 "schabina123456",
                                 new ResourceSet(60, 60, 60))),
-                new Field[9][9],
+                BoardUtils.generateEmptyPlain(9),
                 new StateManager(
                         GameState.WAITING_TO_START,
                         DateUtils.millisecondsFromNow(10000),
@@ -80,7 +81,7 @@ class FirstTurnStartServiceTest {
     @Test
     void testGetTimeToWaitForTimeout() {
         var timeout = tested.getTimeToWaitForTimeout(game);
-        assertEquals(10_000, timeout);
+        assertEquals(20_000, timeout);
     }
 
     @Test

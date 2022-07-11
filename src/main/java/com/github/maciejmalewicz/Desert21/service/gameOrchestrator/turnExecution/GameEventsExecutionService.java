@@ -33,16 +33,16 @@ public class GameEventsExecutionService {
     ) {
         executors = List.of(
                 paymentExecutor,
-                buildingUpgradeExecutor,
                 resourcesProductionExecutor,
-                armyTrainingExecutor,
                 armyLeavingExecutor,
                 armyEnteringExecutor,
-                attackingExecutor,
-                labUpgradeExecutor,
+                armyTrainingExecutor,
                 rocketStrikeExecutor,
+                bombardingExecutor,
+                attackingExecutor,
                 buildBuildingExecutor,
-                bombardingExecutor
+                buildingUpgradeExecutor,
+                labUpgradeExecutor
         );
     }
 

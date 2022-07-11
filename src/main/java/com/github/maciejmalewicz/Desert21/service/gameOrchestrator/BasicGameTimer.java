@@ -3,6 +3,10 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
+import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.boardToFieldList;
+
 @Component
 public class BasicGameTimer implements GameTimer {
 
@@ -13,6 +17,9 @@ public class BasicGameTimer implements GameTimer {
 
     @Override
     public long getMoveTime(Game game) {
-        return 10_000;
+        var totalOccupiedFields = boardToFieldList(game.getFields()).stream()
+                        .filter(f -> f.getOwnerId() != null)
+                        .count();
+        return 20_000 + totalOccupiedFields * 1_000;
     }
 }
