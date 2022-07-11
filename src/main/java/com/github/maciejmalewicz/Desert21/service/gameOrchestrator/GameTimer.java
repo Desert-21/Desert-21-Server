@@ -10,7 +10,7 @@ public interface GameTimer {
     long getInitialTime();
 
     /**
-    How much time do players have per turn in MS based on turn number
+    How much time do players have per turn in MS based on several factors
      */
     long getMoveTime(Game game);
 }

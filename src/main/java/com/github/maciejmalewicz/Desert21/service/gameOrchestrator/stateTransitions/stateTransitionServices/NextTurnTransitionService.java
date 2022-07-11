@@ -4,6 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
@@ -18,8 +19,11 @@ import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTI
 @Service
 public class NextTurnTransitionService extends StateTransitionService {
 
-    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository) {
+    private final BasicGameTimer gameTimer;
+
+    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer) {
         super(playersNotifier, timeoutExecutor, gameRepository);
+        this.gameTimer = gameTimer;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class NextTurnTransitionService extends StateTransitionService {
 
     @Override
     protected long getTimeToWaitForTimeout(Game game) {
-        return 15_000;
+        return gameTimer.getMoveTime(game);
     }
 
     @Override
