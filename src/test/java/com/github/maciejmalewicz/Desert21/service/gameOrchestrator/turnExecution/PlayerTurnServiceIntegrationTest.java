@@ -104,7 +104,7 @@ class PlayerTurnServiceIntegrationTest {
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
 
-        assertEquals(new ResourceSet(82, 42, 107), savedGame.getCurrentPlayer().get().getResources());
+        assertEquals(new ResourceSet(82, 42, 97), savedGame.getCurrentPlayer().get().getResources());
         assertEquals(new Building(BuildingType.ELECTRICITY_FACTORY, 2), savedGame.getFields()[0][0].getBuilding());
 
         verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
