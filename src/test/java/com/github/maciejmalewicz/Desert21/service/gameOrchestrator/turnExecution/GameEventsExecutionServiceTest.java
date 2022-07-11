@@ -7,6 +7,7 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionCont
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BattleExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BombardingBattleExecutor;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.FieldConquestService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.*;
@@ -51,6 +52,7 @@ class GameEventsExecutionServiceTest {
     private MockLabUpgradeExecutor mockLabUpgradeExecutor;
     private MockRocketStrikeExecutor mockRocketStrikeExecutor;
     private MockBuildBuildingExecutor mockBuildBuildingExecutor;
+    private MockBombardingExecutor mockBombardingExecutor;
 
     static class MockAttackingExecutor extends AttackingExecutor {
         public MockAttackingExecutor() {
@@ -164,6 +166,22 @@ class GameEventsExecutionServiceTest {
         }
     }
 
+    static class MockBombardingExecutor extends BombardingExecutor {
+        public MockBombardingExecutor() {
+            super(mock(BombardingBattleExecutor.class));
+        }
+
+        @Override
+        public EventExecutionResult execute(List<BombardingEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<BombardingEvent> getExecutableClass() {
+            return BombardingEvent.class;
+        }
+    }
+
     void setupTested() {
         mockUpgradeExecutor = spy(new MockUpgradeExecutor());
         mockResourceProductionExecutor = spy(new MockResourcesProductionExecutor());
@@ -174,6 +192,7 @@ class GameEventsExecutionServiceTest {
         mockLabUpgradeExecutor = spy(new MockLabUpgradeExecutor());
         mockRocketStrikeExecutor = spy(new MockRocketStrikeExecutor());
         mockBuildBuildingExecutor = spy(new MockBuildBuildingExecutor());
+        mockBombardingExecutor = spy(new MockBombardingExecutor());
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
@@ -184,7 +203,8 @@ class GameEventsExecutionServiceTest {
                 mockAttackingExecutor,
                 mockLabUpgradeExecutor,
                 mockRocketStrikeExecutor,
-                mockBuildBuildingExecutor
+                mockBuildBuildingExecutor,
+                mockBombardingExecutor
         );
     }
 
@@ -258,6 +278,7 @@ class GameEventsExecutionServiceTest {
         verify(mockLabUpgradeExecutor, times(1)).execute(anyList(), eq(context));
         verify(mockRocketStrikeExecutor, times(1)).execute(any(), eq(context));
         verify(mockBuildBuildingExecutor, times(1)).execute(any(), eq(context));
+        verify(mockBombardingExecutor, times(1)).execute(any(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());
