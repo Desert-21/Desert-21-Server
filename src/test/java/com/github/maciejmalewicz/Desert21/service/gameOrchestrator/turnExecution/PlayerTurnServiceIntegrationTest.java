@@ -22,6 +22,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,23 +72,8 @@ class PlayerTurnServiceIntegrationTest {
     private Player player;
 
     void setupGameAndPlayer() {
-        player = new Player("AA",
-                "macior123456",
-                new ResourceSet(60, 60, 60));
-        game = new Game(
-                List.of(
-                        player,
-                        new Player("BB",
-                                "schabina123456",
-                                new ResourceSet(60, 60, 60))),
-                BoardUtils.generateEmptyPlain(9),
-                new StateManager(
-                        GameState.AWAITING,
-                        DateUtils.millisecondsFromNow(10_000),
-                        "AA",
-                        "TIMEOUTID"
-                )
-        );
+        player = new Player("AA", "macior123456", new ResourceSet(60, 60, 60));
+        game = new Game(List.of(player, new Player("BB", "schabina123456", new ResourceSet(60, 60, 60))), BoardUtils.generateEmptyPlain(9), new StateManager(GameState.AWAITING, DateUtils.millisecondsFromNow(10_000), "AA", "TIMEOUTID"));
         game.getFields()[0][0] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY, 1), "AA");
         game.getFields()[0][1] = new Field(new Building(BuildingType.HOME_BASE, 3), "AA");
         game.getFields()[1][1] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY), "BB");
@@ -100,14 +86,7 @@ class PlayerTurnServiceIntegrationTest {
         doReturn(new GamePlayerData(game, player)).when(gamePlayerService).getGamePlayerData(anyString(), any());
 
         turnResolutionPhaseStartService = mock(TurnResolutionPhaseStartService.class);
-        tested = new PlayerTurnService(
-                gamePlayerService,
-                gameBalanceService,
-                validatingService,
-                eventsExecutionService,
-                gameRepository,
-                turnResolutionPhaseStartService
-        );
+        tested = new PlayerTurnService(gamePlayerService, gameBalanceService, validatingService, eventsExecutionService, gameRepository, turnResolutionPhaseStartService);
     }
 
     @BeforeEach
@@ -120,9 +99,7 @@ class PlayerTurnServiceIntegrationTest {
     void integrationUpgradeBuilding() throws NotAcceptableException {
         var upgradeContent = new UpgradeAction(new Location(0, 0));
         var map = new ObjectMapper().convertValue(upgradeContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.UPGRADE, map))
-        );
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.UPGRADE, map)));
         tested.executeTurn(mock(Authentication.class), dto);
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
@@ -137,9 +114,7 @@ class PlayerTurnServiceIntegrationTest {
     void integrationTrainArmy() throws NotAcceptableException {
         var trainContent = new TrainAction(new Location(0, 1), UnitType.DROID, TrainingMode.SMALL_PRODUCTION);
         var map = new ObjectMapper().convertValue(trainContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.TRAIN, map))
-        );
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.TRAIN, map)));
         tested.executeTurn(mock(Authentication.class), dto);
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
@@ -154,16 +129,9 @@ class PlayerTurnServiceIntegrationTest {
     void integrationMoveArmy() throws NotAcceptableException {
         game.getFields()[0][0].setArmy(new Army(20, 10, 15));
         game.getFields()[0][1].setArmy(new Army(5, 0, 0));
-        var moveContent = new MoveUnitsAction(
-                new Location(0, 0),
-                new Location(0, 1),
-                List.of(new Location(0, 0), new Location(0, 1)),
-                new Army(10, 5, 5)
-        );
+        var moveContent = new MoveUnitsAction(new Location(0, 0), new Location(0, 1), List.of(new Location(0, 0), new Location(0, 1)), new Army(10, 5, 5));
         var map = new ObjectMapper().convertValue(moveContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.MOVE_UNITS, map)
-        ));
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.MOVE_UNITS, map)));
 
         tested.executeTurn(mock(Authentication.class), dto);
 
@@ -178,16 +146,9 @@ class PlayerTurnServiceIntegrationTest {
     void integrationAttack() throws NotAcceptableException {
         game.getFields()[0][1].setArmy(new Army(20, 10, 15));
         game.getFields()[1][1].setArmy(new Army(5, 2, 10));
-        var attackContent = new AttackAction(
-                new Location(0, 1),
-                new Location(1, 1),
-                List.of(new Location(0, 1), new Location(1, 1)),
-                new Army(10, 5, 10)
-        );
+        var attackContent = new AttackAction(new Location(0, 1), new Location(1, 1), List.of(new Location(0, 1), new Location(1, 1)), new Army(10, 5, 10));
         var map = new ObjectMapper().convertValue(attackContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.ATTACK, map)
-        ));
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.ATTACK, map)));
 
         tested.executeTurn(mock(Authentication.class), dto);
 
@@ -210,9 +171,7 @@ class PlayerTurnServiceIntegrationTest {
 
         var labUpgradeContent = new LabAction(LabUpgrade.SCARAB_SCANNERS);
         var map = new ObjectMapper().convertValue(labUpgradeContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.LAB_EVENT, map)
-        ));
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.LAB_EVENT, map)));
 
         tested.executeTurn(mock(Authentication.class), dto);
 
@@ -235,9 +194,7 @@ class PlayerTurnServiceIntegrationTest {
 
         var rocketStrikeActionContent = new FireRocketAction(new Location(5, 5), false);
         var map = new ObjectMapper().convertValue(rocketStrikeActionContent, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.FIRE_ROCKET, map)
-        ));
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.FIRE_ROCKET, map)));
 
         tested.executeTurn(mock(Authentication.class), dto);
 
@@ -256,17 +213,13 @@ class PlayerTurnServiceIntegrationTest {
 
         var buildBuildingAction = new BuildAction(new Location(7, 7), BuildingType.METAL_FACTORY);
         var map = new ObjectMapper().convertValue(buildBuildingAction, LinkedHashMap.class);
-        var dto = new PlayersTurnDto("IGNORED", List.of(
-                new PlayersActionDto(ActionType.BUILD, map)
-        ));
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.BUILD, map)));
 
         tested.executeTurn(mock(Authentication.class), dto);
 
         var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
         var eventQueue = savedGame.getEventQueue();
-        var expectedEventQueue = List.of(
-                new BuildBuildingEvent(1, new Location(7, 7), BuildingType.METAL_FACTORY)
-        );
+        var expectedEventQueue = List.of(new BuildBuildingEvent(1, new Location(7, 7), BuildingType.METAL_FACTORY));
         assertThat(eventQueue, sameBeanAs(expectedEventQueue));
     }
 
@@ -287,5 +240,30 @@ class PlayerTurnServiceIntegrationTest {
         var newBuilding = savedGame.getFields()[7][7].getBuilding();
         assertEquals(1, newBuilding.getLevel());
         assertEquals(BuildingType.METAL_FACTORY, newBuilding.getType());
+    }
+
+    @Test
+    void integrationBombarding() throws NotAcceptableException {
+        player.getOwnedUpgrades().add(LabUpgrade.IMPROVED_CANNONS);
+
+        game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
+        game.getFields()[7][7].setArmy(new Army(10, 10, 60));
+        game.getFields()[7][8] = new Field(new Building(BuildingType.EMPTY_FIELD), "BB");
+        game.getFields()[7][8].setArmy(new Army(1, 1, 1));
+
+        var bombardingAction = new BombardAction(
+                new Location(7, 7),
+                new Location(7, 8),
+                List.of(new Location(7, 7), new Location(7, 8)),
+                50
+        );
+        var map = new ObjectMapper().convertValue(bombardingAction, LinkedHashMap.class);
+        var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.BOMBARD, map)));
+
+        tested.executeTurn(mock(Authentication.class), dto);
+
+        var savedGame = gameRepository.findAll().stream().findFirst().orElseThrow();
+        var targetField = savedGame.getFields()[7][8];
+        assertEquals(new Army(0, 0, 0), targetField.getArmy());
     }
 }

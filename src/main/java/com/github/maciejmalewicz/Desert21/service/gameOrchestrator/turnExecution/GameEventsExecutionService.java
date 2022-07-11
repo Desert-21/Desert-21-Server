@@ -28,7 +28,8 @@ public class GameEventsExecutionService {
            AttackingExecutor attackingExecutor,
            LabUpgradeExecutor labUpgradeExecutor,
            RocketStrikeExecutor rocketStrikeExecutor,
-           BuildBuildingExecutor buildBuildingExecutor
+           BuildBuildingExecutor buildBuildingExecutor,
+           BombardingExecutor bombardingExecutor
     ) {
         executors = List.of(
                 paymentExecutor,
@@ -40,7 +41,8 @@ public class GameEventsExecutionService {
                 attackingExecutor,
                 labUpgradeExecutor,
                 rocketStrikeExecutor,
-                buildBuildingExecutor
+                buildBuildingExecutor,
+                bombardingExecutor
         );
     }
 

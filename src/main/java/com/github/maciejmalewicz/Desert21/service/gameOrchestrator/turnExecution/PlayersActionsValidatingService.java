@@ -6,6 +6,8 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.LabUpgradeNotRepeatedValidatable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
+import com.mongodb.internal.VisibleForTesting;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class PlayersActionsValidatingService {
 
     private final List<ActionValidator<?>> actionValidators;
 
+    @Autowired
     public PlayersActionsValidatingService(
             BuildingUpgradableValidator buildingUpgradableValidator,
             CostValidator costValidator,
@@ -42,7 +45,9 @@ public class PlayersActionsValidatingService {
             IsBuildingBuildableValidator isBuildingBuildableValidator,
             IsFieldEmptyValidator isFieldEmptyValidator,
             HasUpgradeRequiredToBuildValidator hasUpgradeRequiredToBuildValidator,
-            SingleBuildPerLocationValidator singleBuildPerLocationValidator
+            SingleBuildPerLocationValidator singleBuildPerLocationValidator,
+            IsBombardingUnlockedValidator isBombardingUnlockedValidator,
+            IsFieldEnemyValidator isFieldEnemyValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -69,7 +74,9 @@ public class PlayersActionsValidatingService {
                 isBuildingBuildableValidator,
                 isFieldEmptyValidator,
                 hasUpgradeRequiredToBuildValidator,
-                singleBuildPerLocationValidator
+                singleBuildPerLocationValidator,
+                isBombardingUnlockedValidator,
+                isFieldEnemyValidator
         );
     }
 

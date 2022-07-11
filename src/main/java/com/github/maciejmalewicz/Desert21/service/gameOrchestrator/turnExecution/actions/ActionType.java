@@ -10,7 +10,8 @@ public enum ActionType {
     TRAIN(TrainAction.class),
     MOVE_UNITS(MoveUnitsAction.class),
     ATTACK(AttackAction.class),
-    FIRE_ROCKET(FireRocketAction.class);
+    FIRE_ROCKET(FireRocketAction.class),
+    BOMBARD(BombardAction.class);
 
     private final Class<? extends Action> actionClass;
 
