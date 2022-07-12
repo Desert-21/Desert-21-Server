@@ -13,14 +13,14 @@ import static com.github.maciejmalewicz.Desert21.models.BuildingType.*;
 public class CornerFactoriesRules implements RuleSupplier {
 
     @Override
-    public List<BoardLocationRule> getRules() {
+    public List<BoardLocationRule> getRules(int boardSize) {
         return List.of(
                 new BoardLocationRule(northWestLocations(), METAL_FACTORY, 1),
                 new BoardLocationRule(northWestLocations(), BUILDING_MATERIALS_FACTORY, 1),
                 new BoardLocationRule(northWestLocations(), ELECTRICITY_FACTORY, 1),
-                new BoardLocationRule(southEastLocations(), METAL_FACTORY, 1),
-                new BoardLocationRule(southEastLocations(), BUILDING_MATERIALS_FACTORY, 1),
-                new BoardLocationRule(southEastLocations(), ELECTRICITY_FACTORY, 1)
+                new BoardLocationRule(southEastLocations(boardSize), METAL_FACTORY, 1),
+                new BoardLocationRule(southEastLocations(boardSize), BUILDING_MATERIALS_FACTORY, 1),
+                new BoardLocationRule(southEastLocations(boardSize), ELECTRICITY_FACTORY, 1)
         );
     }
 
@@ -30,9 +30,9 @@ public class CornerFactoriesRules implements RuleSupplier {
                 .collect(Collectors.toList());
     }
 
-    private List<Location> southEastLocations() {
-        return LocationUtils.generateLocationsSquare(9, 10, 9, 10).stream()
-                .filter(l -> !l.equals(new Location(9, 9)))
+    private List<Location> southEastLocations(int boardSize) {
+        return LocationUtils.generateLocationsSquare(boardSize - 2, boardSize - 1, boardSize - 2, boardSize - 1).stream()
+                .filter(l -> !l.equals(new Location(boardSize - 2, boardSize - 2)))
                 .collect(Collectors.toList());
     }
 }

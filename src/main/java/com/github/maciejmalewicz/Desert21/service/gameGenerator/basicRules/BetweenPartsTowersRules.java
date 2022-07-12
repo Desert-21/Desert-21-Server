@@ -11,12 +11,16 @@ import static com.github.maciejmalewicz.Desert21.models.BuildingType.TOWER;
 public class BetweenPartsTowersRules implements RuleSupplier {
 
     @Override
-    public List<BoardLocationRule> getRules() {
+    public List<BoardLocationRule> getRules(int boardSize) {
+        var twoBeforeMiddle = (boardSize / 2) - 2;
+        var middle = boardSize / 2;
+        var twoAfterMiddle = (boardSize / 2) + 2;
+        var end = boardSize - 1;
         return List.of(
-                new BoardLocationRule(LocationUtils.generateLocationsSquare(0, 3, 5, 5), TOWER, 1),
-                new BoardLocationRule(LocationUtils.generateLocationsSquare(7, 10, 5, 5), TOWER, 1),
-                new BoardLocationRule(LocationUtils.generateLocationsSquare(5, 5, 0, 3), TOWER, 1),
-                new BoardLocationRule(LocationUtils.generateLocationsSquare(5, 5, 7, 10), TOWER, 1)
+                new BoardLocationRule(LocationUtils.generateLocationsSquare(0, twoBeforeMiddle, middle, middle), TOWER, 1),
+                new BoardLocationRule(LocationUtils.generateLocationsSquare(twoAfterMiddle, end, middle, middle), TOWER, 1),
+                new BoardLocationRule(LocationUtils.generateLocationsSquare(middle, middle, 0, twoBeforeMiddle), TOWER, 1),
+                new BoardLocationRule(LocationUtils.generateLocationsSquare(middle, middle, twoAfterMiddle, end), TOWER, 1)
         );
     }
 }
