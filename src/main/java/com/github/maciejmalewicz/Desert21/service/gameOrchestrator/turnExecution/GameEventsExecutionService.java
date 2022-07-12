@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameEventsExecutionService {
@@ -29,10 +30,12 @@ public class GameEventsExecutionService {
            LabUpgradeExecutor labUpgradeExecutor,
            RocketStrikeExecutor rocketStrikeExecutor,
            BuildBuildingExecutor buildBuildingExecutor,
-           BombardingExecutor bombardingExecutor
+           BombardingExecutor bombardingExecutor,
+           AIProductionIncreaseExecutor aiProductionIncreaseExecutor
     ) {
         executors = List.of(
                 paymentExecutor,
+                aiProductionIncreaseExecutor,
                 resourcesProductionExecutor,
                 armyLeavingExecutor,
                 armyEnteringExecutor,
@@ -62,10 +65,13 @@ public class GameEventsExecutionService {
         //separate events to be executed now from ones in the future
         var currentTurnEvents = events.stream()
                 .filter(GameEvent::shouldTriggerNow)
-                .toList();
+                .collect(Collectors.toList());
         var otherTurnEvents = events.stream()
                 .filter(e -> !e.shouldTriggerNow())
-                .toList();
+                .collect(Collectors.toList());
+
+        //save future ones
+        context.game().setEventQueue(otherTurnEvents);
 
         var eventResults = new ArrayList<EventResult>();
         //execute current events
@@ -75,8 +81,6 @@ public class GameEventsExecutionService {
             eventResults.addAll(executionResultPair.results());
         }
 
-        //save future ones
-        context.game().setEventQueue(otherTurnEvents);
         return new EventExecutionResult(context, eventResults);
     }
 

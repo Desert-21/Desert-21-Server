@@ -6,5 +6,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class AIProductionIncreaseEvent extends GameEvent {
-    private int currentProduction;
+
+    public AIProductionIncreaseEvent(int turnsToExecute) {
+        super(turnsToExecute);
+    }
 }

@@ -11,6 +11,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors.*;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.FieldConquestService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.*;
+import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,16 @@ import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.TurnsConstants.END_OF_NEXT_TURN;
 import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.TurnsConstants.END_OF_THIS_TURN;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class GameEventsExecutionServiceTest {
+
+    @Autowired
+    private GameEventsExecutionService testedIntegration;
 
     private GameEventsExecutionService tested;
 
@@ -53,6 +59,7 @@ class GameEventsExecutionServiceTest {
     private MockRocketStrikeExecutor mockRocketStrikeExecutor;
     private MockBuildBuildingExecutor mockBuildBuildingExecutor;
     private MockBombardingExecutor mockBombardingExecutor;
+    private MockAiProductionIncreaseExecutor mockAiProductionIncreaseExecutor;
 
     static class MockAttackingExecutor extends AttackingExecutor {
         public MockAttackingExecutor() {
@@ -182,6 +189,19 @@ class GameEventsExecutionServiceTest {
         }
     }
 
+    static class MockAiProductionIncreaseExecutor extends AIProductionIncreaseExecutor {
+
+        @Override
+        public EventExecutionResult execute(List<AIProductionIncreaseEvent> events, TurnExecutionContext context) throws NotAcceptableException {
+            return new EventExecutionResult(context, new ArrayList<>());
+        }
+
+        @Override
+        public Class<AIProductionIncreaseEvent> getExecutableClass() {
+            return AIProductionIncreaseEvent.class;
+        }
+    }
+
     void setupTested() {
         mockUpgradeExecutor = spy(new MockUpgradeExecutor());
         mockResourceProductionExecutor = spy(new MockResourcesProductionExecutor());
@@ -193,6 +213,7 @@ class GameEventsExecutionServiceTest {
         mockRocketStrikeExecutor = spy(new MockRocketStrikeExecutor());
         mockBuildBuildingExecutor = spy(new MockBuildBuildingExecutor());
         mockBombardingExecutor = spy(new MockBombardingExecutor());
+        mockAiProductionIncreaseExecutor = spy(new MockAiProductionIncreaseExecutor());
         tested = new GameEventsExecutionService(
                 new PaymentExecutor(),
                 mockUpgradeExecutor,
@@ -204,7 +225,8 @@ class GameEventsExecutionServiceTest {
                 mockLabUpgradeExecutor,
                 mockRocketStrikeExecutor,
                 mockBuildBuildingExecutor,
-                mockBombardingExecutor
+                mockBombardingExecutor,
+                mockAiProductionIncreaseExecutor
         );
     }
 
@@ -245,7 +267,7 @@ class GameEventsExecutionServiceTest {
                                 new Player("BB",
                                         "schabina123456",
                                         new ResourceSet(60, 60, 60))),
-                        new Field[9][9],
+                        BoardUtils.generateEmptyPlain(9),
                         new StateManager(
                                 GameState.WAITING_TO_START,
                                 DateUtils.millisecondsFromNow(10_000),
@@ -279,6 +301,7 @@ class GameEventsExecutionServiceTest {
         verify(mockRocketStrikeExecutor, times(1)).execute(any(), eq(context));
         verify(mockBuildBuildingExecutor, times(1)).execute(any(), eq(context));
         verify(mockBombardingExecutor, times(1)).execute(any(), eq(context));
+        verify(mockAiProductionIncreaseExecutor, times(1)).execute(any(), eq(context));
 
         var queue = context.game().getEventQueue();
         assertEquals(2, queue.size());
@@ -297,5 +320,21 @@ class GameEventsExecutionServiceTest {
             tested.executeEvents(actions, context);
         });
         assertEquals("TEST EXCEPTION", exception.getMessage());
+    }
+
+    @Test
+    void shouldAllowForAddingEventsInTheMiddleOfTheExecution() throws NotAcceptableException {
+        context.player().setProductionAI(new ProductionAI(true, 20));
+        context.game().setEventQueue(new ArrayList<>());
+        var results = testedIntegration.executeEvents(new ArrayList<>(), context);
+
+        var savedContext = results.context();
+        var savedPlayer = savedContext.player();
+        assertEquals(40, savedPlayer.getProductionAI().getCurrentProduction());
+
+        var savedEventQueue = savedContext.game().getEventQueue();
+        var expectedList = new ArrayList<GameEvent>();
+        expectedList.add(new AIProductionIncreaseEvent(2));
+        assertThat(expectedList, sameBeanAs(savedEventQueue));
     }
 }
