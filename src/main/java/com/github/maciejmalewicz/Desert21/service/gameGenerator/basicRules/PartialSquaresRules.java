@@ -25,10 +25,9 @@ public class PartialSquaresRules implements RuleSupplier {
 
     private List<BoardLocationRule> getSingleSquareSetup(List<Location> locations) {
         return List.of(
-                new BoardLocationRule(locations, METAL_FACTORY, 2),
-                new BoardLocationRule(locations, BUILDING_MATERIALS_FACTORY, 2),
-                new BoardLocationRule(locations, ELECTRICITY_FACTORY, 2),
-                new BoardLocationRule(locations, TOWER, 2)
+                new BoardLocationRule(locations, METAL_FACTORY, 1),
+                new BoardLocationRule(locations, BUILDING_MATERIALS_FACTORY, 1),
+                new BoardLocationRule(locations, ELECTRICITY_FACTORY, 1)
         );
     }
 

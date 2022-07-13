@@ -16,7 +16,7 @@ public class BasicBoardGeneratorConfig implements BoardGeneratorConfig {
 
     @Override
     public int getSize() {
-        return 11;
+        return 7;
     }
 
     @Override
