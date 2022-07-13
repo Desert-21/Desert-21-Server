@@ -41,7 +41,7 @@ public class PlayerTurnService {
         this.turnResolutionPhaseStartService = turnResolutionPhaseStartService;
     }
 
-    public void executeTurn(Authentication authentication, PlayersTurnDto dto) throws NotAcceptableException {
+    public void executeTurn(Authentication authentication, PlayersTurnDto dto) throws NotAcceptableException, IllegalArgumentException {
         var gamePlayer = gamePlayerService.getGamePlayerData(dto.gameId(), authentication);
         if (gamePlayer.game().getStateManager().getGameState() != GameState.AWAITING) {
             throw new NotAcceptableException("Cannot execute turn now!");

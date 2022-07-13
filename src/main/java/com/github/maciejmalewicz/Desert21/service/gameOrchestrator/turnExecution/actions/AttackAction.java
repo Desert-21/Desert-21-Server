@@ -13,6 +13,7 @@ import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -23,9 +24,13 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttackAction implements Action {
+    @NonNull
     private Location from;
+    @NonNull
     private Location to;
+    @NonNull
     private List<Location> path;
+    @NonNull
     private Army army;
 
     @Override

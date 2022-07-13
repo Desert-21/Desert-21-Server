@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.testConfig.TestUtils.findAllWithinCollection;
@@ -167,5 +169,22 @@ class AttackActionTest {
         var enoughUnitsValidatable = findWithinCollection(validatables, EnoughUnitsValidatable.class);
         var expectedEnoughUnitsValidatable = new EnoughUnitsValidatable(army, new Location(0, 0));
         assertThat(expectedEnoughUnitsValidatable, sameBeanAs(enoughUnitsValidatable));
+    }
+
+    @Test
+    void nonNullAnnotations() {
+        var fromLocation = new Location(0, 0);
+        var toLocation = new Location(1, 1);
+        var path = List.of(new Location(0, 0), new Location(1, 0), new Location(1, 1));
+        var army = new Army(10, 2, 4);
+
+        var action = new AttackAction(fromLocation, toLocation, path, army);
+        var map = new ObjectMapper().convertValue(action, LinkedHashMap.class);
+
+        map.put("from", null);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ObjectMapper().convertValue(map, AttackAction.class);
+        });
     }
 }

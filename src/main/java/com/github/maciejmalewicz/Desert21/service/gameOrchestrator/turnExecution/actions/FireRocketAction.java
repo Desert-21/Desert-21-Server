@@ -12,6 +12,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -22,9 +23,11 @@ import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.boardToOwnedFi
 @NoArgsConstructor
 @AllArgsConstructor
 public class FireRocketAction implements Action {
+    @NonNull
     private Location target;
+    @NonNull
     @JsonProperty(value="isTargetingRocket")
-    private boolean isTargetingRocket;
+    private Boolean isTargetingRocket;
 
     @Override
     public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {

@@ -15,7 +15,8 @@ public class MainControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(
             {
-                    NotAcceptableException.class
+                    NotAcceptableException.class,
+                    IllegalArgumentException.class
             })
     public ResponseEntity<?> handleNotAcceptableException(Exception ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(),
