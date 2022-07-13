@@ -16,6 +16,7 @@ import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -24,15 +25,17 @@ import java.util.List;
 @AllArgsConstructor
 public class TrainAction implements Action {
 
+    @NonNull
     private Location location;
+
+    @NonNull
     private UnitType unitType;
+
+    @NonNull
     private TrainingMode trainingMode;
 
     @Override
     public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {
-        if (unitType == null || trainingMode == null) {
-            throw new NotAcceptableException("Invalid units training data!");
-        }
         var field = BoardUtils.fieldAtLocation(context.game().getFields(), location);
 
         var fieldOwnershipValidatable = new FieldOwnershipValidatable(

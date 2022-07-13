@@ -22,7 +22,7 @@ public class GameTurnController {
 
     @PostMapping
     public ResponseEntity<Void> executeTurn(Authentication authentication, @RequestBody PlayersTurnDto playersTurnDto)
-            throws NotAcceptableException {
+            throws NotAcceptableException, IllegalArgumentException {
         playerTurnService.executeTurn(authentication, playersTurnDto);
         return ResponseEntity.ok().build();
     }

@@ -64,24 +64,6 @@ public class TrainActionTest {
     }
 
     @Test
-    void getActionValidatablesEmptyUnitType() {
-        var trainAction = new TrainAction(new Location(7, 7), null, TrainingMode.MASS_PRODUCTION);
-        var exception = assertThrows(NotAcceptableException.class, () -> {
-            trainAction.getActionValidatables(context);
-        });
-        assertEquals("Invalid units training data!", exception.getMessage());
-    }
-
-    @Test
-    void getActionValidatablesEmptyTrainingMode() {
-        var trainAction = new TrainAction(new Location(7, 7), UnitType.TANK, null);
-        var exception = assertThrows(NotAcceptableException.class, () -> {
-            trainAction.getActionValidatables(context);
-        });
-        assertEquals("Invalid units training data!", exception.getMessage());
-    }
-
-    @Test
     void getActionValidatablesHappyPath() throws NotAcceptableException {
         var trainAction = new TrainAction(new Location(2, 2), UnitType.TANK, TrainingMode.MASS_PRODUCTION);
         var validatables = trainAction.getActionValidatables(context);

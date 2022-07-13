@@ -11,4 +11,9 @@ public class ProductionAI {
         this.isActivated = false;
         this.currentProduction = 0;
     }
+
+    public ProductionAI(boolean isActivated, int currentProduction) {
+        this.isActivated = isActivated;
+        this.currentProduction = currentProduction;
+    }
 }

@@ -12,6 +12,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -22,7 +23,9 @@ import static com.github.maciejmalewicz.Desert21.utils.BuildingUtils.buildingTyp
 @NoArgsConstructor
 @AllArgsConstructor
 public class BuildAction implements Action {
+    @NonNull
     private Location location;
+    @NonNull
     private BuildingType buildingType;
 
     @Override

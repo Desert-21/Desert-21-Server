@@ -16,7 +16,7 @@ public class BasicBoardGeneratorConfig implements BoardGeneratorConfig {
 
     @Override
     public int getSize() {
-        return 11;
+        return 7;
     }
 
     @Override
@@ -29,17 +29,17 @@ public class BasicBoardGeneratorConfig implements BoardGeneratorConfig {
                 new BetweenPartsTowersRules(),
                 new PartialSquaresRules()
         )
-                .flatMap(ruleSupplier -> ruleSupplier.getRules().stream())
+                .flatMap(ruleSupplier -> ruleSupplier.getRules(getSize()).stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Location> getPLayer1Locations() {
-        return LocationUtils.generateLocationsSquare(9, 10, 0, 1);
+        return LocationUtils.generateLocationsSquare(getSize() - 2, getSize() - 1, 0, 1);
     }
 
     @Override
     public List<Location> getPLayer2Locations() {
-        return LocationUtils.generateLocationsSquare(0, 1, 9, 10);
+        return LocationUtils.generateLocationsSquare(0, 1, getSize() - 2, getSize() - 1);
     }
 }

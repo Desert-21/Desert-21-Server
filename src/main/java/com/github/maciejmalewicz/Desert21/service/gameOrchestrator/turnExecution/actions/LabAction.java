@@ -12,6 +12,7 @@ import com.github.maciejmalewicz.Desert21.utils.LabUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import static com.github.maciejmalewicz.Desert21.utils.LabUtils.getUpgradeCost;
 @AllArgsConstructor
 public class LabAction implements Action {
 
+    @NonNull
     private LabUpgrade upgrade;
 
     @Override

@@ -12,6 +12,7 @@ import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,10 +22,14 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BombardAction implements Action {
+    @NonNull
     private Location from;
+    @NonNull
     private Location to;
+    @NonNull
     private List<Location> path;
-    private int cannonsAmount;
+    @NonNull
+    private Integer cannonsAmount;
 
     @Override
     public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {

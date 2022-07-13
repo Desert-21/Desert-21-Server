@@ -13,6 +13,7 @@ import com.github.maciejmalewicz.Desert21.utils.BuildingUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpgradeAction implements Action {
+    @NonNull
     private Location location;
 
     @Override
