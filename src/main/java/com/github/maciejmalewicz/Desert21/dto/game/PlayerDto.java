@@ -10,6 +10,8 @@ public record PlayerDto(
         String nickname,
         ResourceSet resources,
         List<LabUpgrade> upgrades,
-        int rocketStrikesDone
+        int rocketStrikesDone,
+        int builtFactories,
+        int builtTowers
 ) {
 }

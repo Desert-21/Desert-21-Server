@@ -58,7 +58,7 @@ class BuildActionTest {
     }
 
     @Test
-    void getActionValidatablesHappyPath() throws NotAcceptableException {
+    void getActionValidatablesHappyPathForFactories() throws NotAcceptableException {
         var buildAction = new BuildAction(new Location(0, 0), BuildingType.METAL_FACTORY);
         var validatables = buildAction.getActionValidatables(context);
         var expectedValidatables = List.of(
@@ -67,7 +67,24 @@ class BuildActionTest {
                 new IsFieldEmptyValidatable(context.game().getFields()[0][0]),
                 new HasUpgradeRequiredToBuildValidatable(BuildingType.METAL_FACTORY),
                 new IsBuildingBuildableValidatable(BuildingType.METAL_FACTORY),
-                new SingleBuildPerLocationValidatable(new Location(0, 0))
+                new SingleBuildPerLocationValidatable(new Location(0, 0)),
+                new MaxFactoriesCapValidatable()
+        );
+        assertThat(expectedValidatables, sameBeanAs(validatables));
+    }
+
+    @Test
+    void getActionValidatablesHappyPathForTowers() throws NotAcceptableException {
+        var buildAction = new BuildAction(new Location(0, 0), BuildingType.METAL_FACTORY);
+        var validatables = buildAction.getActionValidatables(context);
+        var expectedValidatables = List.of(
+                new CostValidatable(new ResourceSet(0, 600, 0)),
+                new FieldOwnershipValidatable(context.game().getFields()[0][0], player),
+                new IsFieldEmptyValidatable(context.game().getFields()[0][0]),
+                new HasUpgradeRequiredToBuildValidatable(BuildingType.METAL_FACTORY),
+                new IsBuildingBuildableValidatable(BuildingType.METAL_FACTORY),
+                new SingleBuildPerLocationValidatable(new Location(0, 0)),
+                new MaxTowersCapValidatable()
         );
         assertThat(expectedValidatables, sameBeanAs(validatables));
     }

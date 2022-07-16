@@ -47,7 +47,9 @@ public class PlayersActionsValidatingService {
             HasUpgradeRequiredToBuildValidator hasUpgradeRequiredToBuildValidator,
             SingleBuildPerLocationValidator singleBuildPerLocationValidator,
             IsBombardingUnlockedValidator isBombardingUnlockedValidator,
-            IsFieldEnemyValidator isFieldEnemyValidator
+            IsFieldEnemyValidator isFieldEnemyValidator,
+            MaxTowersCapValidator maxTowersCapValidator,
+            MaxFactoriesCapValidator maxFactoriesCapValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -76,7 +78,9 @@ public class PlayersActionsValidatingService {
                 hasUpgradeRequiredToBuildValidator,
                 singleBuildPerLocationValidator,
                 isBombardingUnlockedValidator,
-                isFieldEnemyValidator
+                isFieldEnemyValidator,
+                maxTowersCapValidator,
+                maxFactoriesCapValidator
         );
     }
 

@@ -9,6 +9,7 @@ import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.security.core.Authentication;
@@ -17,8 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.maciejmalewicz.Desert21.config.Constants.TRAINING_EVENT;
-import static com.github.maciejmalewicz.Desert21.config.Constants.UPGRADE_EVENT;
+import static com.github.maciejmalewicz.Desert21.config.Constants.*;
 
 @Service
 public class GameSnapshotService {
@@ -50,7 +50,9 @@ public class GameSnapshotService {
                 p.getNickname(),
                 p.getResources(),
                 p.getOwnedUpgrades(),
-                p.getRocketStrikesDone()
+                p.getRocketStrikesDone(),
+                p.getBuiltFactories(),
+                p.getBuiltTowers()
         )).collect(Collectors.toList());
     }
 
@@ -101,6 +103,9 @@ public class GameSnapshotService {
         }
         if (event instanceof ArmyTrainingEvent) {
             return TRAINING_EVENT;
+        }
+        if (event instanceof BuildBuildingEvent) {
+            return BUILD_EVENT;
         }
         return "";
     }

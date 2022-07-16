@@ -24,6 +24,9 @@ public class Player {
 
     private int rocketStrikesDone;
 
+    private int builtFactories;
+    private int builtTowers;
+
     public Player(String id, String nickname, ResourceSet resources) {
         this.id = id;
         this.nickname = nickname;
@@ -32,6 +35,8 @@ public class Player {
         this.ownedUpgrades = new ArrayList<>();
         this.productionAI = new ProductionAI();
         this.rocketStrikesDone = 0;
+        this.builtFactories = 0;
+        this.builtTowers = 0;
     }
 
     public boolean ownsUpgrade(LabUpgrade upgrade) {
