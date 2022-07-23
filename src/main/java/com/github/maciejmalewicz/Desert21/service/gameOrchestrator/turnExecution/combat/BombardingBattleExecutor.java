@@ -16,7 +16,7 @@ public class BombardingBattleExecutor {
     private final WinnersArmyDestructionRatioCalculator winnersArmyDestructionRatioCalculator;
     private final DefendersArmyAfterAttackCalculator defendersArmyAfterAttackCalculator;
 
-    public BombardingBattleExecutor(ArmyPowerCalculator armyPowerCalculator, ScarabsGenerator scarabsGenerator, BombardingAttackersPowerCalculator bombardingAttackersPowerCalculator, WinnersArmyDestructionRatioCalculator winnersArmyDestructionRatioCalculator, DefendersArmyAfterAttackCalculator defendersArmyAfterAttackCalculator) {
+    public BombardingBattleExecutor(ArmyPowerCalculator armyPowerCalculator, BombardingAttackersPowerCalculator bombardingAttackersPowerCalculator, WinnersArmyDestructionRatioCalculator winnersArmyDestructionRatioCalculator, DefendersArmyAfterAttackCalculator defendersArmyAfterAttackCalculator) {
         this.armyPowerCalculator = armyPowerCalculator;
         this.bombardingAttackersPowerCalculator = bombardingAttackersPowerCalculator;
         this.winnersArmyDestructionRatioCalculator = winnersArmyDestructionRatioCalculator;
