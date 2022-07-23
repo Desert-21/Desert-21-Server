@@ -1,8 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat;
 
-import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.domain.games.Army;
-import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BombardingEvent;
@@ -14,14 +12,12 @@ import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.fieldAtLocatio
 public class BombardingBattleExecutor {
 
     private final ArmyPowerCalculator armyPowerCalculator;
-    private final ScarabsGenerator scarabsGenerator;
     private final BombardingAttackersPowerCalculator bombardingAttackersPowerCalculator;
     private final WinnersArmyDestructionRatioCalculator winnersArmyDestructionRatioCalculator;
     private final DefendersArmyAfterAttackCalculator defendersArmyAfterAttackCalculator;
 
     public BombardingBattleExecutor(ArmyPowerCalculator armyPowerCalculator, ScarabsGenerator scarabsGenerator, BombardingAttackersPowerCalculator bombardingAttackersPowerCalculator, WinnersArmyDestructionRatioCalculator winnersArmyDestructionRatioCalculator, DefendersArmyAfterAttackCalculator defendersArmyAfterAttackCalculator) {
         this.armyPowerCalculator = armyPowerCalculator;
-        this.scarabsGenerator = scarabsGenerator;
         this.bombardingAttackersPowerCalculator = bombardingAttackersPowerCalculator;
         this.winnersArmyDestructionRatioCalculator = winnersArmyDestructionRatioCalculator;
         this.defendersArmyAfterAttackCalculator = defendersArmyAfterAttackCalculator;
@@ -32,7 +28,7 @@ public class BombardingBattleExecutor {
         var opponent = context.game().getOtherPlayer()
                 .orElseThrow(() -> new NotAcceptableException("Player not found!"));
         var fieldArmy = field.getArmy();
-        var defendersArmyBefore = getDefendersFightingArmy(fieldArmy, opponent, context);
+        var defendersArmyBefore = getDefendersFightingArmy(fieldArmy);
         var defendersPower = armyPowerCalculator.calculateDefendersPower(defendersArmyBefore, context, opponent, field);
         var attackersPower = bombardingAttackersPowerCalculator.calculateAttackersPower(event.getCannons(), context);
 
@@ -57,12 +53,8 @@ public class BombardingBattleExecutor {
         );
     }
 
-    private FightingArmy getDefendersFightingArmy(Army fieldArmy, Player defender, TurnExecutionContext context) {
-        if (!defender.ownsUpgrade(LabUpgrade.KING_OF_DESERT)) {
-            return new FightingArmy(fieldArmy.getDroids(), fieldArmy.getTanks(), fieldArmy.getCannons(), 0);
-        }
-        var scarabDefenders = scarabsGenerator.generateScarabs(context);
-        return new FightingArmy(fieldArmy.getDroids(), fieldArmy.getTanks(), fieldArmy.getCannons(), scarabDefenders);
+    private FightingArmy getDefendersFightingArmy(Army fieldArmy) {
+        return new FightingArmy(fieldArmy.getDroids(), fieldArmy.getTanks(), fieldArmy.getCannons(), 0);
     }
 
 }
