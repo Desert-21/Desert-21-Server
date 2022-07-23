@@ -44,12 +44,15 @@ public class UpgradeAction implements Action {
         var buildingMaterialsCost = buildingConfig.costAtLevel(nextLevel);
         var cost = new CostValidatable(new ResourceSet(0, buildingMaterialsCost, 0));
 
+        var hasSufficientLab = new HasSufficientLabForBuildingUpgradeValidatable(location);
+
         return List.of(
                 locationBounds,
                 fieldOwnership,
                 buildingUpgradable,
                 singleUpgradePerLocation,
-                cost
+                cost,
+                hasSufficientLab
         );
     }
 
