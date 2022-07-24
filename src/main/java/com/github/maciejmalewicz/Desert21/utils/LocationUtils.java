@@ -6,6 +6,7 @@ import org.springframework.data.util.Pair;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class LocationUtils {
 
@@ -49,19 +50,19 @@ public class LocationUtils {
                 new Location(location.row() + 1, location.col() + 1),
                 new Location(location.row() + 1, location.col() - 1),
                 new Location(location.row() - 1, location.col() + 1),
-                new Location(location.row() - 1, location.col() - 1)
+                new Location(location.row() - 1, location.col() - 1),
+                new Location(location.row(), location.col() + 2),
+                new Location(location.row(), location.col() - 2),
+                new Location(location.row() + 2, location.col()),
+                new Location(location.row() - 2, location.col())
         );
     }
 
     public static List<Location> getUpTo2ndLevelNeighbouringLocations(Location location) {
-        return generateLocationsSquare(
-                location.row() - 1,
-                location.row() + 1,
-                location.col() - 1,
-                location.col() + 1
-        ).stream()
-                .filter(l -> !l.equals(location))
-                .collect(Collectors.toList());
+        return Stream.concat(
+                get1stLevelNeighbouringLocations(location).stream(),
+                get2ndLevelNeighbouringLocations(location).stream()
+        ).toList();
     }
 
     public static boolean isWithinBounds(Location location, int yMin, int yMax, int xMin, int xMax) {
