@@ -55,5 +55,4 @@ public class RocketStrikeExecutor implements EventExecutor<RocketStrikeEvent> {
                 (int) (defenders.getCannons() * remainingUnitsRatio)
         );
     }
-
 }

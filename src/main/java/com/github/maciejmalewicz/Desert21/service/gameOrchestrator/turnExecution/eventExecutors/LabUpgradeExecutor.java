@@ -1,5 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors;
 
+import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
+import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
@@ -23,7 +25,15 @@ public class LabUpgradeExecutor implements EventExecutor<LabUpgradeEvent> {
             player.getOwnedUpgrades().add(upgrade);
             var eventResult = new LabUpgradeEventResult(upgrade, player.getId());
             eventResults.add(eventResult);
+
+            if (upgrade == LabUpgrade.PRODUCTION_AI) {
+                activateProductionAI(player);
+            }
         }
         return new EventExecutionResult(context, eventResults);
+    }
+
+    private void activateProductionAI(Player player) {
+        player.getProductionAI().setActivated(true);
     }
 }

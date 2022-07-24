@@ -45,13 +45,16 @@ public class BuildAction implements Action {
 
         var singleBuildPerLocationValidatable = new SingleBuildPerLocationValidatable(location);
 
+        var buildingCapValidatable = getCapValidatable();
+
         return List.of(
                 costValidatable,
                 fieldOwnershipValidatable,
                 isFieldEmptyValidatable,
                 hasUpgradeRequiredToBuildValidatable,
                 isBuildingBuildableValidatable,
-                singleBuildPerLocationValidatable
+                singleBuildPerLocationValidatable,
+                buildingCapValidatable
         );
     }
 
@@ -64,5 +67,11 @@ public class BuildAction implements Action {
         var buildBuildingEvent = new BuildBuildingEvent(location, buildingType);
 
         return List.of(paymentEvent, buildBuildingEvent);
+    }
+
+    private ActionValidatable getCapValidatable() {
+        return buildingType == BuildingType.TOWER ?
+                new MaxTowersCapValidatable() :
+                new MaxFactoriesCapValidatable();
     }
 }

@@ -30,4 +30,5 @@ public class Constants {
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";
+    public static final String BUILD_EVENT = "BUILD";
 }

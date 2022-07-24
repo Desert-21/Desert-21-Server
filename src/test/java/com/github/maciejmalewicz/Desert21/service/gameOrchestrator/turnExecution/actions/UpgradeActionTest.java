@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -76,27 +78,15 @@ class UpgradeActionTest {
         context.game().getFields()[0][0] = new Field(new Building(BuildingType.BUILDING_MATERIALS_FACTORY), "AA");
         var upgradeAction = new UpgradeAction(new Location(0, 0));
         var validatables = upgradeAction.getActionValidatables(context);
-        assertEquals(5, validatables.size());
-        assertEquals(
+        var expectedValidatables = List.of(
                 new LocationBoundsValidatable(new Location(0, 0)),
-                validatables.get(0)
-        );
-        assertEquals(
                 new FieldOwnershipValidatable(context.game().getFields()[0][0], context.player()),
-                validatables.get(1)
-        );
-        assertEquals(
                 new BuildingUpgradableValidatable(context.game().getFields()[0][0].getBuilding()),
-                validatables.get(2)
-        );
-        assertEquals(
                 new SingleUpgradePerLocationValidatable(new Location(0, 0)),
-                validatables.get(3)
-        );
-        assertEquals(
                 new CostValidatable(new ResourceSet(0, 40, 0)),
-                validatables.get(4)
+                new HasSufficientLabForBuildingUpgradeValidatable(new Location(0, 0))
         );
+        assertThat(expectedValidatables, sameBeanAs(validatables));
     }
 
     @Test

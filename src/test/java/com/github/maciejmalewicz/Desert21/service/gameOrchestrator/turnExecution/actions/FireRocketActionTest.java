@@ -74,9 +74,10 @@ class FireRocketActionTest {
                 context.game().getFields()[0][3]
         );
         var expectedValidatables = List.of(
-                new SingleRocketStrikePerTurnValidatable(new Location(1, 1)),
+                new SingleRocketStrikePerTurnValidatable(),
                 new CostValidatable(new ResourceSet(0, 0, 300)),
                 new RocketLauncherOwnershipValidatable(ownedFields),
+                new IsFieldTargetableByRocketValidatable(new Location(1, 1)),
                 new RocketStrikeValidRocketStrikeTargetValidatable(new Location(1, 1), false),
                 new SuperSonicUpgradeValidatable(false)
         );
@@ -97,9 +98,10 @@ class FireRocketActionTest {
                 context.game().getFields()[1][0]
         );
         var expectedValidatables = List.of(
-                new SingleRocketStrikePerTurnValidatable(new Location(1, 1)),
+                new SingleRocketStrikePerTurnValidatable(),
                 new CostValidatable(new ResourceSet(0, 0, 550)),
                 new RocketLauncherOwnershipValidatable(ownedFields),
+                new IsFieldTargetableByRocketValidatable(new Location(1, 1)),
                 new RocketStrikeValidRocketStrikeTargetValidatable(new Location(1, 1), false),
                 new SuperSonicUpgradeValidatable(false)
         );

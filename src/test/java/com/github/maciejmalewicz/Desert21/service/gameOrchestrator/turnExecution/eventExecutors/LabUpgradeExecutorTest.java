@@ -84,4 +84,32 @@ class LabUpgradeExecutorTest {
         );
         assertThat(expectedUpgrades, sameBeanAs(newUpgrades));
     }
+
+    @Test
+    void executeForProductionAI() throws NotAcceptableException  {
+        player.getOwnedUpgrades().add(LabUpgrade.HOME_SWEET_HOME);
+        player.getOwnedUpgrades().add(LabUpgrade.MORE_METAL);
+        player.getOwnedUpgrades().add(LabUpgrade.PRODUCTION_MANAGERS);
+        var executables = List.of(
+                new LabUpgradeEvent(LabUpgrade.PRODUCTION_AI)
+        );
+        var results = tested.execute(executables, context);
+        var newUpgrades = player.getOwnedUpgrades();
+
+        var expectedEventResults = List.of(
+                new LabUpgradeEventResult(LabUpgrade.PRODUCTION_AI, "AA")
+        );
+        assertThat(expectedEventResults, sameBeanAs(results.results()));
+
+        var expectedUpgrades = List.of(
+                LabUpgrade.HOME_SWEET_HOME,
+                LabUpgrade.MORE_METAL,
+                LabUpgrade.PRODUCTION_MANAGERS,
+                LabUpgrade.PRODUCTION_AI
+        );
+        assertThat(expectedUpgrades, sameBeanAs(newUpgrades));
+
+        var expectedAI = new ProductionAI(true, 0);
+        assertThat(expectedAI, sameBeanAs(player.getProductionAI()));
+    }
 }

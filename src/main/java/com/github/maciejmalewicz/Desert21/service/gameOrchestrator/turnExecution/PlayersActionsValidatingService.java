@@ -40,6 +40,7 @@ public class PlayersActionsValidatingService {
             LabUpgradeNotRepeatedValidator labUpgradeNotRepeatedValidator,
             SingleRocketStrikePerTurnValidator singleRocketStrikePerTurnValidator,
             RocketLauncherOwnershipValidator rocketLauncherOwnershipValidator,
+            IsFieldTargetableByRocketValidator isFieldTargetableByRocketValidator,
             SuperSonicUpgradeValidator superSonicUpgradeValidator,
             RocketStrikeValidRocketStrikeTargetValidator rocketStrikeValidRocketStrikeTargetValidator,
             IsBuildingBuildableValidator isBuildingBuildableValidator,
@@ -47,7 +48,10 @@ public class PlayersActionsValidatingService {
             HasUpgradeRequiredToBuildValidator hasUpgradeRequiredToBuildValidator,
             SingleBuildPerLocationValidator singleBuildPerLocationValidator,
             IsBombardingUnlockedValidator isBombardingUnlockedValidator,
-            IsFieldEnemyValidator isFieldEnemyValidator
+            IsFieldEnemyValidator isFieldEnemyValidator,
+            MaxTowersCapValidator maxTowersCapValidator,
+            MaxFactoriesCapValidator maxFactoriesCapValidator,
+            HasSufficientLabForBuildingUpgradeValidator hasSufficientLabForBuildingUpgradeValidator
     ) {
         actionValidators = List.of(
                 locationBoundsValidator,
@@ -69,6 +73,7 @@ public class PlayersActionsValidatingService {
                 labUpgradeNotRepeatedValidator,
                 singleRocketStrikePerTurnValidator,
                 rocketLauncherOwnershipValidator,
+                isFieldTargetableByRocketValidator,
                 superSonicUpgradeValidator,
                 rocketStrikeValidRocketStrikeTargetValidator,
                 isBuildingBuildableValidator,
@@ -76,7 +81,10 @@ public class PlayersActionsValidatingService {
                 hasUpgradeRequiredToBuildValidator,
                 singleBuildPerLocationValidator,
                 isBombardingUnlockedValidator,
-                isFieldEnemyValidator
+                isFieldEnemyValidator,
+                maxTowersCapValidator,
+                maxFactoriesCapValidator,
+                hasSufficientLabForBuildingUpgradeValidator
         );
     }
 

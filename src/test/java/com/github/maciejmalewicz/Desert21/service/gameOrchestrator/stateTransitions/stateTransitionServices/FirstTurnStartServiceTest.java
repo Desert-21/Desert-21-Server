@@ -81,7 +81,7 @@ class FirstTurnStartServiceTest {
     @Test
     void testGetTimeToWaitForTimeout() {
         var timeout = tested.getTimeToWaitForTimeout(game);
-        assertEquals(20_000, timeout);
+        assertEquals(30_000, timeout);
     }
 
     @Test

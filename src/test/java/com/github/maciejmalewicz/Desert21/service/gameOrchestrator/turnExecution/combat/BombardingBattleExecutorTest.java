@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat;
 
+import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
@@ -23,6 +24,7 @@ class BombardingBattleExecutorTest {
     @Autowired
     private GameBalanceService gameBalanceService;
 
+    private Player player;
     private TurnExecutionContext context;
 
     @Autowired
@@ -30,7 +32,7 @@ class BombardingBattleExecutorTest {
 
     @BeforeEach
     void setup() {
-        var player = new Player("AA",
+        player = new Player("AA",
                 "macior123456",
                 new ResourceSet(60, 60, 60));
         context = new TurnExecutionContext(
@@ -56,6 +58,24 @@ class BombardingBattleExecutorTest {
 
     @Test
     void executeBombardingAttackersWin() throws NotAcceptableException {
+        var bombardingEvent = new BombardingEvent(new Location(0, 0), 40);
+        context.game().getFields()[0][0].setArmy(new Army(10, 2, 5));
+        /*
+        attackers power: 1000
+        defenders power: 300 + 440 + 250 = 990
+         */
+        var battleResult = tested.executeBombarding(bombardingEvent, context);
+        assertTrue(battleResult.haveAttackersWon());
+        assertFalse(battleResult.wasUnoccupied());
+        assertEquals(new FightingArmy(0, 0, 40, 0), battleResult.attackersBefore());
+        assertEquals(new FightingArmy(0, 0, 40, 0), battleResult.attackersAfter());
+        assertEquals(new FightingArmy(10, 2, 5, 0), battleResult.defendersBefore());
+        assertEquals(new FightingArmy(0, 0, 0, 0), battleResult.defendersAfter());
+    }
+
+    @Test
+    void executeBombardingAttackersWinShouldIgnoreKingOfsDesert() throws NotAcceptableException {
+        player.getOwnedUpgrades().add(LabUpgrade.KING_OF_DESERT);
         var bombardingEvent = new BombardingEvent(new Location(0, 0), 40);
         context.game().getFields()[0][0].setArmy(new Army(10, 2, 5));
         /*
