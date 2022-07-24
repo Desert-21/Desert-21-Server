@@ -1,6 +1,4 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables;
 
-import com.github.maciejmalewicz.Desert21.models.Location;
-
-public record SingleRocketStrikePerTurnValidatable(Location location) implements ActionValidatable {
+public record SingleRocketStrikePerTurnValidatable() implements ActionValidatable {
 }

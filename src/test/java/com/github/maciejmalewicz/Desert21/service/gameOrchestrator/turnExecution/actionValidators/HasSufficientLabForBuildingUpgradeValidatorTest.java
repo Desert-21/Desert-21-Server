@@ -68,8 +68,8 @@ class HasSufficientLabForBuildingUpgradeValidatorTest {
     }
 
     @Test
-    void validateHappyPathHasTowerCreator() {
-        player.getOwnedUpgrades().add(LabUpgrade.TOWER_CREATOR);
+    void validateHappyPathHasTheGreatFortress() {
+        player.getOwnedUpgrades().add(LabUpgrade.THE_GREAT_FORTRESS);
         context.game().getFields()[0][3] = new Field(new Building(BuildingType.TOWER, 3), "AA");
         var validatables = List.of(
                 new HasSufficientLabForBuildingUpgradeValidatable(new Location(0, 0)),
@@ -81,7 +81,7 @@ class HasSufficientLabForBuildingUpgradeValidatorTest {
     }
 
     @Test
-    void validateUnhappyPathDoesNotHaveTowerCreator() {
+    void validateUnhappyPathDoesNotHaveTheGreatFortress() {
         context.game().getFields()[0][3] = new Field(new Building(BuildingType.TOWER, 3), "AA");
         var validatables = List.of(
                 new HasSufficientLabForBuildingUpgradeValidatable(new Location(0, 0)),

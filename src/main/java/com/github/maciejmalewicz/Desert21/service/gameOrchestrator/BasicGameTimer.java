@@ -20,6 +20,6 @@ public class BasicGameTimer implements GameTimer {
         var totalOccupiedFields = boardToFieldList(game.getFields()).stream()
                         .filter(f -> f.getOwnerId() != null)
                         .count();
-        return 20_000 + totalOccupiedFields * 1_000;
+        return 30_000 + totalOccupiedFields * 2_000;
     }
 }

@@ -1,24 +1,23 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidators;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
+import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.SingleRocketStrikePerTurnValidatable;
-import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.IsFieldTargetableByRocketValidatable;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class SingleRocketStrikePerTurnValidatorTest {
+class IsFieldTargetableByRocketValidatorTest {
 
     @Autowired
     private GameBalanceService gameBalanceService;
@@ -26,7 +25,7 @@ class SingleRocketStrikePerTurnValidatorTest {
     private TurnExecutionContext context;
 
     @Autowired
-    private SingleRocketStrikePerTurnValidator tested;
+    private IsFieldTargetableByRocketValidator tested;
 
     @BeforeEach
     void setup() {
@@ -41,9 +40,9 @@ class SingleRocketStrikePerTurnValidatorTest {
                                 new Player("BB",
                                         "schabina123456",
                                         new ResourceSet(60, 60, 60))),
-                        BoardUtils.generateEmptyPlain(9),
+                        new Field[9][9],
                         new StateManager(
-                                GameState.WAITING_TO_START,
+                                GameState.AWAITING,
                                 DateUtils.millisecondsFromNow(10_000),
                                 "AA",
                                 "TIMEOUTID"
@@ -51,29 +50,32 @@ class SingleRocketStrikePerTurnValidatorTest {
                 ),
                 player
         );
+        context.game().getFields()[0][0] = new Field(new Building(BuildingType.TOWER, 2), "AA");
+        context.game().getFields()[0][1] = new Field(new Building(BuildingType.BUILDING_MATERIALS_FACTORY), null);
+        context.game().getFields()[0][2] = new Field(new Building(BuildingType.HOME_BASE, 4), "AA");
     }
 
     @Test
-    void validateNoRocketStrikes() {
-        var validatables = new ArrayList<SingleRocketStrikePerTurnValidatable>();
+    void validateHappyPathNotDefensive() {
+        var validatables = List.of(new IsFieldTargetableByRocketValidatable(new Location(0, 1)));
         assertTrue(tested.validate(validatables, context));
     }
 
     @Test
-    void validateOneRocketStrike() {
-        var validatables = List.of(
-               new SingleRocketStrikePerTurnValidatable()
-        );
+    void validateHappyPathDefensiveButLowerLevel() {
+        var validatables = List.of(new IsFieldTargetableByRocketValidatable(new Location(0, 0)));
         assertTrue(tested.validate(validatables, context));
     }
 
     @Test
-    void validateMoreRocketStrikes() {
-        var validatables = List.of(
-                new SingleRocketStrikePerTurnValidatable(),
-                new SingleRocketStrikePerTurnValidatable(),
-                new SingleRocketStrikePerTurnValidatable()
-        );
+    void validateUnhappyPathDefensiveLevel4() {
+        var validatables = List.of(new IsFieldTargetableByRocketValidatable(new Location(0, 2)));
+        assertFalse(tested.validate(validatables, context));
+    }
+
+    @Test
+    void validateUnhappyPathLocationOutOfBounds() {
+        var validatables = List.of(new IsFieldTargetableByRocketValidatable(new Location(0, 99)));
         assertFalse(tested.validate(validatables, context));
     }
 }

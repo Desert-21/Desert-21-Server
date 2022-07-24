@@ -43,6 +43,6 @@ class BasicGameTimerTest {
     @Test
     void getMoveTime() {
         var timer = new BasicGameTimer();
-        assertEquals(28_000, timer.getMoveTime(game));
+        assertEquals(46_000, timer.getMoveTime(game));
     }
 }

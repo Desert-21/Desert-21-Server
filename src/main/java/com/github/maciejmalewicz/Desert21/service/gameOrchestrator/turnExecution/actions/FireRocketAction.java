@@ -31,7 +31,7 @@ public class FireRocketAction implements Action {
 
     @Override
     public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {
-        var singleRocketStrikePerTurnValidatable = new SingleRocketStrikePerTurnValidatable(target);
+        var singleRocketStrikePerTurnValidatable = new SingleRocketStrikePerTurnValidatable();
 
         var ownedFields = boardToOwnedFieldList(context.game().getFields(), context.player().getId());
         var rocketStrikesPerformed = context.player().getRocketStrikesDone();
@@ -40,6 +40,8 @@ public class FireRocketAction implements Action {
 
         var rocketLauncherOwnershipValidatable = new RocketLauncherOwnershipValidatable(ownedFields);
 
+        var isFieldTargetableByRocketValidatable = new IsFieldTargetableByRocketValidatable(target);
+
         var validTargetValidatable = new RocketStrikeValidRocketStrikeTargetValidatable(target, isTargetingRocket);
 
         var superSonicUpgradeValidatable = new SuperSonicUpgradeValidatable(isTargetingRocket);
@@ -47,6 +49,7 @@ public class FireRocketAction implements Action {
                 singleRocketStrikePerTurnValidatable,
                 costValidatable,
                 rocketLauncherOwnershipValidatable,
+                isFieldTargetableByRocketValidatable,
                 validTargetValidatable,
                 superSonicUpgradeValidatable
         );

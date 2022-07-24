@@ -27,7 +27,7 @@ public class HasSufficientLabForBuildingUpgradeValidator implements ActionValida
             if (!isDefensive || !isLevel3) {
                 return true;
             }
-            return context.player().ownsUpgrade(LabUpgrade.TOWER_CREATOR);
+            return context.player().ownsUpgrade(LabUpgrade.THE_GREAT_FORTRESS);
         } catch (NotAcceptableException e) {
             return false;
         }
