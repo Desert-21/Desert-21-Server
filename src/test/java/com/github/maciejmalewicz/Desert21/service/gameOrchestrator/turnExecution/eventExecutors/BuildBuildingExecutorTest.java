@@ -81,6 +81,8 @@ class BuildBuildingExecutorTest {
                 BuildingType.TOWER,
                 context.game().getFields()[0][1].getBuilding().getType()
         );
+        assertEquals(1, context.player().getBuiltTowers());
+        assertEquals(1, context.player().getBuiltFactories());
     }
 
     @Test
