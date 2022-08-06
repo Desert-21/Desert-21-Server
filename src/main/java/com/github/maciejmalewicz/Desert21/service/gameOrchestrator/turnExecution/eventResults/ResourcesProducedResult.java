@@ -12,7 +12,7 @@ public record ResourcesProducedResult(ResourceSet resourceSet, String playerId) 
 
     @Override
     public long millisecondsToView() {
-        return 1000;
+        return 2000;
     }
 
     @Override
