@@ -7,7 +7,10 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionCont
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.BattleResult;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat.FightingArmy;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.FieldConquestService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +21,8 @@ import org.springframework.data.util.Pair;
 
 import java.util.List;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -60,6 +65,12 @@ class FieldConquestServiceTest {
 
     @Test
     void executeOptionalFieldConquestAttackersHaveWonAgainstPlayer() {
+        context.game().setEventQueue(List.of(
+                new BuildBuildingEvent(new Location(0, 0), BuildingType.TOWER),
+                new BuildBuildingEvent(new Location(1, 1), BuildingType.ELECTRICITY_FACTORY),
+                new ArmyTrainingEvent(2, new Location(0, 1), UnitType.TANK, 4),
+                new ArmyTrainingEvent(2, new Location(0, 0), UnitType.TANK, 4)
+        ));
         var battleResult = new BattleResult(
                 new FightingArmy(100, 20, 40, 0),
                 new FightingArmy(10, 4, 10, 0),
@@ -72,6 +83,12 @@ class FieldConquestServiceTest {
         var conqueredField = newContext.game().getFields()[0][0];
         assertEquals("AA", conqueredField.getOwnerId());
         assertEquals(new Army(70, 14, 28), conqueredField.getArmy());
+
+        var expectedEventQueue = List.of(
+                new BuildBuildingEvent(new Location(1, 1), BuildingType.ELECTRICITY_FACTORY),
+                new ArmyTrainingEvent(2, new Location(0, 1), UnitType.TANK, 4)
+        );
+        assertThat(expectedEventQueue, sameBeanAs(newContext.game().getEventQueue()));
     }
 
     @Test

@@ -69,7 +69,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(41, 41, 41), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
         var forBothNotifications = productionResult.forBoth();
@@ -77,7 +77,7 @@ class ResourcesProductionExecutorTest {
         var forBothNotification = forBothNotifications.get(0);
         assertEquals(RESOURCES_PRODUCED_NOTIFICATION, forBothNotification.type());
         var notificationContent = (ResourcesProducedNotification) forBothNotification.content();
-        assertEquals(1000, notificationContent.getMillisecondsToView());
+        assertEquals(2000, notificationContent.getMillisecondsToView());
         assertEquals(new ResourceSet(41, 41, 41), notificationContent.getProduced());
         assertEquals("AA", notificationContent.getPlayerId());
 
@@ -96,7 +96,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(51, 71, 101), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 
@@ -117,7 +117,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(56, 56, 56), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 
@@ -136,7 +136,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(47, 47, 47), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 
@@ -155,7 +155,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(49, 49, 49), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 
@@ -174,7 +174,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(51, 51, 51), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 
@@ -197,7 +197,7 @@ class ResourcesProductionExecutorTest {
         var results = eventExecutionResults.results();
         assertEquals(1, results.size());
         var productionResult = (ResourcesProducedResult) results.get(0);
-        assertEquals(1000, productionResult.millisecondsToView());
+        assertEquals(2000, productionResult.millisecondsToView());
         assertEquals(new ResourceSet(74, 74, 74), productionResult.resourceSet());
         assertEquals("AA", productionResult.playerId());
 

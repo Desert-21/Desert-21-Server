@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ArmyTrainingEvent extends GameEvent {
+public class ArmyTrainingEvent extends GameEvent implements LocatableEvent {
 
     private Location location;
     private UnitType unitType;
