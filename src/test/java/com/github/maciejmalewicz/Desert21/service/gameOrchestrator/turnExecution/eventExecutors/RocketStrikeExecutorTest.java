@@ -74,6 +74,7 @@ class RocketStrikeExecutorTest {
 
         var expectedResults = List.of(
                 new RocketStrikeEventResult(
+                        new Location(5, 5),
                         new Army(10, 10, 10),
                         new Army(5, 5, 5)
                 )
@@ -97,7 +98,7 @@ class RocketStrikeExecutorTest {
         var eventExecutionResult = tested.execute(events, context);
 
         var expectedResults = List.of(
-                new RocketStrikeEventResult(null, null)
+                new RocketStrikeEventResult(new Location(5, 5), null, null)
         );
         assertThat(expectedResults, sameBeanAs(eventExecutionResult.results()));
 

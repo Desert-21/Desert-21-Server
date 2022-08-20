@@ -5,8 +5,10 @@ import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.GameFinishedNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.GameEndCheckingService;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.GAME_END_NOTIFICATION;
 import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,15 +38,17 @@ class NextTurnTransitionServiceTest {
     private Game game;
 
     private PlayersNotifier playersNotifier;
+    private GameEndCheckingService gameEndCheckingService;
 
     void setupTested() {
         playersNotifier = mock(PlayersNotifier.class);
         var gameTimer = mock(BasicGameTimer.class);
+        gameEndCheckingService = mock(GameEndCheckingService.class);
         tested = new NextTurnTransitionService(
               playersNotifier,
               mock(TimeoutExecutor.class),
               gameRepository,
-                gameTimer);
+                gameTimer, gameEndCheckingService);
     }
 
     void setupGame() {
@@ -75,6 +81,8 @@ class NextTurnTransitionServiceTest {
 
     @Test
     void testStateTransitionFromFirstToSecondPLayer() {
+        doReturn(Optional.empty()).when(gameEndCheckingService).checkIfGameHasEnded(any());
+
         tested.stateTransition(game);
 
         var fromRepo = gameRepository.findAll().stream()
@@ -96,11 +104,14 @@ class NextTurnTransitionServiceTest {
         var notificationContent = (NextTurnNotification) notification.content();
         assertNotNull(notificationContent.timeout());
         assertEquals("BB", notificationContent.currentPlayerId());
+        assertNull(fromRepo.getStateManager().getWinnerId());
         assertEquals(1, game.getStateManager().getTurnCounter());
     }
 
     @Test
     void testStateTransitionFromSecondToFirstPlayer() {
+        doReturn(Optional.empty()).when(gameEndCheckingService).checkIfGameHasEnded(any());
+
         game.getStateManager().setCurrentPlayerId("BB");
         tested.stateTransition(game);
 
@@ -123,6 +134,33 @@ class NextTurnTransitionServiceTest {
         var notificationContent = (NextTurnNotification) notification.content();
         assertNotNull(notificationContent.timeout());
         assertEquals("AA", notificationContent.currentPlayerId());
+        assertNull(fromRepo.getStateManager().getWinnerId());
         assertEquals(2, fromRepo.getStateManager().getTurnCounter());
+    }
+
+    @Test
+    void testStateTransitionWhenOneOfPlayersWonTheGame() {
+        doReturn(Optional.of("AA")).when(gameEndCheckingService).checkIfGameHasEnded(any());
+
+        tested.stateTransition(game);
+
+        var fromRepo = gameRepository.findAll().stream()
+                .findAny()
+                .orElseThrow();
+
+        assertEquals(GameState.FINISHED, fromRepo.getStateManager().getGameState());
+
+        var argumentCaptor = ArgumentCaptor.forClass(PlayersNotificationPair.class);
+        verify(playersNotifier, times(1)).notifyPlayers(
+                eq(fromRepo),
+                argumentCaptor.capture()
+        );
+        var notificationPair = argumentCaptor.getAllValues().stream().findFirst().orElseThrow();
+        assertEquals(notificationPair.forCurrentPlayer(), notificationPair.forOpponent());
+        var notification = notificationPair.forCurrentPlayer();
+        assertEquals(GAME_END_NOTIFICATION, notification.type());
+        var notificationContent = (GameFinishedNotification) notification.content();
+        assertNotNull(notificationContent.winnerId());
+        assertEquals("AA", notificationContent.winnerId());
     }
 }

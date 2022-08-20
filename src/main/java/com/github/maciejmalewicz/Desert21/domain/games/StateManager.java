@@ -22,6 +22,8 @@ public class StateManager {
     private String firstPlayerId;
     private int turnCounter;
 
+    private String winnerId;
+
     public StateManager(GameState gameState, Date timeout, String currentPlayerId, String currentStateTimeoutId) {
         this.gameState = gameState;
         this.timeout = timeout;

@@ -8,27 +8,23 @@ import com.github.maciejmalewicz.Desert21.dto.game.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildingUpgradeEvent;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.maciejmalewicz.Desert21.config.Constants.*;
-
 @Service
 public class GameSnapshotService {
 
     private final GamePlayerService gamePlayerService;
     private final ArmySnapshotProcessingService armySnapshotProcessingService;
+    private final EventQueueProcessingService eventQueueProcessingService;
 
-    public GameSnapshotService(GamePlayerService gamePlayerService, ArmySnapshotProcessingService armySnapshotProcessingService) {
+    public GameSnapshotService(GamePlayerService gamePlayerService, ArmySnapshotProcessingService armySnapshotProcessingService, EventQueueProcessingService eventQueueProcessingService) {
         this.gamePlayerService = gamePlayerService;
         this.armySnapshotProcessingService = armySnapshotProcessingService;
+        this.eventQueueProcessingService = eventQueueProcessingService;
     }
 
     public GameDto snapshotGame(String gameId, Authentication authentication) throws NotAcceptableException {
@@ -40,7 +36,7 @@ public class GameSnapshotService {
                 processPlayers(game.getPlayers()),
                 processFields(game.getFields(), player),
                 processStateManager(game.getStateManager()),
-                processEventQueue(game.getEventQueue())
+                eventQueueProcessingService.processEventQueue(game.getEventQueue(), player, game.getFields())
         );
     }
 
@@ -89,24 +85,5 @@ public class GameSnapshotService {
                 stateManager.getCurrentPlayerId(),
                 stateManager.getTurnCounter()
         );
-    }
-
-    private List<EventDto> processEventQueue(List<GameEvent> eventQueue) {
-        return eventQueue.stream()
-                .map(e -> new EventDto(getEventLabel(e), e))
-                .toList();
-    }
-
-    private String getEventLabel(GameEvent event) {
-        if (event instanceof BuildingUpgradeEvent) {
-            return UPGRADE_EVENT;
-        }
-        if (event instanceof ArmyTrainingEvent) {
-            return TRAINING_EVENT;
-        }
-        if (event instanceof BuildBuildingEvent) {
-            return BUILD_EVENT;
-        }
-        return "";
     }
 }

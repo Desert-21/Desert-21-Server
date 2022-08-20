@@ -1,7 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventExecutors;
 
 import com.github.maciejmalewicz.Desert21.domain.games.Building;
+import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.eventResults.BuildingBuiltEventResult;
@@ -25,11 +27,21 @@ public class BuildBuildingExecutor implements EventExecutor<BuildBuildingEvent> 
             var location = event.getLocation();
 
             var field = fieldAtLocation(context.game().getFields(), location);
-            field.setBuilding(new Building(event.getBuildingType(), 1));
+            var building = new Building(event.getBuildingType(), 1);
+            field.setBuilding(building);
+            updatePlayerCaps(context.player(), building);
 
             results.add(new BuildingBuiltEventResult(event.getLocation(), event.getBuildingType()));
         }
         return new EventExecutionResult(context, results);
+    }
+
+    private void updatePlayerCaps(Player player, Building building) {
+        if (building.isDefensive()) {
+            player.setBuiltTowers(player.getBuiltTowers() + 1);
+        } else {
+            player.setBuiltFactories(player.getBuiltFactories() + 1);
+        }
     }
 
 }

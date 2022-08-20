@@ -10,7 +10,7 @@ import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnEx
 
 @Data
 @NoArgsConstructor
-public class BuildBuildingEvent extends GameEvent {
+public class BuildBuildingEvent extends GameEvent implements LocatableEvent {
 
     private Location location;
     private BuildingType buildingType;

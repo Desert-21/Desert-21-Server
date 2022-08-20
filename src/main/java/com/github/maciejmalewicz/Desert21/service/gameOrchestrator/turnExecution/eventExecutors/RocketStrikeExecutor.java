@@ -37,7 +37,7 @@ public class RocketStrikeExecutor implements EventExecutor<RocketStrikeEvent> {
             var defendersBefore = field.getArmy();
             var defendersAfter = damageArmy(defendersBefore, context);
             field.setArmy(defendersAfter);
-            eventResults.add(new RocketStrikeEventResult(defendersBefore, defendersAfter));
+            eventResults.add(new RocketStrikeEventResult(event.getLocation(), defendersBefore, defendersAfter));
         }
         return new EventExecutionResult(context, eventResults);
     }

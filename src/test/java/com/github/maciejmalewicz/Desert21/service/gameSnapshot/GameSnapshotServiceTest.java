@@ -2,11 +2,15 @@ package com.github.maciejmalewicz.Desert21.service.gameSnapshot;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.dto.game.BuildingDto;
+import com.github.maciejmalewicz.Desert21.dto.game.EventDto;
 import com.github.maciejmalewicz.Desert21.dto.game.FieldDto;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
+import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +28,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -40,6 +45,16 @@ class GameSnapshotServiceTest {
     private GamePlayerService gamePlayerService;
 
     private final Army army = new Army(10, 10, 10);
+    private final List<EventDto> events = List.of(
+            new EventDto(
+                    "TRAIN",
+                    new ArmyTrainingEvent(
+                            4,
+                            new Location(0, 0),
+                            UnitType.TANK,
+                            4)
+            )
+    );
 
     private Game game;
 
@@ -51,7 +66,9 @@ class GameSnapshotServiceTest {
         doReturn(army).when(armySnapshotProcessingService).snapshotArmy(
                 any(), any(), any()
         );
-        tested = new GameSnapshotService(gamePlayerService, armySnapshotProcessingService);
+        var eventQueueProcessingService = mock(EventQueueProcessingService.class);
+        doReturn(events).when(eventQueueProcessingService).processEventQueue(anyList(), any(Player.class), any());
+        tested = new GameSnapshotService(gamePlayerService, armySnapshotProcessingService, eventQueueProcessingService);
 
         setupGame();
         setupAuthentication();
