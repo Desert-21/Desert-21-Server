@@ -111,8 +111,7 @@ class PlayerTurnServiceTest {
                 validatingService,
                 eventsExecutionService,
                 gameRepository,
-                turnResolutionPhaseStartService
-        );
+                turnResolutionPhaseStartService);
     }
 
     void setupGameAndPlayer() {
