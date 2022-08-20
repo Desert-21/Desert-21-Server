@@ -1,0 +1,11 @@
+generalBalanceConfig:
+  startingResources: 60
+
+  fogOfWar1: 30
+  fogOfWar2: 60
+
+  productionPerField: 2
+
+  rocketStrikeDamage: 0.5
+  baseRocketStrikePrice: 300
+  rocketStrikePricePerUsage: 200
