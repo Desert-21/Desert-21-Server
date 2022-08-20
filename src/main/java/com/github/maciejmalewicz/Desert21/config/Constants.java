@@ -29,6 +29,7 @@ public class Constants {
     public static final String PLAYERS_BOMBARDING_FAILED_NOTIFICATION = "PLAYER_BOMBARDING_FAILED";
     public static final String ENEMY_BOMBARDING_FAILED_NOTIFICATION = "ENEMY_BOMBARDING_FAILED";
     public static final String GAME_END_NOTIFICATION = "GAME_END";
+    public static final String SURRENDER_NOTIFICATION = "SURRENDER";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";
