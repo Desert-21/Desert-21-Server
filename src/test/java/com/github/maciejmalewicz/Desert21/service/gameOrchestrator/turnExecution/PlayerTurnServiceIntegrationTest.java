@@ -155,7 +155,7 @@ class PlayerTurnServiceIntegrationTest {
         var toField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(1, 1));
         assertEquals(new Army(10, 5, 5), fromField.getArmy());
         // after calculations...
-        assertEquals(new Army(5, 2, 5), toField.getArmy());
+        assertEquals(new Army(6, 3, 6), toField.getArmy());
         assertEquals("AA", fromField.getOwnerId());
         assertEquals("AA", toField.getOwnerId());
 
