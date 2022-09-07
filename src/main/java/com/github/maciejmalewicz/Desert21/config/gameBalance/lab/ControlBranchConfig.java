@@ -26,7 +26,7 @@ public class ControlBranchConfig implements LabBranchConfig {
     public List<LabUpgrade> getFirstTierUpgrades() {
         return List.of(
                 LabUpgrade.KING_OF_DESERT,
-                LabUpgrade.FACTORY_TURRET,
+                LabUpgrade.THE_GREAT_FORTRESS,
                 LabUpgrade.GOLD_DIGGERS
         );
     }
@@ -35,7 +35,7 @@ public class ControlBranchConfig implements LabBranchConfig {
     public List<LabUpgrade> getSecondTierUpgrades() {
         return List.of(
                 LabUpgrade.TOWER_CREATOR,
-                LabUpgrade.THE_GREAT_FORTRESS
+                LabUpgrade.FACTORY_TURRET
         );
     }
 

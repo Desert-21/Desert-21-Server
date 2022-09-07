@@ -43,7 +43,7 @@ homeBaseConfig:
     level2: 0.3
     level3: 0.55
     level4: 0.9
-  production: 40
+  production: 20
 
 rocketLauncherConfig:
   cost:

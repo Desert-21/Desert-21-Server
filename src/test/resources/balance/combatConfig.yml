@@ -20,7 +20,7 @@ cannonsConfig:
   cost: 10
   power: 50
   turnsToTrain: 2
-  fieldsTraveledPerTurn: 4
+  fieldsTraveledPerTurn: 3
   smallProduction: 10
   mediumProduction: 30
   massProduction: 50

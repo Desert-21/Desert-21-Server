@@ -36,6 +36,6 @@ public class GameStartTimeoutExecutable implements TimeoutExecutable {
 
     @Override
     public long getExecutionOffset() {
-        return gameTimer.getInitialTime();
+        return 0;
     }
 }

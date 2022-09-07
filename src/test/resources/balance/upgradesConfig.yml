@@ -5,7 +5,7 @@ combatBranchBalanceConfig:
   improvedDroidsBaseAtTowerDefenceBonus: 0.4
   improvedTanksPowerBonus: 0.5
 
-  improvedCannonsBombardingPowerFraction: 0.6
+  improvedCannonsBombardingPowerFraction: 0.5
 
   advancedTacticsReferencePower: 100
   advancedTacticsPowerBonusPerReferencePower: 0.01
@@ -15,12 +15,12 @@ combatBranchCostConfig:
 
   mediumProduction: 200
   improvedDroids: 200
-  improvedCannons: 400
+  improvedTanks: 400
 
-  massProduction: 600
-  improvedTanks: 600
+  massProduction: 800
+  improvedCannons: 800
 
-  advancedTactics: 1400
+  advancedTactics: 2000
 
 
 controlBranchBalanceConfig:
@@ -35,14 +35,13 @@ controlBranchCostConfig:
   scarabScanners: 100
 
   kingOfDesert: 200
-  theGreatFortress: 200
+  factoryTurret: 200
   goldDiggers: 400
 
-  factoryTurret: 600
-  towerCreator: 600
+  towerCreator: 800
+  theGreatFortress: 800
 
-
-  superSonicRockets: 1400
+  superSonicRockets: 2000
 
 
 productionBranchBalanceConfig:
@@ -58,7 +57,7 @@ productionBranchBalanceConfig:
   productionManagersProductionBonus: 0.2
   factoryBuildingMaxFactoriesBuilt: 4
 
-  productionAiIncreasePerTurn: 40
+  productionAiIncreasePerTurn: 20
 
 productionBranchCostConfig:
   homeSweetHome: 100
@@ -67,7 +66,7 @@ productionBranchCostConfig:
   moreBuildingMaterials: 200
   moreElectricity: 200
 
-  productionManagers: 600
-  factoryBuilders: 800
+  productionManagers: 800
+  factoryBuilders: 1000
 
-  productionAi: 1400
+  productionAi: 2000
