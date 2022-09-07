@@ -1,5 +1,5 @@
 generalBalanceConfig:
-  startingResources: 60
+  startingResources: 100
 
   fogOfWar1: 30
   fogOfWar2: 60

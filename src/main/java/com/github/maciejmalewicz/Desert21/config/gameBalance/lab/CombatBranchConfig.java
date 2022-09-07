@@ -27,7 +27,8 @@ public class CombatBranchConfig implements LabBranchConfig {
         return List.of(
                 LabUpgrade.MEDIUM_PRODUCTION,
                 LabUpgrade.IMPROVED_DROIDS,
-                LabUpgrade.IMPROVED_TANKS
+                LabUpgrade.IMPROVED_CANNONS
+
         );
     }
 
@@ -35,7 +36,7 @@ public class CombatBranchConfig implements LabBranchConfig {
     public List<LabUpgrade> getSecondTierUpgrades() {
         return List.of(
                 LabUpgrade.MASS_PRODUCTION,
-                LabUpgrade.IMPROVED_CANNONS
+                LabUpgrade.IMPROVED_TANKS
         );
     }
 

@@ -69,7 +69,7 @@ class LabUpgradeHierarchyValidatorTest {
         player.getOwnedUpgrades().add(LabUpgrade.SCARAB_SCANNERS);
         player.getOwnedUpgrades().add(LabUpgrade.HOME_SWEET_HOME);
         var validatables = List.of(
-                new LabUpgradeHierarchyValidatable(LabUpgrade.IMPROVED_TANKS),
+                new LabUpgradeHierarchyValidatable(LabUpgrade.IMPROVED_CANNONS),
                 new LabUpgradeHierarchyValidatable(LabUpgrade.KING_OF_DESERT),
                 new LabUpgradeHierarchyValidatable(LabUpgrade.MORE_METAL)
         );
@@ -113,7 +113,7 @@ class LabUpgradeHierarchyValidatorTest {
         player.getOwnedUpgrades().add(LabUpgrade.MORE_METAL);
         var validatables = List.of(
                 new LabUpgradeHierarchyValidatable(LabUpgrade.IMPROVED_CANNONS),
-                new LabUpgradeHierarchyValidatable(LabUpgrade.THE_GREAT_FORTRESS),
+                new LabUpgradeHierarchyValidatable(LabUpgrade.TOWER_CREATOR),
                 new LabUpgradeHierarchyValidatable(LabUpgrade.PRODUCTION_MANAGERS)
         );
         assertFalse(tested.validate(validatables, context));
@@ -128,7 +128,7 @@ class LabUpgradeHierarchyValidatorTest {
         player.getOwnedUpgrades().add(LabUpgrade.KING_OF_DESERT);
         player.getOwnedUpgrades().add(LabUpgrade.MORE_METAL);
         player.getOwnedUpgrades().add(LabUpgrade.IMPROVED_CANNONS);
-        player.getOwnedUpgrades().add(LabUpgrade.THE_GREAT_FORTRESS);
+        player.getOwnedUpgrades().add(LabUpgrade.FACTORY_TURRET);
         player.getOwnedUpgrades().add(LabUpgrade.PRODUCTION_MANAGERS);
         var validatables = List.of(
                 new LabUpgradeHierarchyValidatable(LabUpgrade.ADVANCED_TACTICS),
