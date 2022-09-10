@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
@@ -79,7 +80,7 @@ class GameReadinessServiceTest {
     }
 
     @Test
-    void notifyAboutReadinessFromFirstPLayer() throws NotAcceptableException {
+    void notifyAboutReadinessFromFirstPLayer() throws NotAcceptableException, AuthorizationException {
         setup();
 
         var id = game.getId();
@@ -95,7 +96,7 @@ class GameReadinessServiceTest {
     }
 
     @Test
-    void notifyAboutReadinessFromSecondPlayer() throws NotAcceptableException {
+    void notifyAboutReadinessFromSecondPlayer() throws NotAcceptableException, AuthorizationException  {
         setup();
         var secondPlayer = game.getPlayers().stream()
                 .filter(p -> p.getId().equals("BB"))
@@ -121,7 +122,7 @@ class GameReadinessServiceTest {
         setup();
         doReturn(new ArrayList<>()).when(authentication).getAuthorities();
 
-        assertThrows(NotAcceptableException.class, () -> {
+        assertThrows(AuthorizationException.class, () -> {
             var id = game.getId();
             tested.notifyAboutReadiness(authentication, id);
         });

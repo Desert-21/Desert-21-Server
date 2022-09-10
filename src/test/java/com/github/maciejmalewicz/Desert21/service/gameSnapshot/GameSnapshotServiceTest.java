@@ -4,6 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.dto.game.BuildingDto;
 import com.github.maciejmalewicz.Desert21.dto.game.EventDto;
 import com.github.maciejmalewicz.Desert21.dto.game.FieldDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.Location;
@@ -139,7 +140,7 @@ class GameSnapshotServiceTest {
     }
 
     @Test
-    void snapshotGame() throws NotAcceptableException {
+    void snapshotGame() throws NotAcceptableException, AuthorizationException {
         var gameSnapshot = tested.snapshotGame(game.getId(), authentication);
         assertEquals(game.getId(), gameSnapshot.gameId());
 
@@ -175,7 +176,7 @@ class GameSnapshotServiceTest {
     @Test
     void snapshotGameWhenGetGamePlayerFails() throws NotAcceptableException {
         doReturn(new ArrayList<>()).when(authentication).getAuthorities();
-        var exception = assertThrows(NotAcceptableException.class, () -> {
+        var exception = assertThrows(AuthorizationException.class, () -> {
             tested.snapshotGame(game.getId(), authentication);
         });
         assertEquals("User could not be identified!", exception.getMessage());

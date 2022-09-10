@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.service.SurrenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class SurrenderController {
     private SurrenderService service;
 
     @PostMapping("/{gameId}")
-    public ResponseEntity<Void> surrender(Authentication auth, @PathVariable("gameId") String gameId) throws NotAcceptableException {
+    public ResponseEntity<Void> surrender(Authentication auth, @PathVariable("gameId") String gameId) throws NotAcceptableException, AuthorizationException {
         service.surrender(auth, gameId);
         return ResponseEntity.ok().build();
     }

@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.GameReadinessService;
@@ -76,7 +77,7 @@ class GamePlayerServiceTest {
     }
 
     @Test
-    void getHappyPath() throws NotAcceptableException {
+    void getHappyPath() throws NotAcceptableException, AuthorizationException {
         var id = game.getId();
         var retrieved = tested.getGamePlayerData(id, authentication);
         assertEquals(player, retrieved.player());
@@ -87,7 +88,7 @@ class GamePlayerServiceTest {
     void getWithEmptyCredentials() {
         doReturn(new ArrayList<>()).when(authentication).getAuthorities();
 
-        var exception = assertThrows(NotAcceptableException.class, () -> {
+        var exception = assertThrows(AuthorizationException.class, () -> {
             var id = game.getId();
             tested.getGamePlayerData(id, authentication);
         });

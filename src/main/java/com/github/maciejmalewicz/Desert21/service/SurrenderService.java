@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
@@ -30,7 +31,7 @@ public class SurrenderService {
         this.playersNotifier = playersNotifier;
     }
 
-    public void surrender(Authentication auth, String gameId) throws NotAcceptableException {
+    public void surrender(Authentication auth, String gameId) throws NotAcceptableException, AuthorizationException {
         var data = gamePlayerService.getGamePlayerData(gameId, auth);
         var player = data.player();
         var game = data.game();

@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.UsersData;
 import com.github.maciejmalewicz.Desert21.service.UsersService;
@@ -21,7 +22,7 @@ public class UsersController {
     }
 
     @GetMapping
-    public ResponseEntity<UsersData> getUserFromAuth(Authentication auth) throws NotAcceptableException {
+    public ResponseEntity<UsersData> getUserFromAuth(Authentication auth) throws AuthorizationException {
         if (auth == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

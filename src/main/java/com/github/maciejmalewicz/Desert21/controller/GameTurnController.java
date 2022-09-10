@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.PlayerTurnService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class GameTurnController {
 
     @PostMapping
     public ResponseEntity<Void> executeTurn(Authentication authentication, @RequestBody PlayersTurnDto playersTurnDto)
-            throws NotAcceptableException, IllegalArgumentException {
+            throws NotAcceptableException, IllegalArgumentException, AuthorizationException {
         playerTurnService.executeTurn(authentication, playersTurnDto);
         return ResponseEntity.ok().build();
     }

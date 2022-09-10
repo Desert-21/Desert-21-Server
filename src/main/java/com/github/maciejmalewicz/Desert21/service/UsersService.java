@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.UsersData;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
@@ -15,10 +16,10 @@ public class UsersService {
         this.userRepository = userRepository;
     }
 
-    public UsersData getUsersData(String email) throws NotAcceptableException {
+    public UsersData getUsersData(String email) throws AuthorizationException {
         return userRepository.findFirstByEmail(email)
                 .map(this::mapToUsersData)
-                .orElseThrow(() -> new NotAcceptableException("User not found!"));
+                .orElseThrow(() -> new AuthorizationException("User not found!"));
     }
 
     private UsersData mapToUsersData(ApplicationUser user) {

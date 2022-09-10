@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
@@ -17,12 +18,12 @@ public class GameInfoService {
         this.gameRepository = gameRepository;
     }
 
-    public String getGameIdByUsersAuthentication(Authentication authentication) throws NotAcceptableException {
+    public String getGameIdByUsersAuthentication(Authentication authentication) throws AuthorizationException {
         if (authentication == null) {
-            throw new NotAcceptableException("User could not be recognized!");
+            throw new AuthorizationException("User could not be recognized!");
         }
         var usersId = AuthoritiesUtils.getIdFromAuthorities(authentication.getAuthorities())
-                .orElseThrow(() -> new NotAcceptableException("User could not be recognized!"));
+                .orElseThrow(() -> new AuthorizationException("User could not be recognized!"));
         return gameRepository.findByPlayersId(usersId)
                 .filter(g -> g.getStateManager().getGameState() != GameState.FINISHED)
                 .map(Game::getId)

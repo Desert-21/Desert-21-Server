@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.GamePlayerData;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
@@ -76,7 +77,7 @@ class SurrenderServiceTest {
         game = gameRepository.save(game);
     }
 
-    void setupTested() throws NotAcceptableException {
+    void setupTested() throws NotAcceptableException, AuthorizationException {
 
         gamePlayerService = mock(GamePlayerService.class);
         doReturn(new GamePlayerData(game, player)).when(gamePlayerService).getGamePlayerData(anyString(), any());
@@ -92,14 +93,14 @@ class SurrenderServiceTest {
     }
 
     @BeforeEach
-    void setup() throws NotAcceptableException {
+    void setup() throws NotAcceptableException, AuthorizationException  {
         setupAuth();
         setupGame();
         setupTested();
     }
 
     @Test
-    void surrenderHappyPath() throws NotAcceptableException {
+    void surrenderHappyPath() throws NotAcceptableException, AuthorizationException {
         var timeoutIdBefore = game.getStateManager().getCurrentStateTimeoutId();
         var timeoutBefore = game.getStateManager().getTimeout();
         tested.surrender(authentication, "ANY");
