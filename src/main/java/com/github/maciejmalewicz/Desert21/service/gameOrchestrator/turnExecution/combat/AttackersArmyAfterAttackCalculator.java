@@ -18,9 +18,9 @@ public class AttackersArmyAfterAttackCalculator {
                 : destructionRatio;
         double remainingUnitsRatio = 1 - actualDestructionRatio;
 
-        var droids = (int) Math.floor(attackersBefore.droids() * remainingUnitsRatio);
-        var tanks = (int) Math.floor(attackersBefore.tanks() * remainingUnitsRatio);
-        var cannons = (int) Math.floor(attackersBefore.cannons() * remainingUnitsRatio);
+        var droids = (int) Math.ceil(attackersBefore.droids() * remainingUnitsRatio);
+        var tanks = (int) Math.ceil(attackersBefore.tanks() * remainingUnitsRatio);
+        var cannons = (int) Math.ceil(attackersBefore.cannons() * remainingUnitsRatio);
         return new FightingArmy(droids, tanks, cannons, 0);
     }
 }

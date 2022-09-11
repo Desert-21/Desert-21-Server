@@ -5,6 +5,7 @@ import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersActionDto;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.GamePlayerData;
@@ -79,7 +80,7 @@ class PlayerTurnServiceIntegrationTest {
         gameRepository.save(game);
     }
 
-    void setupTested() throws NotAcceptableException {
+    void setupTested() throws NotAcceptableException, AuthorizationException {
         gamePlayerService = mock(GamePlayerService.class);
         doReturn(new GamePlayerData(game, player)).when(gamePlayerService).getGamePlayerData(anyString(), any());
 
@@ -88,13 +89,13 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @BeforeEach
-    void setup() throws NotAcceptableException {
+    void setup() throws NotAcceptableException, AuthorizationException  {
         setupGameAndPlayer();
         setupTested();
     }
 
     @Test
-    void integrationUpgradeBuilding() throws NotAcceptableException {
+    void integrationUpgradeBuilding() throws NotAcceptableException, AuthorizationException  {
         var upgradeContent = new UpgradeAction(new Location(0, 0));
         var map = new ObjectMapper().convertValue(upgradeContent, LinkedHashMap.class);
         var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.UPGRADE, map)));
@@ -109,7 +110,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationTrainArmy() throws NotAcceptableException {
+    void integrationTrainArmy() throws NotAcceptableException, AuthorizationException  {
         var trainContent = new TrainAction(new Location(0, 1), UnitType.DROID, TrainingMode.SMALL_PRODUCTION);
         var map = new ObjectMapper().convertValue(trainContent, LinkedHashMap.class);
         var dto = new PlayersTurnDto("IGNORED", List.of(new PlayersActionDto(ActionType.TRAIN, map)));
@@ -124,7 +125,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationMoveArmy() throws NotAcceptableException {
+    void integrationMoveArmy() throws NotAcceptableException, AuthorizationException  {
         game.getFields()[0][0].setArmy(new Army(20, 10, 15));
         game.getFields()[0][1].setArmy(new Army(5, 0, 0));
         var moveContent = new MoveUnitsAction(new Location(0, 0), new Location(0, 1), List.of(new Location(0, 0), new Location(0, 1)), new Army(10, 5, 5));
@@ -141,7 +142,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationAttack() throws NotAcceptableException {
+    void integrationAttack() throws NotAcceptableException, AuthorizationException  {
         game.getFields()[0][1].setArmy(new Army(20, 10, 15));
         game.getFields()[1][1].setArmy(new Army(5, 2, 10));
         var attackContent = new AttackAction(new Location(0, 1), new Location(1, 1), List.of(new Location(0, 1), new Location(1, 1)), new Army(10, 5, 10));
@@ -155,7 +156,7 @@ class PlayerTurnServiceIntegrationTest {
         var toField = BoardUtils.fieldAtLocation(savedGame.getFields(), new Location(1, 1));
         assertEquals(new Army(10, 5, 5), fromField.getArmy());
         // after calculations...
-        assertEquals(new Army(5, 2, 5), toField.getArmy());
+        assertEquals(new Army(6, 3, 6), toField.getArmy());
         assertEquals("AA", fromField.getOwnerId());
         assertEquals("AA", toField.getOwnerId());
 
@@ -163,7 +164,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationLabUpgrade() throws NotAcceptableException {
+    void integrationLabUpgrade() throws NotAcceptableException, AuthorizationException  {
         player.getOwnedUpgrades().add(LabUpgrade.HOME_SWEET_HOME);
         player.setResources(new ResourceSet(10, 100, 300));
 
@@ -184,7 +185,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationRocketStrike() throws NotAcceptableException {
+    void integrationRocketStrike() throws NotAcceptableException, AuthorizationException  {
         player.setResources(new ResourceSet(10, 100, 400));
         game.getFields()[6][6] = new Field(new Building(BuildingType.ROCKET_LAUNCHER), "AA");
         game.getFields()[5][5] = new Field(new Building(BuildingType.ELECTRICITY_FACTORY), "BB");
@@ -204,7 +205,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationBuildBuildingTurn1() throws NotAcceptableException {
+    void integrationBuildBuildingTurn1() throws NotAcceptableException, AuthorizationException  {
         player.setResources(new ResourceSet(60, 800, 60));
         player.getOwnedUpgrades().add(LabUpgrade.FACTORY_BUILDERS);
         game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
@@ -222,7 +223,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationBuildBuildingTurn2() throws NotAcceptableException {
+    void integrationBuildBuildingTurn2() throws NotAcceptableException, AuthorizationException  {
         game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");
         game.getEventQueue().add(new BuildBuildingEvent(0, new Location(7, 7), BuildingType.METAL_FACTORY));
 
@@ -241,7 +242,7 @@ class PlayerTurnServiceIntegrationTest {
     }
 
     @Test
-    void integrationBombarding() throws NotAcceptableException {
+    void integrationBombarding() throws NotAcceptableException, AuthorizationException  {
         player.getOwnedUpgrades().add(LabUpgrade.IMPROVED_CANNONS);
 
         game.getFields()[7][7] = new Field(new Building(BuildingType.EMPTY_FIELD), "AA");

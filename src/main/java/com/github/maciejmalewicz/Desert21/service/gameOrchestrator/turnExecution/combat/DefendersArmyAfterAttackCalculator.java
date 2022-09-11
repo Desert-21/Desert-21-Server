@@ -11,10 +11,10 @@ public class DefendersArmyAfterAttackCalculator {
         }
         double remainingUnitsRatio = 1 - destructionRatio;
 
-        var droids = (int) Math.floor(defendersBefore.droids() * remainingUnitsRatio);
-        var tanks = (int) Math.floor(defendersBefore.tanks() * remainingUnitsRatio);
-        var cannons = (int) Math.floor(defendersBefore.cannons() * remainingUnitsRatio);
-        var scarabs = (int) Math.floor(defendersBefore.scarabs() * remainingUnitsRatio);
+        var droids = (int) Math.ceil(defendersBefore.droids() * remainingUnitsRatio);
+        var tanks = (int) Math.ceil(defendersBefore.tanks() * remainingUnitsRatio);
+        var cannons = (int) Math.ceil(defendersBefore.cannons() * remainingUnitsRatio);
+        var scarabs = (int) Math.ceil(defendersBefore.scarabs() * remainingUnitsRatio);
         return new FightingArmy(droids, tanks, cannons, scarabs);
     }
 }

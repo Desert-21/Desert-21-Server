@@ -83,7 +83,7 @@ class BombardingExecutorTest {
                                 new FightingArmy(0, 0, 20, 0),
                                 new FightingArmy(10, 10, 10, 0),
                                 new FightingArmy(0, 0, 20, 0),
-                                new FightingArmy(8, 8, 8, 0),
+                                new FightingArmy(9, 9, 9, 0),
                                 false,
                                 false
                         )
@@ -109,7 +109,7 @@ class BombardingExecutorTest {
         assertThat(expectedArmy1, sameBeanAs(field1.getArmy()));
 
         var field2 = newContext.game().getFields()[1][1];
-        var expectedArmy2 = new Army(8, 8, 8);
+        var expectedArmy2 = new Army(9, 9, 9);
         assertThat(expectedArmy2, sameBeanAs(field2.getArmy()));
     }
 }

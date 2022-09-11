@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
 import com.github.maciejmalewicz.Desert21.dto.game.GameDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.service.gameSnapshot.GameSnapshotService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class GameSnapshotController {
 
     @RequestMapping("/{gameId}")
     @GetMapping
-    public ResponseEntity<GameDto> getGameSnapshot(@PathVariable("gameId") String gameId, Authentication authentication) throws NotAcceptableException {
+    public ResponseEntity<GameDto> getGameSnapshot(@PathVariable("gameId") String gameId, Authentication authentication) throws NotAcceptableException, AuthorizationException {
         var snapshot = gameSnapshotService.snapshotGame(gameId, authentication);
         return ResponseEntity.ok(snapshot);
     }

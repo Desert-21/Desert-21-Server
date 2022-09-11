@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.controller;
 
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.GameReadinessService;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class GameReadinessController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> notifyAboutReadiness(Authentication authentication, @RequestBody String gameId) throws NotAcceptableException {
+    public ResponseEntity<Void> notifyAboutReadiness(Authentication authentication, @RequestBody String gameId) throws NotAcceptableException, AuthorizationException {
         gameReadinessService.notifyAboutReadiness(authentication, gameId);
         return ResponseEntity.ok().build();
     }

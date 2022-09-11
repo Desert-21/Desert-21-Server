@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service;
 
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
 import com.github.maciejmalewicz.Desert21.domain.users.LoginData;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.ApplicationUserRepository;
 import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExtension;
@@ -25,7 +26,7 @@ class UsersServiceTest {
     private ApplicationUserRepository repository;
 
     @Test
-    void getUsersDataHappyPath() throws NotAcceptableException {
+    void getUsersDataHappyPath() throws AuthorizationException {
         var user = new ApplicationUser(
                 "macior123456",
                 new LoginData("m@gmail.com", "Password1")
@@ -38,7 +39,7 @@ class UsersServiceTest {
 
     @Test
     void getUsersDataNotFound() {
-        var exception = assertThrows(NotAcceptableException.class, () -> {
+        var exception = assertThrows(AuthorizationException.class, () -> {
             tested.getUsersData("m@gmail.com");
         });
         assertEquals("User not found!", exception.getMessage());

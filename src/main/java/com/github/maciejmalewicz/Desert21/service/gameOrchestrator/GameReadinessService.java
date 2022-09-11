@@ -1,7 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator;
 
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
+import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
@@ -23,10 +25,14 @@ public class GameReadinessService {
         this.gamePlayerService = gamePlayerService;
     }
 
-    public synchronized void notifyAboutReadiness(Authentication authentication, String gameId) throws NotAcceptableException {
+    public void notifyAboutReadiness(Authentication authentication, String gameId) throws NotAcceptableException, AuthorizationException {
         var gamePlayer = gamePlayerService.getGamePlayerData(gameId, authentication);
         var game = gamePlayer.game();
         var player = gamePlayer.player();
+
+        if (!game.getStateManager().getGameState().equals(GameState.WAITING_TO_START)) {
+            throw new NotAcceptableException("Readiness checkout phase has already passed!");
+        }
 
         player.setIsReady(true);
 

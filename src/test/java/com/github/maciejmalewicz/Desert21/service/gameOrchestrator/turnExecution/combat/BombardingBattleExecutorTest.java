@@ -105,6 +105,6 @@ class BombardingBattleExecutorTest {
         assertEquals(new FightingArmy(0, 0, 20, 0), battleResult.attackersBefore());
         assertEquals(new FightingArmy(0, 0, 20, 0), battleResult.attackersAfter());
         assertEquals(new FightingArmy(10, 2, 5, 0), battleResult.defendersBefore());
-        assertEquals(new FightingArmy(5, 1, 2, 0), battleResult.defendersAfter());
+        assertEquals(new FightingArmy(6, 2, 3, 0), battleResult.defendersAfter());
     }
 }

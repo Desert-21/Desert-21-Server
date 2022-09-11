@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.GamePlayerData;
@@ -77,7 +78,7 @@ class PlayerTurnServiceTest {
         doReturn(authorities).when(authentication).getAuthorities();
     }
 
-    void setupTested() throws NotAcceptableException {
+    void setupTested() throws NotAcceptableException, AuthorizationException {
         gamePlayerService = mock(GamePlayerService.class);
         doReturn(new GamePlayerData(game, player)).when(gamePlayerService).getGamePlayerData(anyString(), any());
 
@@ -135,14 +136,14 @@ class PlayerTurnServiceTest {
     }
 
     @BeforeEach
-    void setup() throws NotAcceptableException {
+    void setup() throws NotAcceptableException, AuthorizationException  {
         setupGameAndPlayer();
         setupAuth();
         setupTested();
     }
 
     @Test
-    void executeTurnHappyPath() throws NotAcceptableException {
+    void executeTurnHappyPath() throws NotAcceptableException, AuthorizationException  {
         var dto = new PlayersTurnDto(
                 "IGNORED",
                 new ArrayList<>()
@@ -186,7 +187,7 @@ class PlayerTurnServiceTest {
 
 
     @Test
-    void executeTurnGamePlayerFailing() throws NotAcceptableException {
+    void executeTurnGamePlayerFailing() throws NotAcceptableException, AuthorizationException  {
         doThrow(new NotAcceptableException("TEST ERROR")).when(gamePlayerService).getGamePlayerData(anyString(), any());
         var dto = new PlayersTurnDto(
                 "IGNORED",

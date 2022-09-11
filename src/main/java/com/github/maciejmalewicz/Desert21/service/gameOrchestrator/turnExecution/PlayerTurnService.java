@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersActionDto;
 import com.github.maciejmalewicz.Desert21.dto.orchestrator.PlayersTurnDto;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
@@ -41,7 +42,7 @@ public class PlayerTurnService {
         this.turnResolutionPhaseStartService = turnResolutionPhaseStartService;
     }
 
-    public void executeTurn(Authentication authentication, PlayersTurnDto dto) throws NotAcceptableException, IllegalArgumentException {
+    public void executeTurn(Authentication authentication, PlayersTurnDto dto) throws NotAcceptableException, IllegalArgumentException, AuthorizationException {
         var gamePlayer = gamePlayerService.getGamePlayerData(dto.gameId(), authentication);
         if (gamePlayer.game().getStateManager().getGameState() != GameState.AWAITING) {
             throw new NotAcceptableException("Cannot execute turn now!");

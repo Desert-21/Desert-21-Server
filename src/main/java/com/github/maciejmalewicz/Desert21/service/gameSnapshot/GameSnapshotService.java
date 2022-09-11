@@ -5,6 +5,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.domain.games.StateManager;
 import com.github.maciejmalewicz.Desert21.dto.game.*;
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
@@ -27,7 +28,7 @@ public class GameSnapshotService {
         this.eventQueueProcessingService = eventQueueProcessingService;
     }
 
-    public GameDto snapshotGame(String gameId, Authentication authentication) throws NotAcceptableException {
+    public GameDto snapshotGame(String gameId, Authentication authentication) throws NotAcceptableException, AuthorizationException {
         var gamePlayer = gamePlayerService.getGamePlayerData(gameId, authentication);
         var game = gamePlayer.game();
         var player = gamePlayer.player();

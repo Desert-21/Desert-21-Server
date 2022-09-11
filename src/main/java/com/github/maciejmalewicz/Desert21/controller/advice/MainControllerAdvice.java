@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.controller.advice;
 
+import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,5 +22,14 @@ public class MainControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleNotAcceptableException(Exception ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(),
                 new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE, request);
+    }
+
+    @ExceptionHandler(
+            {
+                    AuthorizationException.class
+            })
+    public ResponseEntity<?> handleAuthorizationException(Exception ex, WebRequest request){
+        return handleExceptionInternal(ex, ex.getMessage(),
+                new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 }
