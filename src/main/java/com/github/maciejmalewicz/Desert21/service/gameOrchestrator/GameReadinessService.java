@@ -11,6 +11,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GameReadinessService {
@@ -25,6 +26,7 @@ public class GameReadinessService {
         this.gamePlayerService = gamePlayerService;
     }
 
+    @Transactional
     public void notifyAboutReadiness(Authentication authentication, String gameId) throws NotAcceptableException, AuthorizationException {
         var gamePlayer = gamePlayerService.getGamePlayerData(gameId, authentication);
         var game = gamePlayer.game();

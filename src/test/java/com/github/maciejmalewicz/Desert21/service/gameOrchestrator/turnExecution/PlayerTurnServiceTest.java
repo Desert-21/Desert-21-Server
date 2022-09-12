@@ -149,14 +149,13 @@ class PlayerTurnServiceTest {
                 new ArrayList<>()
         );
         tested.executeTurn(authentication, dto);
+
         var gameArgumentCaptor = ArgumentCaptor.forClass(Game.class);
 
-        verify(gameRepository, times(1)).save(gameArgumentCaptor.capture());
+        verify(turnResolutionPhaseStartService, times(1)).stateTransition(gameArgumentCaptor.capture());
         var savedGame = gameArgumentCaptor.getAllValues().get(0);
         assertEquals(new Field(new Building(BuildingType.TOWER)), savedGame.getFields()[0][0]);
         assertEquals(eventResults, savedGame.getCurrentEventResults());
-
-        verify(turnResolutionPhaseStartService, times(1)).stateTransition(savedGame);
     }
 
     @Test
