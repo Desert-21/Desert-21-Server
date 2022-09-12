@@ -10,10 +10,10 @@ spring:
       host: 127.0.0.1
       port: 27017
       database: desert21
-      username: backend_server
-      password: ${DATABASE_PASSWORD}
+
   main:
     allow-circular-references: true
+
   authentication:
     email:
       host: localhost
