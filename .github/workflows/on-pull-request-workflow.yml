@@ -7,6 +7,7 @@ jobs:
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17

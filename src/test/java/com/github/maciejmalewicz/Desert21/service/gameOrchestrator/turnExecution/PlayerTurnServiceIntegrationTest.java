@@ -16,6 +16,7 @@ import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.service.GamePlayerService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices.TurnResolutionPhaseStartService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.AttackingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
@@ -85,6 +86,9 @@ class PlayerTurnServiceIntegrationTest {
         doReturn(new GamePlayerData(game, player)).when(gamePlayerService).getGamePlayerData(anyString(), any());
 
         turnResolutionPhaseStartService = mock(TurnResolutionPhaseStartService.class);
+        // just save the game
+        doAnswer(args -> { var game = args.getArgument(0, Game.class); gameRepository.save(game); return null; })
+                .when(turnResolutionPhaseStartService).stateTransition(game);
         tested = new PlayerTurnService(gamePlayerService, gameBalanceService, validatingService, eventsExecutionService, gameRepository, turnResolutionPhaseStartService);
     }
 

@@ -14,6 +14,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actions.Action;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PlayerTurnService {
@@ -42,6 +43,7 @@ public class PlayerTurnService {
         this.turnResolutionPhaseStartService = turnResolutionPhaseStartService;
     }
 
+    @Transactional(rollbackFor = {NotAcceptableException.class, IllegalArgumentException.class, AuthorizationException.class})
     public void executeTurn(Authentication authentication, PlayersTurnDto dto) throws NotAcceptableException, IllegalArgumentException, AuthorizationException {
         var gamePlayer = gamePlayerService.getGamePlayerData(dto.gameId(), authentication);
         if (gamePlayer.game().getStateManager().getGameState() != GameState.AWAITING) {
@@ -70,8 +72,7 @@ public class PlayerTurnService {
         //setting up for the next phase
         updatedGame.setCurrentEventResults(eventResults);
 
-        var savedGame = gameRepository.save(updatedGame);
-        turnResolutionPhaseStartService.stateTransition(savedGame);
+        turnResolutionPhaseStartService.stateTransition(updatedGame);
     }
 
     private Action castToClass(PlayersActionDto actionDto) {
