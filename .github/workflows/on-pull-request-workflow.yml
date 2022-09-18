@@ -1,7 +1,7 @@
 name: on-pull-request
 on: [pull_request]
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -24,15 +24,3 @@ jobs:
         run: |
           docker stop mongodb
           docker rm mongodb
-
-#  check-bats-version-2:
-#    needs: check-bats-version
-#    runs-on: ubuntu-latest
-#    environment: staging
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-node@v2
-#        with:
-#          node-version: '14'
-#      - run: npm install -g bats
-#      - run: bats -v
