@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
@@ -22,7 +24,7 @@ public class RegistrationController {
 
 
     @PostMapping
-    public ResponseEntity<Void> registerUser(@RequestBody RegistrationDto dto) throws NotAcceptableException {
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody RegistrationDto dto) throws NotAcceptableException {
         registrationService.registerUser(dto);
         return ResponseEntity.ok().build();
     }

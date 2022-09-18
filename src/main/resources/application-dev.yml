@@ -1,0 +1,8 @@
+# Work in progress coming soon...
+spring:
+  data:
+    mongodb:
+      username: backend_server
+      password: ${DATABASE_PASSWORD}
+
+
