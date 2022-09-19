@@ -10,7 +10,7 @@ on:
         required: true
 
 jobs:
-  verify:
+  run_tests:
     runs-on: ubuntu-latest
     environment: staging
     env:

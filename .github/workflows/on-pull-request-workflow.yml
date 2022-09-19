@@ -5,7 +5,7 @@ on: [pull_request]
 #    branches:
 #      - main
 jobs:
-  verify:
+  verify_pull_request:
     uses: ./.github/workflows/run-tests-workflow.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
