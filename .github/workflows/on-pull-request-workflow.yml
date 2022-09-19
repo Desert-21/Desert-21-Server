@@ -10,4 +10,3 @@ jobs:
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}

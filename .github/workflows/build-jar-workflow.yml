@@ -1,10 +1,12 @@
-name: run_tests
+name: build_jar
 on:
   workflow_call:
     secrets:
       SECRET_KEY:
         required: true
       EMAIL_PASSWORD:
+        required: true
+      DATABASE_PASSWORD:
         required: true
 
 jobs:
