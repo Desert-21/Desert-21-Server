@@ -1,9 +1,9 @@
-name: on-pull-request
-#on: [pull_request]
-on:
-  push:
-    branches:
-      - main
+name: on-main-push
+on: [pull_request]
+#on:
+#  push:
+#    branches:
+#      - main
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -20,10 +20,8 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
           cache: maven
-      - name: Create docker container
-        run: docker run --name mongodb -d -p 27017:27017 mongo:5.0.6
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn --batch-mode --update-snapshots package -DskipTests
       - name: Clean up docker
         run: |
           docker stop mongodb
