@@ -6,7 +6,7 @@ on: [pull_request]
 #      - main
 jobs:
   verify:
-    uses: ./run-tests-workflow.yml@main
+    uses: ./.github/workflows/run-tests-workflow.yml@main
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
