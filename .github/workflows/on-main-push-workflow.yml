@@ -22,7 +22,3 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package -DskipTests
-      - name: Clean up docker
-        run: |
-          docker stop mongodb
-          docker rm mongodb
