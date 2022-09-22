@@ -18,7 +18,7 @@ jobs:
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     steps:
-      - uses: actions/download-artifact
+      - uses: actions/download-artifact@main
         with:
           name: jar
           path: target/Desert21-0.0.0.jar
