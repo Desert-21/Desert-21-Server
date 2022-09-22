@@ -18,11 +18,15 @@ jobs:
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     steps:
-      - uses: actions/checkout@dev
-      - uses: actions/download-artifact@dev
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
         with:
           name: jar
           path: target/Desert21-0.0.0.jar
+#      - uses: actions/download-artifact@v2
+#        with:
+#          name: dockerfile
+#          path: Dockerfile
       - name: Create docker image
         run: docker image build -t docker-java-jar:latest .
       - name: Run docker image
