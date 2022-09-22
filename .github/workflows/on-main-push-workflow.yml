@@ -17,3 +17,10 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  deploy_main:
+    needs: build_main
+    uses: ./.github/workflows/deploy-workflow.yml
+    secrets:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}

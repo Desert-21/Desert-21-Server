@@ -1,0 +1,28 @@
+name: deploy
+on:
+  workflow_call:
+    secrets:
+      SECRET_KEY:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
+      DATABASE_PASSWORD:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+    steps:
+      - uses: actions/download-artifact
+        with:
+          name: jar
+          path: target/Desert21-0.0.0.jar
+      - name: Create docker image
+        run: docker image build -t docker-java-jar:latest .
+      - name: Run docker image
+        run: docker run docker-java-jar
