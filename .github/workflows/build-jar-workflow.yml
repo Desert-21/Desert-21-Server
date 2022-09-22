@@ -33,9 +33,3 @@ jobs:
           name: jar
           path: target/Desert21-0.0.0.jar
           retention-days: 1
-      - name: Upload dockerfile
-        uses: actions/upload-artifact@v2
-        with:
-          name: dockerfile
-          path: Dockerfile
-          retention-days: 1
