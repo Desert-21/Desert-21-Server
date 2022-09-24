@@ -1,4 +1,4 @@
-name: deploy
+name: create_image
 on:
   workflow_call:
     secrets:
@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  deploy:
+  create_image:
     runs-on: ubuntu-latest
     environment: staging
     steps:

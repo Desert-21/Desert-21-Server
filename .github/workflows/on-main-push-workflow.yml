@@ -17,9 +17,9 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-  deploy_main:
+  create_image_main:
     needs: build_main
-    uses: ./.github/workflows/deploy-workflow.yml
+    uses: ./.github/workflows/create-image.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
