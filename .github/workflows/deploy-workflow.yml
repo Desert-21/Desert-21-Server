@@ -25,8 +25,6 @@ jobs:
           path: target/Desert21-0.0.0.jar
       - name: Create docker image
         run: docker image build -t docker-java-jar:latest .
-      - name: Run docker image
-        run: docker run docker-java-jar
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
