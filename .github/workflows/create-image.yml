@@ -32,6 +32,6 @@ jobs:
       - name: Build container image
         run: docker image build -t ${{ secrets.REGISTRY_NAME }}/backend:latest .
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 1200
+        run: doctl registry login --expiry-seconds 200
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ secrets.REGISTRY_NAME }}/backend:latest
