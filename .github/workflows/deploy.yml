@@ -21,18 +21,13 @@ jobs:
     environment: staging
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: jar
-          path: target/Desert21-0.0.0.jar
-
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Update deployment file
-        run: sed -i 's|<IMAGE_NAME>|${{ secrets.REGISTRY_NAME }}/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
+        run: sed -i 's|<IMAGE_NAME>|$registry.digitalocean.com/desert-21-container-registry/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
 
       - name: View deployment file
         run: cat $GITHUB_WORKSPACE/config/deployment.yml
