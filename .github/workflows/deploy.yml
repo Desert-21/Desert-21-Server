@@ -12,9 +12,11 @@ on:
         required: true
       REGISTRY_NAME:
         required: true
+      CLUSTER_NAME:
+        required: true
 
 jobs:
-  create_image:
+  deploy:
     runs-on: ubuntu-latest
     environment: staging
     steps:
