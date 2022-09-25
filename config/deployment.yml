@@ -19,3 +19,10 @@ spec:
           image: <IMAGE_NAME>
           ports:
             - containerPort: 8080
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: SECRET_KEY
+                  optional: false
