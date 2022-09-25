@@ -31,8 +31,8 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-#      - name: Update deployment file
-#        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/python-example:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
+      - name: Update deployment file
+        run: sed -i 's|<IMAGE_NAME>|${{ secrets.REGISTRY_NAME }}/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
@@ -41,4 +41,4 @@ jobs:
         run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
 
       - name: Verify deployment
-        run: kubectl rollout status deployment/python-example
+        run: kubectl rollout status deployment/backend
