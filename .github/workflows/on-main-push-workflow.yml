@@ -26,3 +26,12 @@ jobs:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
+  deploy_main:
+    needs: create_image_main
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
