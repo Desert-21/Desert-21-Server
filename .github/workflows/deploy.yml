@@ -1,0 +1,42 @@
+name: create_image
+on:
+  workflow_call:
+    secrets:
+      SECRET_KEY:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
+      DATABASE_PASSWORD:
+        required: true
+      DIGITALOCEAN_ACCESS_TOKEN:
+        required: true
+      REGISTRY_NAME:
+        required: true
+
+jobs:
+  create_image:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: jar
+          path: target/Desert21-0.0.0.jar
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+#      - name: Update deployment file
+#        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/python-example:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/python-example
