@@ -26,8 +26,11 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 800
+
       - name: Update deployment file
-        run: sed -i 's|<IMAGE_NAME>|registry.digitalocean.com/desert-21-container-registry/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
+        run: sed -i 's|<IMAGE_NAME>|${{ secrets.REGISTRY_NAME }}/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
 
       - name: View deployment file
         run: cat $GITHUB_WORKSPACE/config/deployment.yml
