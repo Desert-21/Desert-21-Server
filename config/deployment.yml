@@ -26,3 +26,5 @@ spec:
                   name: backend-secret
                   key: SECRET_KEY
                   optional: false
+            - name: spring.profiles.active
+              value: dev
