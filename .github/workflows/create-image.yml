@@ -37,3 +37,17 @@ jobs:
         run: docker push ${{ secrets.REGISTRY_NAME }}/backend:latest
       - name: Logout from the registry
         run: doctl registry logout
+      - name: Update deployment file
+        run: sed -i 's|<IMAGE_NAME>|registry.digitalocean.com/desert-21-container-registry/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: View deployment file
+        run: cat $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/backend
