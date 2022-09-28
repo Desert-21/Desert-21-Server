@@ -1,9 +1,5 @@
 name: on-pull-request
-#on: [pull_request]
-on:
-  push:
-    branches:
-      - main
+on: [pull_request]
 jobs:
   verify_pull_request:
     uses: ./.github/workflows/run-tests-workflow.yml
