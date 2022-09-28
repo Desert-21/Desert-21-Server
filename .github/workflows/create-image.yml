@@ -23,17 +23,23 @@ jobs:
         with:
           name: jar
           path: target/Desert21-0.0.0.jar
+
       - name: Create docker image
         run: docker image build -t docker-java-jar:latest .
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
       - name: Build container image
         run: docker image build -t ${{ secrets.REGISTRY_NAME }}/backend:latest .
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+
+      - name: Log in to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 800
+
       - name: Push image to DigitalOcean Container Registry
         run: docker push ${{ secrets.REGISTRY_NAME }}/backend:latest
+
       - name: Logout from the registry
         run: doctl registry logout

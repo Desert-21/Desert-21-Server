@@ -26,7 +26,7 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+      - name: Log in to DigitalOcean Container Registry
         run: doctl registry login --expiry-seconds 800
 
       - name: Update secret file
@@ -35,14 +35,17 @@ jobs:
       - name: Update deployment file
         run: sed -i 's|<IMAGE_NAME>|${{ secrets.REGISTRY_NAME }}/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
 
-      - name: Save DigitalOcean kubeconfig with short-lived credentials
+      - name: Save DigitalOcean kubeconfig
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
 
-      - name: Update secret
+      - name: Deploy secret
         run: kubectl apply -f $GITHUB_WORKSPACE/config/secret.yml
 
-      - name: Deploy to DigitalOcean Kubernetes
+      - name: Deploy application
         run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
 
       - name: Verify deployment
         run: kubectl rollout status deployment/backend
+
+      - name: Registry garbage collection
+        run: doctl registry garbage-collection start --include-untagged-manifests --force
