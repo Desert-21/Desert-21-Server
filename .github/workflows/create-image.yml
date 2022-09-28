@@ -1,0 +1,45 @@
+name: create_image
+on:
+  workflow_call:
+    secrets:
+      SECRET_KEY:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
+      DATABASE_PASSWORD:
+        required: true
+      DIGITALOCEAN_ACCESS_TOKEN:
+        required: true
+      REGISTRY_NAME:
+        required: true
+
+jobs:
+  create_image:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: jar
+          path: target/Desert21-0.0.0.jar
+
+      - name: Create docker image
+        run: docker image build -t docker-java-jar:latest .
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Build container image
+        run: docker image build -t ${{ secrets.REGISTRY_NAME }}/backend:latest .
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 800
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push ${{ secrets.REGISTRY_NAME }}/backend:latest
+
+      - name: Logout from the registry
+        run: doctl registry logout

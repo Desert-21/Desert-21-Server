@@ -2,7 +2,8 @@
 spring:
   data:
     mongodb:
-      username: backend_server
-      password: ${DATABASE_PASSWORD}
+      host: 10.244.0.3
+      port: 27017
+      database: desert21
 
 

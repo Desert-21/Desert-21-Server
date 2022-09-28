@@ -1,38 +1,8 @@
 name: on-pull-request
 on: [pull_request]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    environment: staging
-    env:
+  verify_pull_request:
+    uses: ./.github/workflows/run-tests-workflow.yml
+    secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: maven
-      - name: Create docker container
-        run: docker run --name mongodb -d -p 27017:27017 mongo:5.0.6
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-      - name: Clean up docker
-        run: |
-          docker stop mongodb
-          docker rm mongodb
-
-#  check-bats-version-2:
-#    needs: check-bats-version
-#    runs-on: ubuntu-latest
-#    environment: staging
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-node@v2
-#        with:
-#          node-version: '14'
-#      - run: npm install -g bats
-#      - run: bats -v

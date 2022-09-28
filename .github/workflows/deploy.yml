@@ -1,0 +1,51 @@
+name: deploy
+on:
+  workflow_call:
+    secrets:
+      SECRET_KEY:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
+      DATABASE_PASSWORD:
+        required: true
+      DIGITALOCEAN_ACCESS_TOKEN:
+        required: true
+      REGISTRY_NAME:
+        required: true
+      CLUSTER_NAME:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --expiry-seconds 800
+
+      - name: Update secret file
+        run: sed -i 's|<SECRET_KEY>|${{ secrets.SECRET_KEY }}|' $GITHUB_WORKSPACE/config/secret.yml
+
+      - name: Update deployment file
+        run: sed -i 's|<IMAGE_NAME>|${{ secrets.REGISTRY_NAME }}/backend:latest|' $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy secret
+        run: kubectl apply -f $GITHUB_WORKSPACE/config/secret.yml
+
+      - name: Deploy application
+        run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/backend
+
+      - name: Registry garbage collection
+        run: doctl registry garbage-collection start --include-untagged-manifests --force
