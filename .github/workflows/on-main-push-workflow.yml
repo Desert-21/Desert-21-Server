@@ -5,14 +5,14 @@ on:
       - main
 jobs:
   verify_main:
-    uses: ./.github/workflows/run-tests-workflow.yml
+    uses: ./.github/workflows/run-tests.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
   build_main:
     needs: verify_main
-    uses: ./.github/workflows/build-jar-workflow.yml
+    uses: ./.github/workflows/build-jar.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}

@@ -2,7 +2,7 @@ name: on-pull-request
 on: [pull_request]
 jobs:
   verify_pull_request:
-    uses: ./.github/workflows/run-tests-workflow.yml
+    uses: ./.github/workflows/run-tests.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
