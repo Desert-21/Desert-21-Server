@@ -28,16 +28,16 @@ spec:
                   key: SECRET_KEY
                   optional: false
             - name: DATABASE_USERNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: mongo-secret
-                    key: DATABASE_USERNAME
-                    optional: false
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: DATABASE_USERNAME
+                  optional: false
             - name: DATABASE_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: mongo-secret
-                    key: DATABASE_PASSWORD
-                    optional: false
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: DATABASE_PASSWORD
+                  optional: false
             - name: spring.profiles.active
               value: dev
