@@ -10,6 +10,6 @@ public class Ping {
 
     @GetMapping
     public String getPing() {
-        return "Application Active";
+        return "OK";
     }
 }
