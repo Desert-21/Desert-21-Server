@@ -5,5 +5,7 @@ spring:
       host: 10.244.0.3
       port: 27017
       database: desert21
+      username: ${DATABASE_USERNAME}
+      password: ${DATABASE_PASSWORD}
 
 
