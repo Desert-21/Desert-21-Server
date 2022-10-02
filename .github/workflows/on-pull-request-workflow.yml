@@ -5,4 +5,3 @@ jobs:
     uses: ./.github/workflows/run-tests.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}

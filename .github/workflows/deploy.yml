@@ -4,9 +4,7 @@ on:
     secrets:
       SECRET_KEY:
         required: true
-      EMAIL_PASSWORD:
-        required: true
-      DATABASE_PASSWORD:
+      EMAIL_TOKEN:
         required: true
       DIGITALOCEAN_ACCESS_TOKEN:
         required: true

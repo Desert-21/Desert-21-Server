@@ -4,16 +4,13 @@ on:
     secrets:
       SECRET_KEY:
         required: true
-      EMAIL_PASSWORD:
-        required: true
 
 jobs:
   run_tests:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: unit-tests
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17
