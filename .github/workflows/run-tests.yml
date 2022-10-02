@@ -1,6 +1,9 @@
 name: run_tests
 on:
   workflow_call:
+    secrets:
+      SECRET_KEY:
+        required: true
 
 jobs:
   run_tests:
