@@ -32,6 +32,6 @@ public class NextTurnTimeoutExecutable implements TimeoutExecutable {
 
     @Override
     public long getExecutionOffset() {
-        return 2000;
+        return 5000;
     }
 }
