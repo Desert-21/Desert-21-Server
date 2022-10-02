@@ -6,8 +6,6 @@ on:
 jobs:
   verify_main:
     uses: ./.github/workflows/run-tests.yml
-    secrets:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
   build_main:
     needs: verify_main
