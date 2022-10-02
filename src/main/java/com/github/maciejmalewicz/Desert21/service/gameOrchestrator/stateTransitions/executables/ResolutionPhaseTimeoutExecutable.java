@@ -31,6 +31,6 @@ public class ResolutionPhaseTimeoutExecutable implements TimeoutExecutable {
 
     @Override
     public long getExecutionOffset() {
-        return 0;
+        return 3000;
     }
 }
