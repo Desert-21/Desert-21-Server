@@ -13,7 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class EmailSendingServiceTest {
+class MailSenderConfigSendingServiceTest {
 
     private EmailConfig emailConfig;
     private MailerSend mailerSend;

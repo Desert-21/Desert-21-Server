@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.config.websockets;
 
+import com.github.maciejmalewicz.Desert21.config.security.CorsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -17,9 +18,14 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired
     private UserChanelInterceptor userChanelInterceptor;
 
+    @Autowired
+    private CorsConfig corsConfig;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4200").withSockJS();
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins(corsConfig.getOrigins().toArray(new String[0]))
+                .withSockJS();
     }
 
     @Override

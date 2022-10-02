@@ -31,16 +31,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
     private final JwtTokenVerifier tokenVerifier;
+    private final CorsConfig corsConfig;
 
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
                                      ApplicationUserDetailsService applicationUserDetailsService,
                                      SecretKey secretKey,
-                                     JwtConfig jwtConfig, JwtTokenVerifier tokenVerifier) {
+                                     JwtConfig jwtConfig, JwtTokenVerifier tokenVerifier, CorsConfig corsConfig) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = applicationUserDetailsService;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
         this.tokenVerifier = tokenVerifier;
+        this.corsConfig = corsConfig;
     }
 
     @Override
@@ -65,7 +67,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").exposedHeaders("Authorization");
+                registry.addMapping("/**")
+                        .exposedHeaders("Authorization")
+                        .allowedOrigins(corsConfig.getOrigins().toArray(new String[0]));
             }
         };
     }
