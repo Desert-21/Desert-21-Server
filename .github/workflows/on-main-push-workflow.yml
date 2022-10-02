@@ -6,25 +6,15 @@ on:
 jobs:
   verify_main:
     uses: ./.github/workflows/run-tests.yml
-    secrets:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
   build_main:
     needs: verify_main
     uses: ./.github/workflows/build-jar.yml
-    secrets:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
   create_image_main:
     needs: build_main
     uses: ./.github/workflows/create-image.yml
     secrets:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
 
@@ -33,8 +23,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_TOKEN }}
       DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
       CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}

@@ -2,12 +2,6 @@ name: create_image
 on:
   workflow_call:
     secrets:
-      SECRET_KEY:
-        required: true
-      EMAIL_PASSWORD:
-        required: true
-      DATABASE_PASSWORD:
-        required: true
       DIGITALOCEAN_ACCESS_TOKEN:
         required: true
       REGISTRY_NAME:
