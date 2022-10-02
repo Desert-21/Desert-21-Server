@@ -28,11 +28,11 @@ spec:
                   key: SECRET_KEY
                   optional: false
             - name: EMAIL_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: backend-secret
-                    key: EMAIL_TOKEN
-                    optional: false
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: EMAIL_TOKEN
+                  optional: false
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
