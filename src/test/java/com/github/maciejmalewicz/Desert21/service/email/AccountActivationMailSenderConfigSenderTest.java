@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class AccountActivationEmailSenderTest {
+class AccountActivationMailSenderConfigSenderTest {
 
     public static final String expectedMessage = """
             Hi macior123456,

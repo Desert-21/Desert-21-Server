@@ -19,6 +19,10 @@ spring:
       name: "Desert 21"
       address: registration@email.desert21.com
       token: ${EMAIL_TOKEN}
+    cors:
+      origins:
+        - http://localhost:4200
+
   addresses:
     baseUrl: localhost:4200
 

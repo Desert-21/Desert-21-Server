@@ -18,6 +18,9 @@ spring:
       user: d21gsd21gs@gmail.com
       password: ${EMAIL_PASSWORD}
       port: 587
+    cors:
+      origins:
+        - http://localhost:4200
   addresses:
     baseUrl: localhost:4200
 

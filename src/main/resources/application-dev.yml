@@ -8,6 +8,11 @@ spring:
       username: ${DATABASE_USERNAME}
       password: ${DATABASE_PASSWORD}
 
+  authentication:
+    cors:
+      origins:
+        - http://play.dev.desert21.com
+
   addresses:
     baseUrl: http://play.dev.desert21.com
 
