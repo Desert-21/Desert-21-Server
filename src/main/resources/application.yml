@@ -16,10 +16,9 @@ spring:
 
   authentication:
     email:
-      host: localhost
-      user: registration@desert21.com
-      password: ${EMAIL_PASSWORD}
-      port: 25
+      name: "Desert 21"
+      address: registration@email.desert21.com
+      token: ${EMAIL_TOKEN}
   addresses:
     baseUrl: localhost:4200
 

@@ -1,60 +1,63 @@
 package com.github.maciejmalewicz.Desert21.service.email;
 
+import com.mailersend.sdk.MailerSend;
+import com.mailersend.sdk.emails.Email;
+import com.mailersend.sdk.emails.Emails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.mail.internet.MimeMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 
 class EmailSendingServiceTest {
 
     private EmailConfig emailConfig;
+    private MailerSend mailerSend;
+
+    private String savedToken;
+    private Emails emails;
 
     @BeforeEach
     public void setup() {
         emailConfig = new EmailConfig();
-        emailConfig.setHost("smtp.gmail.com");
-        emailConfig.setPassword("Password123");
-        emailConfig.setUser("d21gsd21gs@gmail.com");
-        emailConfig.setPort("587");
+        emailConfig.setName("Name");
+        emailConfig.setAddress("service@email.com");
+        emailConfig.setToken("TOKEN");
+
+        mailerSend = mock(MailerSend.class);
+        doAnswer(args -> { savedToken = args.getArgument(0, String.class); return null; })
+                .when(mailerSend).setToken(anyString());
+
+        emails = mock(Emails.class);
+        doReturn(emails).when(mailerSend).emails();
     }
 
     @Test
     void send() throws Exception {
-        var service = new EmailSendingService(emailConfig);
-        var tested = Mockito.spy(service);
-        var argument = ArgumentCaptor.forClass(MimeMessage.class);
-        doNothing().when(tested).transportMessage(argument.capture());
+        var service = new EmailSendingService(emailConfig, mailerSend);
 
-        tested.send("Example topic", "Hello message", "player@gmail.com");
+        assertEquals("TOKEN", savedToken);
+        service.send("Topic", "Message", "Address");
 
-        var allValues = argument.getAllValues();
-        assertEquals(1, allValues.size());
-        var messageParameter = allValues.get(0);
+        ArgumentCaptor<Email> emailArgumentCaptor = ArgumentCaptor.forClass(Email.class);
+        verify(emails, times(1)).send(emailArgumentCaptor.capture());
 
-        //validate email
-        var recipients = messageParameter.getAllRecipients();
-        var receiver = recipients[0].toString();
-        var subject = messageParameter.getSubject();
-        var message = messageParameter.getContent();
-        assertEquals("player@gmail.com", receiver);
-        assertEquals("Example topic", subject);
-        assertEquals("Hello message", message);
+        var sentEmail = emailArgumentCaptor.getAllValues().stream()
+                .findAny()
+                .orElseThrow();
 
-        //validate session
-        var session = messageParameter.getSession();
-        assertEquals("Password123", session.getProperty("password"));
-        assertEquals("587", session.getProperty("mail.smtp.port"));
-        assertEquals("d21gsd21gs@gmail.com", session.getProperty("user"));
-        assertEquals("true", session.getProperty("mail.smtp.auth"));
-        assertEquals("true", session.getProperty("mail.smtp.starttls.enable"));
-        assertEquals("smtp.gmail.com", session.getProperty("mail.smtp.host"));
-        assertEquals("587", session.getProperty("mail.smtp.socketFactory.port"));
+        assertEquals("Topic", sentEmail.subject);
+        assertEquals("Message", sentEmail.text);
+
+        assertEquals(1, sentEmail.recipients.size());
+        assertEquals("Player", sentEmail.recipients.get(0).name);
+        assertEquals("Address", sentEmail.recipients.get(0).email);
+
+        assertEquals("Name", sentEmail.from.name);
+        assertEquals("service@email.com", sentEmail.from.email);
     }
 }

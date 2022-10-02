@@ -1,61 +1,35 @@
 package com.github.maciejmalewicz.Desert21.service.email;
 
-import com.mongodb.internal.VisibleForTesting;
+import com.mailersend.sdk.MailerSend;
+import com.mailersend.sdk.emails.Email;
+import com.mailersend.sdk.exceptions.MailerSendException;
+import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
 @Service
 public class EmailSendingService {
 
     private final EmailConfig config;
+    private final MailerSend mailerSend;
 
-    public EmailSendingService(EmailConfig config) {
+    public EmailSendingService(EmailConfig config, MailerSend mailerSend) {
         this.config = config;
+        this.mailerSend = mailerSend;
+        this.mailerSend.setToken(config.getToken());
     }
 
-    public void send (String topic, String messageToSend, String email) throws MessagingException {
-        var host = config.getHost();
-        var user = config.getUser();
-        var password = config.getPassword();
-        var port = config.getPort();
+    public void send (String topic, String messageToSend, String emailAddress) throws MessagingException {
+        Email email = new Email();
 
-        var session = buildSession(host, user, password, port);
+        email.setFrom(config.getName(), config.getAddress());
+        email.addRecipient("Player", emailAddress);
+        email.setSubject(topic);
+        email.setPlain(messageToSend);
 
-        MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(user));
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-        message.setSubject(topic);
-        message.setText(messageToSend);
-
-        transportMessage(message);
+        try {
+            mailerSend.emails().send(email);
+        } catch (MailerSendException e) {
+            throw new MessagingException("Could not send an email to: " + emailAddress);
+        }
     }
-
-    private Session buildSession(String host, String user, String password, String port) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", host);
-        props.put("user", user);
-        props.put("password", password);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", port);
-        props.put("mail.smtp.socketFactory.port", port);
-        props.put("mail.smtp.starttls.enable", "true");
-
-        return Session.getInstance(props,
-                new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(user, password);
-                    }
-                });
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.AccessModifier.PRIVATE)
-    void transportMessage(MimeMessage message) throws MessagingException {
-        Transport.send(message);
-    }
-
-
 }

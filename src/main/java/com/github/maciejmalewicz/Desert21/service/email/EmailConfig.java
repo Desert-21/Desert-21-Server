@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailConfig {
 
-    private String host;
-    private String user;
-    private String password;
-    private String port;
+    private String name;
+    private String address;
+    private String token;
 }
