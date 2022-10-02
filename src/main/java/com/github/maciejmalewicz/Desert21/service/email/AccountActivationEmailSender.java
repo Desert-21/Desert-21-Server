@@ -1,9 +1,8 @@
 package com.github.maciejmalewicz.Desert21.service.email;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
 
 @Service
 public class AccountActivationEmailSender {
