@@ -11,9 +11,9 @@ spring:
   authentication:
     cors:
       origins:
-        - http://play.dev.desert21.com
+        - https://play.dev.desert21.com
 
   addresses:
-    baseUrl: http://play.dev.desert21.com
+    baseUrl: https://play.dev.desert21.com
 
 
