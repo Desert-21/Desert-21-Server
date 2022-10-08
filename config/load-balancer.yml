@@ -4,12 +4,20 @@ metadata:
   name: backend-lb
   annotations:
     kubernetes.digitalocean.com/load-balancer-id: "backend-load-balancer"
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
+    service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: <CERTIFICATE_ID>
 spec:
   type: LoadBalancer
   selector:
     app: backend
   ports:
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 8080
     - name: http
       protocol: TCP
-      port: 8080
+      port: 80
       targetPort: 8080
