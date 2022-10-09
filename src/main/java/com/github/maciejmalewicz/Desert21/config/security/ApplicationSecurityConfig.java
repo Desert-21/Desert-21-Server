@@ -56,15 +56,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(tokenVerifier, JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/registration/users").permitAll()
-                .antMatchers(HttpMethod.POST, "**/**", "/api/login").permitAll()
-                .anyRequest().permitAll(); //todo CHANGE!!
+                .anyRequest().permitAll(); // Validation is always player oriented and handled on the endpoint side
     }
 
-    //working for now, will be removed anyway when setting up CORS
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
+        return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
@@ -72,12 +69,5 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                         .allowedOrigins(corsConfig.getOrigins().toArray(new String[0]));
             }
         };
-    }
-
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
     }
 }
