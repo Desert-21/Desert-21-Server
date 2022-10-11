@@ -38,7 +38,11 @@ public class NextTurnTransitionService extends StateTransitionService {
                     .map(Player::getId)
                     .orElse("");
             return Optional.of(PlayersNotificationPair.forBoth(
-                    new Notification<>(NEXT_TURN_NOTIFICATION, new NextTurnNotification(currentPlayerId, game.getStateManager().getTimeout()))
+                    new Notification<>(NEXT_TURN_NOTIFICATION, new NextTurnNotification(
+                            currentPlayerId,
+                            game.getStateManager().getTimeout(),
+                            game.getStateManager().getTurnCounter()
+                    ))
             ));
         }
         return Optional.of(PlayersNotificationPair.forBoth(new Notification<>(GAME_END_NOTIFICATION,
