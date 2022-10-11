@@ -2,5 +2,5 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notification
 
 import java.util.Date;
 
-public record NextTurnNotification(String currentPlayerId, Date timeout) {
+public record NextTurnNotification(String currentPlayerId, Date timeout, int turnCounter) {
 }

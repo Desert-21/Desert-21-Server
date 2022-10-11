@@ -8,6 +8,7 @@ public record StateManagerDto(
         GameState gameState,
         Date timeout,
         String currentPlayerId,
-        int turnCounter
+        int turnCounter,
+        String firstPlayerId
 ) {
 }

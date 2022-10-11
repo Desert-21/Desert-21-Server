@@ -33,7 +33,11 @@ public class FirstTurnStartService extends StateTransitionService {
 
     @Override
     protected Optional<PlayersNotificationPair> getNotifications(Game game) {
-        var content = new NextTurnNotification(game.getStateManager().getCurrentPlayerId(), game.getStateManager().getTimeout());
+        var content = new NextTurnNotification(
+                game.getStateManager().getCurrentPlayerId(),
+                game.getStateManager().getTimeout(),
+                game.getStateManager().getTurnCounter()
+        );
         return Optional.of(PlayersNotificationPair.forBoth(
                 new Notification<>(NEXT_TURN_NOTIFICATION, content))
         );
