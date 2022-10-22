@@ -36,11 +36,10 @@ controlBranchCostConfig:
 
   kingOfDesert: 200
   theGreatFortress: 200
-  goldDiggers: 400
+  towerCreator: 400
 
+  goldDiggers: 600
   factoryTurret: 600
-  towerCreator: 600
-
 
   superSonicRockets: 1400
 

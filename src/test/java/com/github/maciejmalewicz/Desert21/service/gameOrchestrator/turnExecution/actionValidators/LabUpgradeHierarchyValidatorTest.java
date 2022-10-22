@@ -113,7 +113,7 @@ class LabUpgradeHierarchyValidatorTest {
         player.getOwnedUpgrades().add(LabUpgrade.MORE_METAL);
         var validatables = List.of(
                 new LabUpgradeHierarchyValidatable(LabUpgrade.IMPROVED_CANNONS),
-                new LabUpgradeHierarchyValidatable(LabUpgrade.TOWER_CREATOR),
+                new LabUpgradeHierarchyValidatable(LabUpgrade.GOLD_DIGGERS),
                 new LabUpgradeHierarchyValidatable(LabUpgrade.PRODUCTION_MANAGERS)
         );
         assertFalse(tested.validate(validatables, context));

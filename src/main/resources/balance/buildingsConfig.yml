@@ -1,6 +1,6 @@
 factoryConfig:
   cost:
-    level1: 600
+    level1: 120
     level2: 40
     level3: 160
     level4: 480
@@ -12,8 +12,8 @@ factoryConfig:
 
 towerConfig:
   cost:
-    level1: 700
-    level2: 50
+    level1: 200
+    level2: 80
     level3: 200
     level4: 600
   baseProtection:
@@ -30,7 +30,7 @@ towerConfig:
 homeBaseConfig:
   cost:
     level1: -1
-    level2: 50
+    level2: 80
     level3: 200
     level4: 600
   baseProtection:
