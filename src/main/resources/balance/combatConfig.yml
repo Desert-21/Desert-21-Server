@@ -1,6 +1,6 @@
 droidsConfig:
   cost: 5
-  power: 30
+  power: 21
   turnsToTrain: 1
   fieldsTraveledPerTurn: 2
   smallProduction: 10

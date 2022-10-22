@@ -49,7 +49,8 @@ public class GameSnapshotService {
                 p.getOwnedUpgrades(),
                 p.getRocketStrikesDone(),
                 p.getBuiltFactories(),
-                p.getBuiltTowers()
+                p.getBuiltTowers(),
+                p.getProductionAI()
         )).collect(Collectors.toList());
     }
 
