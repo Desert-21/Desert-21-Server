@@ -44,4 +44,9 @@ public class PlayersNotifier {
             messageSendingOperations.convertAndSend(topic, notification);
         });
     }
+
+    public void notifyPlayer(String id, Notification<?> notification) {
+        var topic = String.format("/topics/users/%s", id);
+        messageSendingOperations.convertAndSend(topic, notification);
+    }
 }

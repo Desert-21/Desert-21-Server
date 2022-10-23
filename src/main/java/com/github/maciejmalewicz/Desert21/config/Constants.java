@@ -30,6 +30,9 @@ public class Constants {
     public static final String ENEMY_BOMBARDING_FAILED_NOTIFICATION = "ENEMY_BOMBARDING_FAILED";
     public static final String GAME_END_NOTIFICATION = "GAME_END";
     public static final String SURRENDER_NOTIFICATION = "SURRENDER";
+    public static final String DRAW_REQUESTED_NOTIFICATION = "DRAW_REQUESTED";
+    public static final String DRAW_REJECTED_NOTIFICATION = "DRAW_REJECTED";
+    public static final String DRAW_ACCEPTED_NOTIFICATION = "DRAW_ACCEPTED";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";
