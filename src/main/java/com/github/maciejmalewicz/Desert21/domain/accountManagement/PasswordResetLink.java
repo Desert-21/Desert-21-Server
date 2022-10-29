@@ -6,22 +6,25 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @NoArgsConstructor
 @Data
-@Document("account_acceptance_request")
-@TypeAlias("account_acceptance_request")
-public class AccountAcceptanceRequest {
+@Document("password_reset_link")
+@TypeAlias("password_reset_link")
+public class PasswordResetLink {
+
     @Id
     private String id;
     private String email;
-    private String nickname;
-    private String password;
     private String activationCode;
+    private Date expiryDate;
+    private String userId;
 
-    public AccountAcceptanceRequest(String email, String nickname, String password, String activationCode) {
+    public PasswordResetLink(String email, String activationCode, Date expiryDate, String userId) {
         this.email = email;
-        this.nickname = nickname;
-        this.password = password;
         this.activationCode = activationCode;
+        this.expiryDate = expiryDate;
+        this.userId = userId;
     }
 }
