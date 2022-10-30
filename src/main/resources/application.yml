@@ -24,7 +24,7 @@ spring:
         - http://localhost:4200
 
   addresses:
-    baseUrl: localhost:4200
+    baseUrl: http://localhost:4200
 
 server:
   servlet:
