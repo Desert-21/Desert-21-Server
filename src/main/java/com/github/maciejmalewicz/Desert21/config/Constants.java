@@ -33,6 +33,11 @@ public class Constants {
     public static final String DRAW_REQUESTED_NOTIFICATION = "DRAW_REQUESTED";
     public static final String DRAW_REJECTED_NOTIFICATION = "DRAW_REJECTED";
     public static final String DRAW_ACCEPTED_NOTIFICATION = "DRAW_ACCEPTED";
+    public static final String FRIENDS_INVITATION_RECEIVED_NOTIFICATION = "FRIENDS_INVITATION_RECEIVED";
+    public static final String FRIENDS_LIST_UPDATED_NOTIFICATION = "FRIENDS_LIST_UPDATED";
+    public static final String FRIENDS_INVITATION_ACCEPTED_NOTIFICATION = "FRIENDS_INVITATION_ACCEPTED";
+    public static final String FRIENDS_INVITATION_REJECTED_NOTIFICATION = "FRIENDS_INVITATION_REJECTED";
+    public static final String REMOVED_FROM_FRIEND_LIST_NOTIFICATION = "REMOVED_FROM_FRIEND_LIST";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";

@@ -9,8 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.USER_ID_AUTH_PREFIX;
 
@@ -23,6 +25,8 @@ public class ApplicationUser implements UserDetails {
     private String id;
     private String nickname;
     private LoginData loginData;
+
+    private List<FriendEntry> friends = new ArrayList<>();
 
     public ApplicationUser(String nickname, LoginData loginData) {
         this.nickname = nickname;
