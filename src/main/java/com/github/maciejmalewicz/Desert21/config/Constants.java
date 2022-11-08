@@ -39,6 +39,10 @@ public class Constants {
     public static final String FRIENDS_INVITATION_REJECTED_NOTIFICATION = "FRIENDS_INVITATION_REJECTED";
     public static final String REMOVED_FROM_FRIEND_LIST_NOTIFICATION = "REMOVED_FROM_FRIEND_LIST";
 
+    public static final String PING_REQUESTED_NOTIFICATION = "PING_REQUESTED";
+    public static final String PLAYER_IN_GAME_NOTIFICATION = "PLAYER_IN_GAME";
+    public static final String PLAYER_ACTIVE_NOTIFICATION = "PLAYER_ACTIVE";
+
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";
     public static final String BUILD_EVENT = "BUILD";

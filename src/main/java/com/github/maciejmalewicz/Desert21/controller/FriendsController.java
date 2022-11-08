@@ -34,7 +34,7 @@ public class FriendsController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("remove/{friendId}")
+    @PostMapping("remove/{friendId}")
     public ResponseEntity<Void> removeFriend(@NotNull Authentication auth, @PathVariable("friendId") String friendId) throws NotAcceptableException {
         friendsService.removeFriend(auth, friendId);
         return ResponseEntity.ok().build();

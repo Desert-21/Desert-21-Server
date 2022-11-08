@@ -9,6 +9,8 @@ import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GameInfoService {
 
@@ -24,9 +26,12 @@ public class GameInfoService {
         }
         var usersId = AuthoritiesUtils.getIdFromAuthorities(authentication.getAuthorities())
                 .orElseThrow(() -> new AuthorizationException("User could not be recognized!"));
+        return getGameIdByUsersId(usersId).orElse(null);
+    }
+
+    public Optional<String> getGameIdByUsersId(String usersId) {
         return gameRepository.findByPlayersId(usersId)
                 .filter(g -> g.getStateManager().getGameState() != GameState.FINISHED)
-                .map(Game::getId)
-                .orElse(null);
+                .map(Game::getId);
     }
 }

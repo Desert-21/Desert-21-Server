@@ -13,7 +13,6 @@ import com.github.maciejmalewicz.Desert21.utils.AuthoritiesUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.util.stream.Collectors;
 
@@ -41,6 +40,10 @@ public class FriendsService {
         var invitingPlayer = applicationUserRepository.findById(invitingId)
                 .orElseThrow(() -> new NotAcceptableException("How about you stop trying to hack it this time?"));
 
+        if (invitedFriend.getId().equals(invitingId)) {
+            throw new NotAcceptableException("You can't add yourself as a friend!");
+        }
+
         if (hasAlreadyFriendOfName(invitingPlayer, invitedFriend.getId()) || hasAlreadyFriendOfName(invitedFriend, invitingId)) {
             throw new NotAcceptableException("Could not send a friend request - you are already friends!");
         }
@@ -52,7 +55,7 @@ public class FriendsService {
 
         playersNotifier.notifyPlayer(invitedFriend.getId(), new Notification<>(
                 FRIENDS_INVITATION_RECEIVED_NOTIFICATION,
-                new FriendsInvitationDto(invitingId, invitingPlayersNickname)
+                new FriendsInvitationDto(invitation.getId(), invitingPlayersNickname)
         ));
     }
 

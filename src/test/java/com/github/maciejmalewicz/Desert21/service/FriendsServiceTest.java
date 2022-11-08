@@ -138,6 +138,18 @@ class FriendsServiceTest {
     }
 
     @Test
+    void invitePlayerToFriendsInvitingHimself() {
+        setupPlayers();
+        authentication = mock(Authentication.class);
+        doReturn(List.of(new SimpleGrantedAuthority(USER_ID_AUTH_PREFIX + inviting.getId()))).when(authentication).getAuthorities();
+
+        var exc = assertThrows(NotAcceptableException.class, () -> {
+            tested.invitePlayerToFriends(authentication, inviting.getNickname());
+        });
+        assertEquals("You can't add yourself as a friend!", exc.getMessage());
+    }
+
+    @Test
     void invitePlayerToFriendsInviterAlreadyContainsInvited() {
         setupPlayers();
         setupAuthForInviting();
@@ -183,7 +195,7 @@ class FriendsServiceTest {
 
         verify(playersNotifier, times(1)).notifyPlayer(invited.getId(), new Notification<>(
                 FRIENDS_INVITATION_RECEIVED_NOTIFICATION,
-                new FriendsInvitationDto(inviting.getId(), inviting.getNickname())
+                new FriendsInvitationDto(invitation.getId(),inviting.getNickname())
         ));
     }
 
