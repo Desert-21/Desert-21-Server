@@ -4,6 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.accountManagement.AccountAccept
 import com.github.maciejmalewicz.Desert21.domain.accountManagement.PasswordResetLink;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.users.ApplicationUser;
+import com.github.maciejmalewicz.Desert21.domain.users.FriendsInvitation;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
@@ -29,5 +30,6 @@ public class AfterEachDatabaseCleanupExtension implements AfterEachCallback {
         mongoTemplate.dropCollection(Game.class);
         mongoTemplate.dropCollection(ApplicationUser.class);
         mongoTemplate.dropCollection(PasswordResetLink.class);
+        mongoTemplate.dropCollection(FriendsInvitation.class);
     }
 }
