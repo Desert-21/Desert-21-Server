@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface GameRepository extends MongoRepository<Game, String> {
-    @Query(value = "{ 'players' : { $elemMatch : { '_id' : ?0 } } }")
+//    @Query(value = "{ 'players' : { $elemMatch : { '_id' : ?0 } } }") // add active check
+    @Query(value = "{ 'players' : { $elemMatch : { '_id' : ?0 } }, 'stateManager.gameState': { $ne : 'FINISHED' } }")
     Optional<Game> findByPlayersId(String playersId);
 }
