@@ -42,7 +42,7 @@ public class SurrenderService {
                 .filter(p -> !p.getId().equals(player.getId()))
                 .findFirst()
                 .orElseThrow();
-        var toWait = 10_000;
+        var toWait = 60_000;
         var executionDate = DateUtils.millisecondsFromNow(toWait);
         stateManager.setTimeout(executionDate);
         stateManager.setCurrentStateTimeoutId(UUID.randomUUID().toString());

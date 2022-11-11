@@ -33,6 +33,7 @@ public class Constants {
     public static final String DRAW_REQUESTED_NOTIFICATION = "DRAW_REQUESTED";
     public static final String DRAW_REJECTED_NOTIFICATION = "DRAW_REJECTED";
     public static final String DRAW_ACCEPTED_NOTIFICATION = "DRAW_ACCEPTED";
+
     public static final String FRIENDS_INVITATION_RECEIVED_NOTIFICATION = "FRIENDS_INVITATION_RECEIVED";
     public static final String FRIENDS_LIST_UPDATED_NOTIFICATION = "FRIENDS_LIST_UPDATED";
     public static final String FRIENDS_INVITATION_ACCEPTED_NOTIFICATION = "FRIENDS_INVITATION_ACCEPTED";
@@ -42,6 +43,11 @@ public class Constants {
     public static final String PING_REQUESTED_NOTIFICATION = "PING_REQUESTED";
     public static final String PLAYER_IN_GAME_NOTIFICATION = "PLAYER_IN_GAME";
     public static final String PLAYER_ACTIVE_NOTIFICATION = "PLAYER_ACTIVE";
+
+    public static final String GAME_INVITATION_RECEIVED_NOTIFICATION = "GAME_INVITATION_RECEIVED";
+    public static final String GAME_INVITATION_CANCELLED_NOTIFICATION = "GAME_INVITATION_CANCELLED";
+    public static final String GAME_INVITATION_REJECTED_NOTIFICATION = "GAME_INVITATION_REJECTED";
+    public static final String GAME_INVITATION_ACCEPTED_NOTIFICATION = "GAME_INVITATION_ACCEPTED";
 
     public static final String UPGRADE_EVENT = "UPGRADE";
     public static final String TRAINING_EVENT = "TRAINING";

@@ -31,7 +31,6 @@ public class GameInfoService {
 
     public Optional<String> getGameIdByUsersId(String usersId) {
         return gameRepository.findByPlayersId(usersId)
-                .filter(g -> g.getStateManager().getGameState() != GameState.FINISHED)
                 .map(Game::getId);
     }
 }
