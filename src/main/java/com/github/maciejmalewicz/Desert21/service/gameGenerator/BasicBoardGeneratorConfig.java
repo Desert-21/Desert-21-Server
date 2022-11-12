@@ -25,9 +25,10 @@ public class BasicBoardGeneratorConfig implements BoardGeneratorConfig {
                 new HomeBaseRules(),
                 new PlayersFactoriesRules(),
                 new RocketLaunchersRules(),
-                new CornerFactoriesRules(),
-                new BetweenPartsTowersRules(),
-                new PartialSquaresRules()
+                new RandomizedTowersRules(),
+                new MiddleFactoriesRules(),
+                new NearbyFactoriesRules(),
+                new FurtherFactoriesRules()
         )
                 .flatMap(ruleSupplier -> ruleSupplier.getRules(getSize()).stream())
                 .collect(Collectors.toList());
