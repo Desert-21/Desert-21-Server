@@ -23,12 +23,14 @@ public class SurrenderService {
     private final GameRepository gameRepository;
     private final TimeoutExecutor timeoutExecutor;
     private final PlayersNotifier playersNotifier;
+    private final RankingService rankingService;
 
-    public SurrenderService(GamePlayerService gamePlayerService, GameRepository gameRepository, TimeoutExecutor timeoutExecutor, PlayersNotifier playersNotifier) {
+    public SurrenderService(GamePlayerService gamePlayerService, GameRepository gameRepository, TimeoutExecutor timeoutExecutor, PlayersNotifier playersNotifier, RankingService rankingService) {
         this.gamePlayerService = gamePlayerService;
         this.gameRepository = gameRepository;
         this.timeoutExecutor = timeoutExecutor;
         this.playersNotifier = playersNotifier;
+        this.rankingService = rankingService;
     }
 
     public void surrender(Authentication auth, String gameId) throws NotAcceptableException, AuthorizationException {
@@ -50,6 +52,8 @@ public class SurrenderService {
         stateManager.setGameState(GameState.FINISHED);
 
         var savedGame = gameRepository.save(game);
+        rankingService.shiftPlayersRankingsAfterGameFinished(game);
+
         timeoutExecutor.executeTimeoutOnGame(savedGame);
 
         playersNotifier.notifyPlayers(game, new Notification<>(SURRENDER_NOTIFICATION, new SurrenderNotification(player.getId())));

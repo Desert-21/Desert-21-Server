@@ -28,10 +28,19 @@ public class ApplicationUser implements UserDetails {
 
     private List<FriendEntry> friends = new ArrayList<>();
 
+    private Integer rating = 300;
+
     public ApplicationUser(String nickname, LoginData loginData) {
         this.nickname = nickname;
         this.loginData = loginData;
     }
+
+    public ApplicationUser(String nickname, LoginData loginData, int rating) {
+        this.nickname = nickname;
+        this.loginData = loginData;
+        this.rating = rating;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
