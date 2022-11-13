@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -46,6 +45,8 @@ class SurrenderServiceTest {
     private Player player;
 
     private Authentication authentication;
+
+    private RankingService rankingService;
 
     void setupAuth() {
         var authorities = List.of(
@@ -84,11 +85,13 @@ class SurrenderServiceTest {
 
         timeoutExecutor = mock(TimeoutExecutor.class);
         playersNotifier = mock(PlayersNotifier.class);
+        rankingService = mock(RankingService.class);
         tested = new SurrenderService(
                 gamePlayerService,
                 gameRepository,
                 timeoutExecutor,
-                playersNotifier
+                playersNotifier,
+                rankingService
         );
     }
 
@@ -115,5 +118,6 @@ class SurrenderServiceTest {
         verify(playersNotifier, times(1)).notifyPlayers(game,
                 new Notification<>(SURRENDER_NOTIFICATION, new SurrenderNotification("AA"))
         );
+        verify(rankingService, times(1)).shiftPlayersRankingsAfterGameFinished(game);
     }
 }

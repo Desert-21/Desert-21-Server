@@ -2,6 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransit
 
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
+import com.github.maciejmalewicz.Desert21.service.RankingService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
@@ -39,16 +40,21 @@ class NextTurnTransitionServiceTest {
 
     private PlayersNotifier playersNotifier;
     private GameEndCheckingService gameEndCheckingService;
+    private RankingService rankingService;
 
     void setupTested() {
         playersNotifier = mock(PlayersNotifier.class);
         var gameTimer = mock(BasicGameTimer.class);
         gameEndCheckingService = mock(GameEndCheckingService.class);
+        rankingService = mock(RankingService.class);
         tested = new NextTurnTransitionService(
-              playersNotifier,
-              mock(TimeoutExecutor.class),
-              gameRepository,
-                gameTimer, gameEndCheckingService);
+                playersNotifier,
+                mock(TimeoutExecutor.class),
+                gameRepository,
+                gameTimer,
+                gameEndCheckingService,
+                rankingService
+        );
     }
 
     void setupGame() {
@@ -162,5 +168,6 @@ class NextTurnTransitionServiceTest {
         var notificationContent = (GameFinishedNotification) notification.content();
         assertNotNull(notificationContent.winnerId());
         assertEquals("AA", notificationContent.winnerId());
+        verify(rankingService, times(1)).shiftPlayersRankingsAfterGameFinished(game);
     }
 }

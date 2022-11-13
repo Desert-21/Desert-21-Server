@@ -4,6 +4,7 @@ import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
+import com.github.maciejmalewicz.Desert21.service.RankingService;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
@@ -24,11 +25,13 @@ public class NextTurnTransitionService extends StateTransitionService {
 
     private final BasicGameTimer gameTimer;
     private final GameEndCheckingService gameEndCheckingService;
+    private final RankingService rankingService;
 
-    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer, GameEndCheckingService gameEndCheckingService) {
+    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer, GameEndCheckingService gameEndCheckingService, RankingService rankingService) {
         super(playersNotifier, timeoutExecutor, gameRepository);
         this.gameTimer = gameTimer;
         this.gameEndCheckingService = gameEndCheckingService;
+        this.rankingService = rankingService;
     }
 
     @Override
@@ -73,6 +76,7 @@ public class NextTurnTransitionService extends StateTransitionService {
         if (winnerIdOptional.isPresent()) {
             game.getStateManager().setGameState(GameState.FINISHED);
             game.getStateManager().setWinnerId(winnerIdOptional.get());
+            rankingService.shiftPlayersRankingsAfterGameFinished(game);
             return game;
         }
         game.getStateManager().setGameState(GameState.AWAITING);
