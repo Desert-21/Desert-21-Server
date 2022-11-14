@@ -18,7 +18,6 @@ public class GameGeneratorService {
     private final BoardGeneratorService boardGeneratorService;
     private final ApplicationUserRepository applicationUserRepository;
     private final GameRepository gameRepository;
-    private final BasicGameTimer basicGameTimer;
     private final GeneralBalanceConfig generalConfig;
     private final GameStartService gameStartService;
 
@@ -26,7 +25,6 @@ public class GameGeneratorService {
         this.boardGeneratorService = boardGeneratorService;
         this.applicationUserRepository = applicationUserRepository;
         this.gameRepository = gameRepository;
-        this.basicGameTimer = basicGameTimer;
         this.generalConfig = generalConfig;
         this.gameStartService = gameStartService;
     }
@@ -58,7 +56,8 @@ public class GameGeneratorService {
                         generalConfig.getStartingResources(),
                         generalConfig.getStartingResources(),
                         generalConfig.getStartingResources()
-                )
+                ),
+                user.getRating()
         );
     }
 }

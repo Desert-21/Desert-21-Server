@@ -91,12 +91,14 @@ class GameGeneratorServiceTest {
                 generalConfig.getStartingResources()
         );
         assertEquals(expectedResourceSet, player1.getResources());
+        assertEquals(300, player1.getRating());
 
         var player2 = players.get(1);
         assertEquals(user2.getId(), player2.getId());
         assertEquals(user2.getNickname(), player2.getNickname());
         assertFalse(player2.getIsReady());
         assertEquals(expectedResourceSet, player2.getResources());
+        assertEquals(300, player2.getRating());
     }
 
     void validateStateManager(Game game) {

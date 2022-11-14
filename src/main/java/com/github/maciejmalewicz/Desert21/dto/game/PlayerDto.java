@@ -14,6 +14,7 @@ public record PlayerDto(
         int rocketStrikesDone,
         int builtFactories,
         int builtTowers,
-        ProductionAI ai
+        ProductionAI ai,
+        int rating
 ) {
 }

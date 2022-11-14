@@ -31,6 +31,8 @@ public class Player {
     private boolean isOfferingDraw;
     private Date drawOfferDisabledTimeout;
 
+    private int rating;
+
     public Player(String id, String nickname, ResourceSet resources) {
         this.id = id;
         this.nickname = nickname;
@@ -44,6 +46,11 @@ public class Player {
         this.builtTowers = 0;
         this.isOfferingDraw = false;
         this.drawOfferDisabledTimeout = null;
+    }
+
+    public Player(String id, String nickname, ResourceSet resources, int rating) {
+        this(id, nickname, resources);
+        this.rating = rating;
     }
 
     public boolean ownsUpgrade(LabUpgrade upgrade) {

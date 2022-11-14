@@ -80,10 +80,12 @@ class GameSnapshotServiceTest {
                 List.of(
                         new Player("AA",
                                 "macior123456",
-                                new ResourceSet(60, 60, 60)),
+                                new ResourceSet(60, 60, 60),
+                                300),
                         new Player("BB",
                                 "schabina123456",
-                                new ResourceSet(60, 60, 60))),
+                                new ResourceSet(60, 60, 60),
+                                200)),
                 generateFields(),
                 new StateManager(
                         GameState.WAITING_TO_START,
@@ -150,9 +152,11 @@ class GameSnapshotServiceTest {
         assertEquals("AA", player1.id());
         assertEquals("macior123456", player1.nickname());
         assertEquals(new ResourceSet(60, 60, 60), player1.resources());
+        assertEquals(300, gameSnapshot.players().get(0).rating());
         assertEquals("BB", player2.id());
         assertEquals("schabina123456", player2.nickname());
         assertEquals(new ResourceSet(60, 60, 60), player2.resources());
+        assertEquals(200, gameSnapshot.players().get(1).rating());
 
         var stateManager = gameSnapshot.stateManager();
         assertEquals(GameState.WAITING_TO_START, stateManager.gameState());
