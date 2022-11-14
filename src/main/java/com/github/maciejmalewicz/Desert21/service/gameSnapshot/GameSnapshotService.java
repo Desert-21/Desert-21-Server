@@ -50,7 +50,8 @@ public class GameSnapshotService {
                 p.getRocketStrikesDone(),
                 p.getBuiltFactories(),
                 p.getBuiltTowers(),
-                p.getProductionAI()
+                p.getProductionAI(),
+                p.getRating()
         )).collect(Collectors.toList());
     }
 
