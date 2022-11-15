@@ -13,12 +13,12 @@ public class PasswordResetEmailSender {
     private final static String messageTemplate = """
             Hi %s,
                         
-            Dude from Desert 21 here! You have requested a password reset, so here's the link:
+            Desert 21 Bot here! You have requested a password reset, so here's the link:
             %s
             This link will be active only for 5 minutes, so be quick!
                   
             Thanks,
-            Dude from Desert 21
+            Desert 21 Bot
             """;
 
     private final EmailSendingService emailSendingService;

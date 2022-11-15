@@ -9,14 +9,14 @@ class AccountActivationMailSenderConfigSenderTest {
     public static final String expectedMessage = """
             Hi macior123456,
                          
-            Dude from Desert 21 here! Your account is almost there.
+            Desert 21 Bot here! Your account is almost there.
             Click on the link below to activate your account and start
             enjoying probably the first non pay-to-win and not real time
             strategic game in the internet:
             http://www.desert21.com/activate-code/macior@gmail.com/AAABBBCCC
                          
             Enjoy,
-            Dude from Desert 21
+            Desert 21 Bot
             """;
 
     @Test
