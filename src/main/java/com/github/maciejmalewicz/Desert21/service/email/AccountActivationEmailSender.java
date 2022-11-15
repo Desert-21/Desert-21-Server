@@ -11,14 +11,14 @@ public class AccountActivationEmailSender {
     private final static String messageTemplate = """
             Hi %s,
                         
-            Dude from Desert 21 here! Your account is almost there.
+            Desert 21 Bot here! Your account is almost there.
             Click on the link below to activate your account and start
             enjoying probably the first non pay-to-win and not real time
             strategic game in the internet:
             %s
                         
             Enjoy,
-            Dude from Desert 21
+            Desert 21 Bot
             """;
 
     private final EmailSendingService emailSendingService;

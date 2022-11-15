@@ -23,12 +23,12 @@ class PasswordResetEmailSenderTest {
     private final String message = """
            Hi macior123456,
                                         
-           Dude from Desert 21 here! You have requested a password reset, so here's the link:
+           Desert 21 Bot here! You have requested a password reset, so here's the link:
            http://www.desert21.com/reset-password/ID/ABC/macior@gmail.com
            This link will be active only for 5 minutes, so be quick!
                                         
            Thanks,
-           Dude from Desert 21
+           Desert 21 Bot
             """;
 
     @Test
