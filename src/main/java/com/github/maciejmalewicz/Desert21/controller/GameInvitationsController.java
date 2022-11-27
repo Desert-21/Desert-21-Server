@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/gameInvitations")
+@RequestMapping("/game-invitations")
 public class GameInvitationsController {
 
     @Autowired
