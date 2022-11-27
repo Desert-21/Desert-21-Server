@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/gameReadiness")
+@RequestMapping("/game-readiness")
 public class GameReadinessController {
 
     private final GameReadinessService gameReadinessService;
