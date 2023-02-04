@@ -7,6 +7,7 @@ import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.balance.CombatUnitConfig;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators.TrainUnitsCostCalculator;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.TrainingMode;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.UnitType;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.ArmyTrainingEvent;
@@ -42,8 +43,8 @@ public class TrainAction implements Action {
                 field,
                 context.player()
         );
-        var trainingCost = getTrainingCost(context);
-        var costValidatable = new CostValidatable(trainingCost);
+        var trainingCost = TrainUnitsCostCalculator.getTrainingCost(context.gameBalance(), unitType, trainingMode);
+        var costValidatable = new CostValidatable(new ResourceSet(trainingCost, 0, 0));
         var singlePerLocationValidatable = new SingleTrainingPerLocationValidatable(location);
         var noPendingTrainingsValidatable = new NoPendingTrainingsValidatable(location);
         var buildingTypeAndLevelValidatable = new BuildingSufficientForUnitsTrainingValidatable(
@@ -71,18 +72,11 @@ public class TrainAction implements Action {
         var producedUnits = getProducedUnitsAmount(config);
 
         return List.of(
-                new PaymentEvent(getTrainingCost(context)),
+                new PaymentEvent(
+                        new ResourceSet(TrainUnitsCostCalculator.getTrainingCost(context.gameBalance(), unitType, trainingMode), 0, 0)
+                ),
                 new ArmyTrainingEvent(actualTurnsToTrain, location, unitType, producedUnits)
         );
-    }
-
-
-    private ResourceSet getTrainingCost(TurnExecutionContext context) {
-        var combatBalance = context.gameBalance().combat();
-        var config = getCombatUnitConfig(combatBalance);
-        var producedUnits = getProducedUnitsAmount(config);
-        var metalCost = config.getCost() * producedUnits;
-        return new ResourceSet(metalCost, 0, 0);
     }
 
     private int getProducedUnitsAmount(CombatUnitConfig config) {

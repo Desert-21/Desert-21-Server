@@ -2,7 +2,7 @@ package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecutio
 
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.RocketLauncherOwnershipValidatable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators.RocketCostCalculator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
