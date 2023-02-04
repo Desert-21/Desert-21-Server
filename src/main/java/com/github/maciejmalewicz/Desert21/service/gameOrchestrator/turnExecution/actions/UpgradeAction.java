@@ -63,6 +63,9 @@ public class UpgradeAction implements Action {
         var field = BoardUtils.fieldAtLocation(fields, location);
         var building = field.getBuilding();
         var buildingMaterialsCost = UpgradeBuildingCostCalculator.getUpgradeCost(building, context.gameBalance());
+        if (buildingMaterialsCost == -1) {
+            throw new NotAcceptableException("Empty field is does not have a config!");
+        }
         var payment = new PaymentEvent(new ResourceSet(0, buildingMaterialsCost, 0));
         var upgrade = new BuildingUpgradeEvent(location);
         return List.of(payment, upgrade);
