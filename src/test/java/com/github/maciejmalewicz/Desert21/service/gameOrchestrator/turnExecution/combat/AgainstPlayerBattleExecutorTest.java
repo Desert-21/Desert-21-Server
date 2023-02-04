@@ -110,7 +110,9 @@ class AgainstPlayerBattleExecutorTest {
                         new FightingArmy(50, 10, 20, 0),
                         context,
                         opponent,
-                        context.game().getFields()[0][0]
+                        player,
+                        context.game().getFields()[0][0],
+                        attackingArmy
                 );
         doReturn(0.5).when(winnersArmyDestructionRatioCalculator)
                 .calculateDestructionRatio(10000, 5000, gameBalanceService.getGameBalance());
@@ -154,7 +156,9 @@ class AgainstPlayerBattleExecutorTest {
                         new FightingArmy(500, 100, 200, 100),
                         context,
                         opponent,
-                        context.game().getFields()[0][0]
+                        player,
+                        context.game().getFields()[0][0],
+                        attackingArmy
                 );
         doReturn(0.2).when(winnersArmyDestructionRatioCalculator)
                 .calculateDestructionRatio(50000, 10000, gameBalanceService.getGameBalance());

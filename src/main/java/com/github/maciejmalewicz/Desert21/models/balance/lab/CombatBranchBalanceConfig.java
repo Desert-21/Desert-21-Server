@@ -13,7 +13,6 @@ public class CombatBranchBalanceConfig {
     private double improvedTanksPowerBonus;
 
     private double improvedCannonsBombardingPowerFraction;
-    private int advancedTacticsReferencePower;
 
-    private double advancedTacticsPowerBonusPerReferencePower;
+    private double advancedTacticsTowerBonusesDecrease;
 }

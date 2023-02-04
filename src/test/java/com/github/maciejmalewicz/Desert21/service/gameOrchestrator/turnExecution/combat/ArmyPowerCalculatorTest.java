@@ -8,6 +8,7 @@ import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionCont
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
 import com.github.maciejmalewicz.Desert21.utils.BoardUtils;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,35 +94,17 @@ class ArmyPowerCalculatorTest {
     }
 
     @Test
-    void calculateAttackersPowerAdvancedTactics() {
-        player.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
-        var attackers = new FightingArmy(100, 10, 20, 0);
-        // base: 3000 + 2200 + 1000 = 6200
-        // steps: 6200 / 100 = 62
-        // power bonus: 62 * 0.01 = 0.62
-        // total power: 6200 * 1.62 = 10 044
-        var power = tested.calculateAttackersPower(attackers, context);
-        assertEquals(10_044, power);
-    }
-
-    @Test
-    void calculateAttackersPowerAllPerks() {
-        player.getOwnedUpgrades().add(LabUpgrade.IMPROVED_TANKS);
-        player.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
-        var attackers = new FightingArmy(100, 10, 20, 0);
-        // 3000 + 2200 * 1.5 + 1000 = 3000 + 3300 + 1000 = 7300
-        // steps: 7300 / 100 = 73
-        // power bonus: 73 * 0.01 = 0.73
-        // total power: 7300 * 1.73 = 12 629
-        var power = tested.calculateAttackersPower(attackers, context);
-        assertEquals(12_629, power);
-    }
-
-    @Test
     void calculateDefendersPowerNoPerks() throws NotAcceptableException {
         var defenders = new FightingArmy(100, 10, 20, 0);
         // 3000 + 2200 + 1000 = 6200
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][0]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][0],
+                new Army(0, 0, 0)
+        );
         assertEquals(6200, power);
     }
 
@@ -132,7 +115,14 @@ class ArmyPowerCalculatorTest {
         // tower base bonus: 1000
         // tower unit bonus: 0.3
         // total power: 1000 + 6200 * 1.3 = 1000 + 8060 = 9060
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][1]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][1],
+                new Army(0, 0, 0)
+        );
         assertEquals(9060, power);
     }
 
@@ -144,7 +134,14 @@ class ArmyPowerCalculatorTest {
         // tower base bonus: 1000
         // tower unit bonus: 0.3
         // total power: 1000 + 6200 * 1.3 = 1000 + 8060 = 9060
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][2]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][2],
+                new Army(0, 0, 0)
+        );
         assertEquals(9060, power);
     }
 
@@ -153,7 +150,14 @@ class ArmyPowerCalculatorTest {
         opponent.getOwnedUpgrades().add(LabUpgrade.IMPROVED_DROIDS);
         var defenders = new FightingArmy(100, 10, 20, 0);
         // 3000 * 1.25 + 2200 + 1000 = 3750 + 2200 + 1000 = 6950
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][2]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][2],
+                new Army(0, 0, 0)
+        );
         assertEquals(6950, power);
     }
 
@@ -165,7 +169,14 @@ class ArmyPowerCalculatorTest {
         // tower base bonus: 1000
         // tower unit bonus: 0.3
         // total power: 1000 + 7400 * 1.3 = 1000 + 9620 = 10 620
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][1]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][1],
+                new Army(0, 0, 0)
+        );
         assertEquals(10_620, power);
     }
 
@@ -174,20 +185,60 @@ class ArmyPowerCalculatorTest {
         opponent.getOwnedUpgrades().add(LabUpgrade.IMPROVED_TANKS);
         var defenders = new FightingArmy(100, 10, 20, 0);
         // 3000 + 2200 * 1.5 + 1000 = 3000 + 3300 + 1000 = 7300
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][0]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][0],
+                new Army(0, 0, 0)
+        );
         assertEquals(7300, power);
     }
 
     @Test
-    void calculateDefendersPowerHasAdvancedTactics() throws NotAcceptableException {
-        opponent.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
+    void calculateDefendersPowerOpponentHasAdvancedTacticsOnTower() throws NotAcceptableException {
+        player.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
         var defenders = new FightingArmy(100, 10, 20, 0);
-        // base: 3000 + 2200 + 1000 = 6200
-        // steps: 6200 / 100 = 62
-        // power bonus: 62 * 0.01 = 0.62
-        // total power: 6200 * 1.62 = 10 044
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][0]);
-        assertEquals(10_044, power);
+        // base army power: 3000 + 2200 + 1000 = 6200
+        // tower base bonus: 1000
+        // tower base bonus after advanced tactics decrease: 300
+        // tower unit bonus: 0.3
+        // tower unit bonus after advanced tactics decrease: 0.09
+        // NOT ACTUAL total power: 1000 + 6200 * 1.3 = 1000 + 8060 = 9060
+        // ACTUAL total power: 300 + 6200 * 1.09 = 300 + 6758 = 7058
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][1],
+                new Army(1, 1, 1) // all types of units used
+        );
+        assertEquals(7058, power);
+    }
+
+    @Test
+    void calculateDefendersPowerOpponentHasAdvancedTacticsOnFactoryTurret() throws NotAcceptableException {
+        opponent.getOwnedUpgrades().add(LabUpgrade.FACTORY_TURRET);
+        player.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
+        var defenders = new FightingArmy(100, 10, 20, 0);
+        // base army power: 3000 + 2200 + 1000 = 6200
+        // factory turret base bonus: 1000
+        // factory turret base bonus after advanced tactics decrease: 300
+        // factory turret unit bonus: 0.3
+        // factory turret unit bonus after advanced tactics decrease: 0.09
+        // NOT ACTUAL total power: 1000 + 6200 * 1.3 = 1000 + 8060 = 9060
+        // ACTUAL total power: 300 + 6200 * 1.09 = 300 + 6758 = 7058
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][2],
+                new Army(1, 1, 1) // all types of units used
+        );
+        assertEquals(7058, power);
     }
 
     @Test
@@ -195,7 +246,14 @@ class ArmyPowerCalculatorTest {
         doReturn(600).when(scarabsPowerCalculator).calculateScarabsPower(60, context);
         var defenders = new FightingArmy(100, 10, 20, 60);
         // 3000 + 2200 + 1000 + 600 = 6800
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][0]);
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][0],
+                new Army(0, 0, 0)
+        );
         assertEquals(6800, power);
     }
 
@@ -203,7 +261,8 @@ class ArmyPowerCalculatorTest {
     void calculateDefendersPowerHasAllPerks() throws NotAcceptableException {
         opponent.getOwnedUpgrades().add(LabUpgrade.IMPROVED_DROIDS);
         opponent.getOwnedUpgrades().add(LabUpgrade.IMPROVED_TANKS);
-        opponent.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
+
+        player.getOwnedUpgrades().add(LabUpgrade.ADVANCED_TACTICS);
 
         doReturn(600).when(scarabsPowerCalculator).calculateScarabsPower(60, context);
         var defenders = new FightingArmy(100, 10, 20, 60);
@@ -211,15 +270,21 @@ class ArmyPowerCalculatorTest {
         // base power: 3000, 2200, 1000
         // tower base bonus: 1000
         // tower unit bonus: 0.3
-        // after tower bonuses: 3900, 2860, 1300 + 1000 bonus
-        // after improved droids: 5460, 2860, 1300 + 1000 bonus
-        // after improved tanks: 5460, 4290, 1300 + 1000 bonus
-        // pre advanced tactics power: 5460 + 4290 + 1300 + 1000 = 12 050
-        // advanced tactics steps: 12 050 / 100 = 120
-        // advanced tactics bonus: 120 * 0.01 = 1.2
-        // post advanced tactics power: 12 050 * 2.2 = 26 510
-        // power with scarabs: 26 510 + 600 = 27 110
-        var power = tested.calculateDefendersPower(defenders, context, opponent, context.game().getFields()[0][1]);
-        assertEquals(27_110, power);
+        // tower base decreased bonus: 300
+        // tower unit decreased bonus: 0.09
+        // after tower bonuses: 3270, 2398, 1090 + 300 bonus
+        // after improved droids: 4578, 2398, 1090 + 300 bonus
+        // after improved tanks: 4578, 3597, 1090 + 300 bonus
+        // total base army power: 4578 + 3597 + 1090 + 300 = 9565
+        // power with scarabs: 9565 + 600 = 10 165
+        var power = tested.calculateDefendersPower(
+                defenders,
+                context,
+                opponent,
+                player,
+                context.game().getFields()[0][1],
+                new Army(1, 1, 1)
+        );
+        assertEquals(10_165, power);
     }
 }
