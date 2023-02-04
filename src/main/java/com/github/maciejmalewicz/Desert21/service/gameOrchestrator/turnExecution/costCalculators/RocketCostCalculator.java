@@ -1,4 +1,4 @@
-package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc;
+package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators;
 
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.dto.balance.GameBalanceDto;

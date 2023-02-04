@@ -6,6 +6,7 @@ import com.github.maciejmalewicz.Desert21.models.BuildingType;
 import com.github.maciejmalewicz.Desert21.models.Location;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.actionValidatables.*;
+import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators.BuildBuildingCostCalculator;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.BuildBuildingEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.GameEvent;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.gameEvents.PaymentEvent;
@@ -30,8 +31,7 @@ public class BuildAction implements Action {
 
     @Override
     public List<ActionValidatable> getActionValidatables(TurnExecutionContext context) throws NotAcceptableException {
-        var config = buildingTypeToConfig(buildingType, context.gameBalance());
-        var buildingMaterialsCost = config.costAtLevel(1);
+        var buildingMaterialsCost = BuildBuildingCostCalculator.getBuildingCost(buildingType, context.gameBalance());
         var costValidatable = new CostValidatable(new ResourceSet(0, buildingMaterialsCost, 0));
 
         var field = fieldAtLocation(context.game().getFields(), location);
@@ -60,8 +60,7 @@ public class BuildAction implements Action {
 
     @Override
     public List<GameEvent> getEventExecutables(TurnExecutionContext context) throws NotAcceptableException {
-        var config = buildingTypeToConfig(buildingType, context.gameBalance());
-        var buildingMaterialsCost = config.costAtLevel(1);
+        var buildingMaterialsCost = BuildBuildingCostCalculator.getBuildingCost(buildingType, context.gameBalance());
         var paymentEvent = new PaymentEvent(new ResourceSet(0, buildingMaterialsCost, 0));
 
         var buildBuildingEvent = new BuildBuildingEvent(location, buildingType);

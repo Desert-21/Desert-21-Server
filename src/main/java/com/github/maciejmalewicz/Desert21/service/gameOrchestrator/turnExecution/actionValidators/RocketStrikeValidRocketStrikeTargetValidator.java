@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator.isRocketLauncher;
+import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators.RocketCostCalculator.isRocketLauncher;
 
 @Service
 public class RocketStrikeValidRocketStrikeTargetValidator implements ActionValidator<RocketStrikeValidRocketStrikeTargetValidatable> {

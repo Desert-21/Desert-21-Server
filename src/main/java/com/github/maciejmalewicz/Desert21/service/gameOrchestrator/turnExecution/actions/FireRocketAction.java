@@ -16,7 +16,7 @@ import lombok.NonNull;
 
 import java.util.List;
 
-import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.misc.RocketCostCalculator.calculateRocketCost;
+import static com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.costCalculators.RocketCostCalculator.calculateRocketCost;
 import static com.github.maciejmalewicz.Desert21.utils.BoardUtils.boardToOwnedFieldList;
 
 @Data

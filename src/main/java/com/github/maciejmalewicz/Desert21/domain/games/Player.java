@@ -56,4 +56,9 @@ public class Player {
     public boolean ownsUpgrade(LabUpgrade upgrade) {
         return ownedUpgrades.contains(upgrade);
     }
+
+    public boolean ownsOneOfUpgrades(List<LabUpgrade> upgrades) {
+        return upgrades.stream()
+                .allMatch(this::ownsUpgrade);
+    }
 }

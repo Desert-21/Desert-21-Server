@@ -4,8 +4,10 @@ import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
+import com.github.maciejmalewicz.Desert21.models.LocatedField;
 import com.github.maciejmalewicz.Desert21.models.Location;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -53,9 +55,33 @@ public class BoardUtils {
         return Arrays.stream(fields).flatMap(Arrays::stream).toList();
     }
 
+    public static List<LocatedField> boardToLocatedFieldList(Field[][] fields) {
+        var acc = new ArrayList<LocatedField>();
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields[i].length; j++) {
+                var field = fields[i][j];
+                var location = new Location(i, j);
+                acc.add(new LocatedField(location, field));
+            }
+        }
+        return acc;
+    }
+
     public static List<Field> boardToOwnedFieldList(Field[][] fields, String playerId) {
         return boardToFieldList(fields).stream()
                 .filter(f -> playerId.equals(f.getOwnerId()))
+                .toList();
+    }
+
+    public static List<LocatedField> boardToOwnedLocatedFieldList(Field[][] fields, String playerId) {
+        return boardToLocatedFieldList(fields).stream()
+                .filter(locatedField -> playerId.equals(locatedField.field().getOwnerId()))
+                .toList();
+    }
+
+    public static List<LocatedField> boardToEnemyLocatedFieldList(Field[][] fields, String playerId) {
+        return boardToLocatedFieldList(fields).stream()
+                .filter(locatedField -> locatedField.field().getOwnerId() != null && !playerId.equals(locatedField.field().getOwnerId()))
                 .toList();
     }
 }
