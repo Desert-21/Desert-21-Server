@@ -40,7 +40,7 @@ public class ElectricityActionsGetter implements CategoryActionsGetter<Integer> 
         }
         var rocketStrikeCost = RocketCostCalculator.calculateRocketCost(
                 gameBalance,
-                player.getRocketStrikesDone(),
+                player,
                 ownedFields.stream().map(LocatedField::field).toList()
         );
         return BoardUtils.boardToEnemyLocatedFieldList(game.getFields(), player.getId()).stream()
