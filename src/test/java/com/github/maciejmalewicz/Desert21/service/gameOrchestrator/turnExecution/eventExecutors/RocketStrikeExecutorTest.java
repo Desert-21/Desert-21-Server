@@ -90,6 +90,33 @@ class RocketStrikeExecutorTest {
     }
 
     @Test
+    void executeHappyPathAgainstArmyUpgradeDiscounted() throws NotAcceptableException {
+        context.game().getFields()[5][5].setArmy(new Army(10, 10, 10));
+        context.player().setNextRocketFree(true); // from super sonic rockets
+        var events = List.of(
+                new RocketStrikeEvent(new Location(5, 5), false)
+        );
+        var eventExecutionResult = tested.execute(events, context);
+
+        var expectedResults = List.of(
+                new RocketStrikeEventResult(
+                        new Location(5, 5),
+                        new Army(10, 10, 10),
+                        new Army(5, 5, 5)
+                )
+        );
+        assertThat(expectedResults, sameBeanAs(eventExecutionResult.results()));
+
+        var updatedContext = eventExecutionResult.context();
+        var currentArmy = updatedContext.game().getFields()[5][5].getArmy();
+        var expectedArmy = new Army(5, 5, 5);
+        assertThat(expectedArmy, sameBeanAs(currentArmy));
+        assertEquals(BuildingType.ROCKET_LAUNCHER, updatedContext.game().getFields()[5][5].getBuilding().getType());
+        assertEquals(0, updatedContext.player().getRocketStrikesDone());
+        assertFalse(updatedContext.player().isNextRocketFree());
+    }
+
+    @Test
     void executeHappyPathAgainstArmyNull() throws NotAcceptableException {
         context.game().getFields()[5][5].setArmy(null);
         var events = List.of(

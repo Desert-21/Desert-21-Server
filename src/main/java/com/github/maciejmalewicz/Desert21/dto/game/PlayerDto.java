@@ -15,6 +15,7 @@ public record PlayerDto(
         int builtFactories,
         int builtTowers,
         ProductionAI ai,
-        int rating
+        int rating,
+        boolean isNextRocketFree
 ) {
 }

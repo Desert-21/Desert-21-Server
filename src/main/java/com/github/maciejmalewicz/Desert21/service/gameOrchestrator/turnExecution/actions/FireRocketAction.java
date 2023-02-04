@@ -34,8 +34,7 @@ public class FireRocketAction implements Action {
         var singleRocketStrikePerTurnValidatable = new SingleRocketStrikePerTurnValidatable();
 
         var ownedFields = boardToOwnedFieldList(context.game().getFields(), context.player().getId());
-        var rocketStrikesPerformed = context.player().getRocketStrikesDone();
-        var electricityCost = calculateRocketCost(context.gameBalance(), rocketStrikesPerformed, ownedFields);
+        var electricityCost = calculateRocketCost(context.gameBalance(), context.player(), ownedFields);
         var costValidatable = new CostValidatable(new ResourceSet(0, 0, electricityCost));
 
         var rocketLauncherOwnershipValidatable = new RocketLauncherOwnershipValidatable(ownedFields);
@@ -58,8 +57,7 @@ public class FireRocketAction implements Action {
     @Override
     public List<GameEvent> getEventExecutables(TurnExecutionContext context) throws NotAcceptableException {
         var ownedFields = boardToOwnedFieldList(context.game().getFields(), context.player().getId());
-        var rocketStrikesPerformed = context.player().getRocketStrikesDone();
-        var electricityCost = calculateRocketCost(context.gameBalance(), rocketStrikesPerformed, ownedFields);
+        var electricityCost = calculateRocketCost(context.gameBalance(), context.player(), ownedFields);
         var paymentEvent = new PaymentEvent(new ResourceSet(0, 0, electricityCost));
 
         var rocketStrikeEvent = new RocketStrikeEvent(target, isTargetingRocket);

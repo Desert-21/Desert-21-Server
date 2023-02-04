@@ -25,8 +25,14 @@ public class RocketStrikeExecutor implements EventExecutor<RocketStrikeEvent> {
             return new EventExecutionResult(context, new ArrayList<>());
         }
 
-        var doneRocketStrikes = context.player().getRocketStrikesDone();
-        context.player().setRocketStrikesDone(doneRocketStrikes + 1);
+        var isRocketDiscounted = context.player().isNextRocketFree();
+        if (!isRocketDiscounted) {
+            var doneRocketStrikes = context.player().getRocketStrikesDone();
+            context.player().setRocketStrikesDone(doneRocketStrikes + 1);
+        } else {
+            context.player().setNextRocketFree(false);
+        }
+
         var event = events.get(0);
         var field = BoardUtils.fieldAtLocation(context.game().getFields(), event.getLocation());
         var eventResults = new ArrayList<EventResult>();

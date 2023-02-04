@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.domain.games;
 
 import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
+import com.mongodb.internal.VisibleForTesting;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +34,8 @@ public class Player {
 
     private int rating;
 
+    private boolean isNextRocketFree;
+
     public Player(String id, String nickname, ResourceSet resources) {
         this.id = id;
         this.nickname = nickname;
@@ -46,11 +49,19 @@ public class Player {
         this.builtTowers = 0;
         this.isOfferingDraw = false;
         this.drawOfferDisabledTimeout = null;
+
+        this.isNextRocketFree = false;
     }
 
     public Player(String id, String nickname, ResourceSet resources, int rating) {
         this(id, nickname, resources);
         this.rating = rating;
+    }
+    
+    @VisibleForTesting(otherwise = VisibleForTesting.AccessModifier.PRIVATE)
+    public Player(int rocketStrikesDone, boolean isNextRocketFree) {
+        this.rocketStrikesDone = rocketStrikesDone;
+        this.isNextRocketFree = isNextRocketFree;
     }
 
     public boolean ownsUpgrade(LabUpgrade upgrade) {

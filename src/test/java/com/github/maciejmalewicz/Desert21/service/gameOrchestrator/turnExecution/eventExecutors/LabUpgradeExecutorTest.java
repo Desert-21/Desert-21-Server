@@ -112,4 +112,30 @@ class LabUpgradeExecutorTest {
         var expectedAI = new ProductionAI(true, 0);
         assertThat(expectedAI, sameBeanAs(player.getProductionAI()));
     }
+
+    @Test
+    void executeForSuperSonicRockets() throws NotAcceptableException  {
+        player.getOwnedUpgrades().add(LabUpgrade.SCARAB_SCANNERS);
+        player.getOwnedUpgrades().add(LabUpgrade.KING_OF_DESERT);
+        player.getOwnedUpgrades().add(LabUpgrade.FACTORY_TURRET);
+        var executables = List.of(
+                new LabUpgradeEvent(LabUpgrade.SUPER_SONIC_ROCKETS)
+        );
+        var results = tested.execute(executables, context);
+        var newUpgrades = player.getOwnedUpgrades();
+
+        var expectedEventResults = List.of(
+                new LabUpgradeEventResult(LabUpgrade.SUPER_SONIC_ROCKETS, "AA")
+        );
+        assertThat(expectedEventResults, sameBeanAs(results.results()));
+
+        var expectedUpgrades = List.of(
+                LabUpgrade.SCARAB_SCANNERS,
+                LabUpgrade.KING_OF_DESERT,
+                LabUpgrade.FACTORY_TURRET,
+                LabUpgrade.SUPER_SONIC_ROCKETS
+        );
+        assertThat(expectedUpgrades, sameBeanAs(newUpgrades));
+        assertTrue(player.isNextRocketFree());
+    }
 }

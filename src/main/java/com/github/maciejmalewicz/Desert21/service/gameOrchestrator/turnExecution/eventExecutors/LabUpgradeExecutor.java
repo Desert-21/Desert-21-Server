@@ -29,11 +29,19 @@ public class LabUpgradeExecutor implements EventExecutor<LabUpgradeEvent> {
             if (upgrade == LabUpgrade.PRODUCTION_AI) {
                 activateProductionAI(player);
             }
+
+            if (upgrade == LabUpgrade.SUPER_SONIC_ROCKETS) {
+                activateSuperSonicRocketsDiscount(player);
+            }
         }
         return new EventExecutionResult(context, eventResults);
     }
 
     private void activateProductionAI(Player player) {
         player.getProductionAI().setActivated(true);
+    }
+
+    private void activateSuperSonicRocketsDiscount(Player player) {
+        player.setNextRocketFree(true);
     }
 }

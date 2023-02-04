@@ -51,7 +51,8 @@ public class GameSnapshotService {
                 p.getBuiltFactories(),
                 p.getBuiltTowers(),
                 p.getProductionAI(),
-                p.getRating()
+                p.getRating(),
+                p.isNextRocketFree()
         )).collect(Collectors.toList());
     }
 
