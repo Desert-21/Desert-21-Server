@@ -1,6 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.combat;
 
 import com.github.maciejmalewicz.Desert21.config.gameBalance.lab.LabUpgrade;
+import com.github.maciejmalewicz.Desert21.domain.games.Army;
 import com.github.maciejmalewicz.Desert21.domain.games.Building;
 import com.github.maciejmalewicz.Desert21.domain.games.Field;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
@@ -22,40 +23,39 @@ public class ArmyPowerCalculator {
         this.scarabsPowerCalculator = scarabsPowerCalculator;
     }
 
-    public int calculateDefendersPower(FightingArmy army, TurnExecutionContext context, Player opponent, Field defendedField) throws NotAcceptableException {
+    public int calculateDefendersPower(FightingArmy army, TurnExecutionContext context, Player defender, Player attacker, Field defendedField, Army attackers) throws NotAcceptableException {
         var basePower = getArmyBasePower(army, context.gameBalance().combat());
         var postTowerPower = optionallyApplyTowerPowerBonuses(
                 basePower,
                 defendedField.getBuilding(),
-                context.gameBalance()
+                context.gameBalance(),
+                attacker,
+                attackers
         );
         var postFactoryTurretPower = optionallyApplyFactoryTurretBonuses(
                 postTowerPower,
                 defendedField.getBuilding(),
                 context.gameBalance(),
-                opponent
+                defender,
+                attacker,
+                attackers
         );
         var postImprovedDroidsPower = optionallyApplyImprovedDroidsPower(
                 postFactoryTurretPower,
                 defendedField.getBuilding(),
                 context.gameBalance(),
-                opponent
+                defender
         );
         var postImprovedTanksPower = optionallyApplyImprovedTanksPower(
                 postImprovedDroidsPower,
-                opponent,
+                defender,
                 context.gameBalance().upgrades()
         );
-        var totalPreAdvancedTacticsArmyPower = postImprovedTanksPower.droids()
+        var totalBasicArmyPower = postImprovedTanksPower.droids()
                 + postImprovedTanksPower.tanks()
                 + postImprovedTanksPower.cannons()
                 + postImprovedTanksPower.staticBonus();
-        var totalPostAdvancedTacticsPower = optionallyApplyAdvancedTacticsPower(
-                totalPreAdvancedTacticsArmyPower,
-                opponent,
-                context.gameBalance().upgrades()
-        );
-        return optionallyApplyGeneratedScarabsPower(totalPostAdvancedTacticsPower, army.scarabs(), context);
+        return Math.round(optionallyApplyGeneratedScarabsPower(totalBasicArmyPower, army.scarabs(), context));
 
     }
 
@@ -66,15 +66,10 @@ public class ArmyPowerCalculator {
                 context.player(),
                 context.gameBalance().upgrades()
         );
-        var totalPreAdvancedTacticsArmyPower = postImprovedTanksPower.droids()
+        return Math.round(postImprovedTanksPower.droids()
                 + postImprovedTanksPower.tanks()
                 + postImprovedTanksPower.cannons()
-                + postImprovedTanksPower.staticBonus();
-        return optionallyApplyAdvancedTacticsPower(
-                totalPreAdvancedTacticsArmyPower,
-                context.player(),
-                context.gameBalance().upgrades()
-        );
+                + postImprovedTanksPower.staticBonus());
     }
 
     private ArmyPower getArmyBasePower(FightingArmy army, AllCombatBalanceDto balance) {
@@ -86,7 +81,7 @@ public class ArmyPowerCalculator {
         );
     }
 
-    private ArmyPower optionallyApplyTowerPowerBonuses(ArmyPower armyPower, Building building, GameBalanceDto balance) throws NotAcceptableException {
+    private ArmyPower optionallyApplyTowerPowerBonuses(ArmyPower armyPower, Building building, GameBalanceDto balance, Player attacker, Army attackingArmy) throws NotAcceptableException {
         if (!building.isDefensive()) {
             return armyPower;
         }
@@ -94,6 +89,13 @@ public class ArmyPowerCalculator {
         var config = (TowerConfig) BuildingUtils.buildingTypeToConfig(building.getType(), balance);
         var baseProtection = config.getBaseProtection().getAtLevel(level);
         var unitBonus = config.getUnitBonus().getAtLevel(level);
+
+        // Advanced tactics
+        if (isAdvancedTacticsBonusApplicable(attacker, attackingArmy)) {
+            var defencePenalty = balance.upgrades().combat().getBalanceConfig().getAdvancedTacticsTowerBonusesDecrease();
+            baseProtection = (int) Math.round(baseProtection - (baseProtection * defencePenalty));
+            unitBonus = unitBonus - (unitBonus * defencePenalty);
+        }
 
         return new ArmyPower(
                 armyPower.droids() + (int) Math.round(armyPower.droids() * unitBonus),
@@ -103,17 +105,24 @@ public class ArmyPowerCalculator {
         );
     }
 
-    private ArmyPower optionallyApplyFactoryTurretBonuses(ArmyPower armyPower, Building building, GameBalanceDto balance, Player player) {
+    private ArmyPower optionallyApplyFactoryTurretBonuses(ArmyPower armyPower, Building building, GameBalanceDto balance, Player defender, Player attacker, Army attackingArmy) {
         if (!building.isFactory()) {
             return armyPower;
         }
-        if (!player.ownsUpgrade(LabUpgrade.FACTORY_TURRET)) {
+        if (!defender.ownsUpgrade(LabUpgrade.FACTORY_TURRET)) {
             return armyPower;
         }
         var towerConfig = balance.buildings().tower();
         var towerLevel = balance.upgrades().control().getBalanceConfig().getFactoryTurretTowerLevel();
         var baseProtection = towerConfig.getBaseProtection().getAtLevel(towerLevel);
         var unitBonus = towerConfig.getUnitBonus().getAtLevel(towerLevel);
+
+        // Advanced tactics
+        if (isAdvancedTacticsBonusApplicable(attacker, attackingArmy)) {
+            var defencePenalty = balance.upgrades().combat().getBalanceConfig().getAdvancedTacticsTowerBonusesDecrease();
+            baseProtection = (int) Math.round(baseProtection - (baseProtection * defencePenalty));
+            unitBonus = unitBonus - (unitBonus * defencePenalty);
+        }
 
         return new ArmyPower(
                 armyPower.droids() + (int) Math.round(armyPower.droids() * unitBonus),
@@ -153,23 +162,18 @@ public class ArmyPowerCalculator {
         );
     }
 
-    private int optionallyApplyAdvancedTacticsPower(int power, Player player, AllUpgradesBalanceDto balanceDto) {
-        if (!player.ownsUpgrade(LabUpgrade.ADVANCED_TACTICS)) {
-            return power;
-        }
-        var combatConfig = balanceDto.combat().getBalanceConfig();
-        var powerPerStep = combatConfig.getAdvancedTacticsPowerBonusPerReferencePower();
-        var step = (double) combatConfig.getAdvancedTacticsReferencePower();
-        var amountOfSteps = Math.floor(power / step);
-        var totalBonusRatio = amountOfSteps * powerPerStep;
-        return (int) (power + Math.round(power * totalBonusRatio));
-    }
-
     private int optionallyApplyGeneratedScarabsPower(int power, int scarabsAmount, TurnExecutionContext context) {
         if (scarabsAmount <= 0) {
             return power;
         }
         var additionalScarabsPower = scarabsPowerCalculator.calculateScarabsPower(scarabsAmount, context);
         return power + additionalScarabsPower;
+    }
+
+    private boolean isAdvancedTacticsBonusApplicable(Player attacker, Army attackingArmy) {
+        return attacker.ownsUpgrade(LabUpgrade.ADVANCED_TACTICS)
+                && attackingArmy.getDroids() > 0
+                && attackingArmy.getTanks() > 0
+                && attackingArmy.getCannons() > 0;
     }
 }

@@ -29,7 +29,14 @@ public class BombardingBattleExecutor {
                 .orElseThrow(() -> new NotAcceptableException("Player not found!"));
         var fieldArmy = field.getArmy();
         var defendersArmyBefore = getDefendersFightingArmy(fieldArmy);
-        var defendersPower = armyPowerCalculator.calculateDefendersPower(defendersArmyBefore, context, opponent, field);
+        var defendersPower = armyPowerCalculator.calculateDefendersPower(
+                defendersArmyBefore,
+                context,
+                opponent,
+                context.player(),
+                field,
+                new Army(0, 0, event.getCannons())
+        );
         var attackersPower = bombardingAttackersPowerCalculator.calculateAttackersPower(event.getCannons(), context);
 
         var attackerHasWon = attackersPower > defendersPower;

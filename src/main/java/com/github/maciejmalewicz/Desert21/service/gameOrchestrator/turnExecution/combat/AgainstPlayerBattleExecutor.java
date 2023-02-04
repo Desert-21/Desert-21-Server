@@ -33,7 +33,14 @@ public class AgainstPlayerBattleExecutor {
         var defendersArmyBefore = getDefendersFightingArmy(attackedField.getArmy(), opponent, context);
 
         var attackersPower = armyPowerCalculator.calculateAttackersPower(attackersArmyBefore, context);
-        var defendersPower = armyPowerCalculator.calculateDefendersPower(defendersArmyBefore, context, opponent, attackedField);
+        var defendersPower = armyPowerCalculator.calculateDefendersPower(
+                defendersArmyBefore,
+                context,
+                opponent,
+                context.player(),
+                attackedField,
+                attackersArmy
+        );
 
         var attackerHaveWon = attackersPower > defendersPower;
         var winnersPower = attackerHaveWon ? attackersPower : defendersPower;

@@ -7,8 +7,7 @@ combatBranchBalanceConfig:
 
   improvedCannonsBombardingPowerFraction: 0.6
 
-  advancedTacticsReferencePower: 100
-  advancedTacticsPowerBonusPerReferencePower: 0.01
+  advancedTacticsTowerBonusesDecrease: 0.7
 
 combatBranchCostConfig:
   reusableParts: 100
