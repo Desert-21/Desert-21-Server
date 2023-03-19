@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.RankingService;
@@ -36,6 +37,9 @@ class NextTurnTransitionServiceTest {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
+
     private Game game;
 
     private PlayersNotifier playersNotifier;
@@ -53,8 +57,8 @@ class NextTurnTransitionServiceTest {
                 gameRepository,
                 gameTimer,
                 gameEndCheckingService,
-                rankingService
-        );
+                rankingService,
+                aiPlayerConfig);
     }
 
     void setupGame() {

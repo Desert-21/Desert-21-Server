@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
@@ -34,6 +35,9 @@ class SurrenderServiceTest {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
 
     private TimeoutExecutor timeoutExecutor;
     private PlayersNotifier playersNotifier;
@@ -91,8 +95,8 @@ class SurrenderServiceTest {
                 gameRepository,
                 timeoutExecutor,
                 playersNotifier,
-                rankingService
-        );
+                rankingService,
+                aiPlayerConfig);
     }
 
     @BeforeEach

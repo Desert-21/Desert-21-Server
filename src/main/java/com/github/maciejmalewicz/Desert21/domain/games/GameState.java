@@ -4,6 +4,7 @@ public enum GameState {
     CREATED,
     WAITING_TO_START,
     AWAITING,
+    AWAITING_AI,
     RESOLVED,
     FINISHED
 }

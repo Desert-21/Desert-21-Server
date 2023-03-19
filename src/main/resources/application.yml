@@ -4,6 +4,11 @@ application:
     prefix: 'Bearer '
     tokenExpirationAfterDays: 14
 
+general:
+  ai-player:
+    id: "desert-21-ai"
+    name: "Desert 21 AI"
+
 spring:
   data:
     mongodb:

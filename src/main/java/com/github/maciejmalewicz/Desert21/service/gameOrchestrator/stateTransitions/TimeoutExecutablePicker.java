@@ -27,7 +27,7 @@ public class TimeoutExecutablePicker {
         var state = game.getStateManager().getGameState();
         return switch(state) {
             case CREATED, WAITING_TO_START -> gameStartTimeoutExecutable;
-            case AWAITING -> resolutionPhaseTimeoutExecutable;
+            case AWAITING, AWAITING_AI -> resolutionPhaseTimeoutExecutable;
             case RESOLVED -> nextTurnTimeoutExecutable;
             case FINISHED -> gameArchivingTimeoutExecutable;
         };

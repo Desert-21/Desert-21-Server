@@ -1,6 +1,8 @@
 package com.github.maciejmalewicz.Desert21.service;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
+import com.github.maciejmalewicz.Desert21.domain.games.Player;
 import com.github.maciejmalewicz.Desert21.exceptions.AuthorizationException;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
@@ -24,13 +26,15 @@ public class SurrenderService {
     private final TimeoutExecutor timeoutExecutor;
     private final PlayersNotifier playersNotifier;
     private final RankingService rankingService;
+    private final AiPlayerConfig aiPlayerConfig;
 
-    public SurrenderService(GamePlayerService gamePlayerService, GameRepository gameRepository, TimeoutExecutor timeoutExecutor, PlayersNotifier playersNotifier, RankingService rankingService) {
+    public SurrenderService(GamePlayerService gamePlayerService, GameRepository gameRepository, TimeoutExecutor timeoutExecutor, PlayersNotifier playersNotifier, RankingService rankingService, AiPlayerConfig aiPlayerConfig) {
         this.gamePlayerService = gamePlayerService;
         this.gameRepository = gameRepository;
         this.timeoutExecutor = timeoutExecutor;
         this.playersNotifier = playersNotifier;
         this.rankingService = rankingService;
+        this.aiPlayerConfig = aiPlayerConfig;
     }
 
     public void surrender(Authentication auth, String gameId) throws NotAcceptableException, AuthorizationException {
@@ -52,7 +56,10 @@ public class SurrenderService {
         stateManager.setGameState(GameState.FINISHED);
 
         var savedGame = gameRepository.save(game);
-        rankingService.shiftPlayersRankingsAfterGameFinished(game);
+
+        if (!savedGame.getPlayers().stream().map(Player::getId).toList().contains(aiPlayerConfig.getId())) {
+            rankingService.shiftPlayersRankingsAfterGameFinished(game);
+        }
 
         timeoutExecutor.executeTimeoutOnGame(savedGame);
 

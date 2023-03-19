@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameGenerator;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.ResourceSet;
@@ -12,12 +13,19 @@ import com.github.maciejmalewicz.Desert21.testConfig.AfterEachDatabaseCleanupExt
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Date;
+import java.util.List;
 
+import static com.github.maciejmalewicz.Desert21.config.Constants.USER_ID_AUTH_PREFIX;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @ExtendWith({AfterEachDatabaseCleanupExtension.class})
@@ -37,6 +45,10 @@ class GameGeneratorServiceTest {
 
     @Autowired
     private BasicBoardGeneratorConfig boardGeneratorConfig;
+
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
+
 
     private ApplicationUser user1;
     private ApplicationUser user2;
@@ -63,11 +75,28 @@ class GameGeneratorServiceTest {
         //what has been saved
         assertEquals(1, allSavedGames.size());
         var savedGame = allSavedGames.get(0);
-        validateGame(savedGame);
+        validateGame(savedGame, false);
     }
 
-    void validateGame(Game game) {
-        validatePlayers(game);
+    @Test
+    void generateGameAgainstAI() throws Exception {
+        var mockAuthentication = mock(Authentication.class);
+        doReturn(List.of(new SimpleGrantedAuthority(USER_ID_AUTH_PREFIX + user1.getId()))).when(mockAuthentication).getAuthorities();
+
+        user2.setId(aiPlayerConfig.getId());
+        user2.setNickname(aiPlayerConfig.getName());
+
+        tested.generateGameAgainstAI(mockAuthentication);
+        var allSavedGames = gameRepository.findAll();
+
+        //what has been saved
+        assertEquals(1, allSavedGames.size());
+        var savedGame = allSavedGames.get(0);
+        validateGame(savedGame, true);
+    }
+
+    void validateGame(Game game, boolean isPlayer2Ready) {
+        validatePlayers(game, isPlayer2Ready);
         validateStateManager(game);
         BoardGeneratorServiceTest.validateBoard(
                 boardGeneratorConfig,
@@ -77,7 +106,7 @@ class GameGeneratorServiceTest {
         );
     }
 
-    void validatePlayers(Game game) {
+    void validatePlayers(Game game, boolean isPLayer2Ready) {
         var players = game.getPlayers();
         assertEquals(2, players.size());
 
@@ -96,7 +125,7 @@ class GameGeneratorServiceTest {
         var player2 = players.get(1);
         assertEquals(user2.getId(), player2.getId());
         assertEquals(user2.getNickname(), player2.getNickname());
-        assertFalse(player2.getIsReady());
+        assertEquals(isPLayer2Ready, player2.getIsReady());
         assertEquals(expectedResourceSet, player2.getResources());
         assertEquals(300, player2.getRating());
     }
@@ -111,6 +140,4 @@ class GameGeneratorServiceTest {
         var willTimeoutInTheFuture = 0L < stateManager.getTimeout().getTime() - new Date().getTime();
         assertTrue(willTimeoutInTheFuture);
     }
-
-
 }

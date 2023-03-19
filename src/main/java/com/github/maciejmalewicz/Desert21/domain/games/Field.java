@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class Field {
 
-    private Building building;
-    private String ownerId;
-    private Army army = new Army();
+    protected Building building;
+    protected String ownerId;
+    protected Army army = new Army();
 
     public Field(Building building) {
         this.building = building;

@@ -1,5 +1,6 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
@@ -15,6 +16,7 @@ import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransiti
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.turnExecution.GameEndCheckingService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.GAME_END_NOTIFICATION;
@@ -26,22 +28,30 @@ public class NextTurnTransitionService extends StateTransitionService {
     private final BasicGameTimer gameTimer;
     private final GameEndCheckingService gameEndCheckingService;
     private final RankingService rankingService;
+    private final AiPlayerConfig aiPlayerConfig;
 
-    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer, GameEndCheckingService gameEndCheckingService, RankingService rankingService) {
+    public NextTurnTransitionService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer, GameEndCheckingService gameEndCheckingService, RankingService rankingService, AiPlayerConfig aiPlayerConfig) {
         super(playersNotifier, timeoutExecutor, gameRepository);
         this.gameTimer = gameTimer;
         this.gameEndCheckingService = gameEndCheckingService;
         this.rankingService = rankingService;
+        this.aiPlayerConfig = aiPlayerConfig;
     }
+
+    private final List<GameState> gameContinueStates = List.of(
+            GameState.AWAITING,
+            GameState.AWAITING_AI
+    );
 
     @Override
     protected Optional<PlayersNotificationPair> getNotifications(Game game) {
-        if (game.getStateManager().getGameState() == GameState.AWAITING) {
+        if (gameContinueStates.contains(game.getStateManager().getGameState())) {
             var currentPlayerId = game.getCurrentPlayer()
                     .map(Player::getId)
                     .orElse("");
             return Optional.of(PlayersNotificationPair.forBoth(
                     new Notification<>(NEXT_TURN_NOTIFICATION, new NextTurnNotification(
+                            game.getId(),
                             currentPlayerId,
                             game.getStateManager().getTimeout(),
                             game.getStateManager().getTurnCounter()
@@ -54,8 +64,12 @@ public class NextTurnTransitionService extends StateTransitionService {
 
     @Override
     protected long getTimeToWaitForTimeout(Game game) {
-        if (game.getStateManager().getGameState() == GameState.FINISHED) {
+        var gameState = game.getStateManager().getGameState();
+        if (gameState == GameState.FINISHED) {
             return 10_000;
+        }
+        if (gameState == GameState.AWAITING_AI) {
+            return 3_000;
         }
         return gameTimer.getMoveTime(game);
     }
@@ -79,7 +93,13 @@ public class NextTurnTransitionService extends StateTransitionService {
             rankingService.shiftPlayersRankingsAfterGameFinished(game);
             return game;
         }
-        game.getStateManager().setGameState(GameState.AWAITING);
+
+        var stateManager = game.getStateManager();
+        if (aiPlayerConfig.isAiTurn(game)) {
+            stateManager.setGameState(GameState.AWAITING_AI);
+        } else {
+            stateManager.setGameState(GameState.AWAITING);
+        }
         return game;
     }
 }

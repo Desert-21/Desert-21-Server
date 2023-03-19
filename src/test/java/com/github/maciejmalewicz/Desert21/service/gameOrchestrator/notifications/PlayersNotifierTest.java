@@ -1,10 +1,13 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.core.MessageSendingOperations;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class PlayersNotifierTest {
 
     record AnyObj (String arg) {}
@@ -22,10 +26,14 @@ class PlayersNotifierTest {
 
     private Game game;
 
+
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
+
     @BeforeEach
     void setup() {
         msgOperations = mock(MessageSendingOperations.class);
-        tested = new PlayersNotifier(msgOperations);
+        tested = new PlayersNotifier(msgOperations, aiPlayerConfig);
         setupGame();
     }
 
@@ -133,5 +141,39 @@ class PlayersNotifierTest {
         assertEquals(topic2, calledTopics.get(1));
         assertEquals(content1, calledContents.get(0));
         assertEquals(content2, calledContents.get(1));
+    }
+
+    @Test
+    void testNotifyPlayerNormalCase() {
+        var notification = new Notification<>("N1", new AnyObj("n1"));
+        tested.notifyPlayer("AA", notification);
+
+        var argumentCaptorTopic = ArgumentCaptor.forClass(String.class);
+        var argumentCaptorContent = ArgumentCaptor.forClass(Notification.class);
+
+        verify(msgOperations, times(1)).convertAndSend(
+                argumentCaptorTopic.capture(),
+                argumentCaptorContent.capture()
+        );
+
+        var calledTopic = argumentCaptorTopic.getValue();
+        var calledContent = argumentCaptorContent.getValue();
+
+        var topic = "/topics/users/AA";
+        var content = new Notification<>("N1", new AnyObj("n1"));
+
+        assertEquals(topic, calledTopic);
+        assertEquals(content, calledContent);
+    }
+
+    @Test
+    void testNotifyPlayerAICase() {
+        var notification = new Notification<>("N1", new AnyObj("n1"));
+        tested.notifyPlayer(aiPlayerConfig.getId(), notification);
+
+        verify(msgOperations, never()).convertAndSend(
+                anyString(),
+                any(Notification.class)
+        );
     }
 }

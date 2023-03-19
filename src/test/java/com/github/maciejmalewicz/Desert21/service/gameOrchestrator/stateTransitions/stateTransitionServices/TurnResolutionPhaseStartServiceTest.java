@@ -1,8 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.ai.core.AiTurnHandler;
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
-import com.github.maciejmalewicz.Desert21.models.turnExecution.EventExecutionResult;
 import com.github.maciejmalewicz.Desert21.models.turnExecution.TurnExecutionContext;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.GameBalanceService;
@@ -20,7 +21,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.RESOLUTION_PHASE_NOTIFICATION;
@@ -46,6 +46,12 @@ class TurnResolutionPhaseStartServiceTest {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
+
+    @Autowired
+    private AiTurnHandler aiTurnHandler;
+
     private Game game;
 
     void setupTested() {
@@ -62,7 +68,10 @@ class TurnResolutionPhaseStartServiceTest {
                 gameRepository,
                 resolutionPhaseNotificationService,
                 gameEventsExecutionService,
-                gameBalanceService);
+                gameBalanceService,
+                aiPlayerConfig,
+                aiTurnHandler
+        );
     }
 
     void setupGame() {

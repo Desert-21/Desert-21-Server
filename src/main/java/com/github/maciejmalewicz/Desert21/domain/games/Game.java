@@ -23,22 +23,26 @@ public class Game {
     @Id
     private String id;
 
-    private List<Player> players;
+    protected List<Player> players;
 
-    private Field[][] fields;
+    protected Field[][] fields;
 
-    private StateManager stateManager;
+    protected StateManager stateManager;
 
-    private List<GameEvent> eventQueue;
+    protected List<GameEvent> eventQueue;
 
     private List<EventResult> currentEventResults;
 
-    public Game(List<Player> players, Field[][] fields, StateManager stateManager) {
+    public Game(List<Player> players, StateManager stateManager) {
         this.players = players;
-        this.fields = fields;
         this.stateManager = stateManager;
         this.eventQueue = new ArrayList<>();
         this.currentEventResults = new ArrayList<>();
+    }
+
+    public Game(List<Player> players, Field[][] fields, StateManager stateManager) {
+        this(players, stateManager);
+        this.fields = fields;
     }
 
     public Game(List<Player> players, Field[][] fields, StateManager stateManager, List<GameEvent> eventQueue) {

@@ -60,6 +60,7 @@ public class PlayerTurnService {
                 gamePlayer.game(),
                 gamePlayer.player()
         );
+
         var mayExecuteActions = playersActionsValidatingService.validatePlayersActions(actions, context);
         if (!mayExecuteActions) {
             throw new NotAcceptableException("Could not execute actions! Stop trying to hack this game, or you will get banned! -,-");

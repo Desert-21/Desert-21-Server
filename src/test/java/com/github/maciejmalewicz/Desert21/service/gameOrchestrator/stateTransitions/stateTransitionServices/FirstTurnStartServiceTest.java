@@ -1,10 +1,9 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.*;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
@@ -38,6 +37,9 @@ class FirstTurnStartServiceTest {
     @Autowired
     private BasicGameTimer gameTimer;
 
+    @Autowired
+    private AiPlayerConfig aiPlayerConfig;
+
     private Game game;
 
     private PlayersNotifier playersNotifier;
@@ -68,8 +70,8 @@ class FirstTurnStartServiceTest {
                 playersNotifier,
                 mock(TimeoutExecutor.class),
                 gameRepository,
-                gameTimer
-        );
+                gameTimer,
+                aiPlayerConfig);
     }
 
     @BeforeEach

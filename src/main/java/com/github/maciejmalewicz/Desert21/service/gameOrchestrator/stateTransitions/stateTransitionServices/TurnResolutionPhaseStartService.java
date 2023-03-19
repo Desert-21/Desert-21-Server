@@ -1,5 +1,7 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.ai.core.AiTurnHandler;
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.exceptions.NotAcceptableException;
@@ -27,14 +29,18 @@ public class TurnResolutionPhaseStartService extends StateTransitionService {
     private final ResolutionPhaseNotificationService notificationService;
     private final GameEventsExecutionService gameEventsExecutionService;
     private final GameBalanceService gameBalanceService;
+    private final AiPlayerConfig aiPlayerConfig;
+    private final AiTurnHandler aiTurnHandler;
 
     public TurnResolutionPhaseStartService(PlayersNotifier playersNotifier,
                                            TimeoutExecutor timeoutExecutor,
-                                           GameRepository gameRepository, ResolutionPhaseNotificationService notificationService, GameEventsExecutionService gameEventsExecutionService, GameBalanceService gameBalanceService) {
+                                           GameRepository gameRepository, ResolutionPhaseNotificationService notificationService, GameEventsExecutionService gameEventsExecutionService, GameBalanceService gameBalanceService, AiPlayerConfig aiPlayerConfig, AiTurnHandler aiTurnHandler) {
         super(playersNotifier, timeoutExecutor, gameRepository);
         this.notificationService = notificationService;
         this.gameEventsExecutionService = gameEventsExecutionService;
         this.gameBalanceService = gameBalanceService;
+        this.aiPlayerConfig = aiPlayerConfig;
+        this.aiTurnHandler = aiTurnHandler;
     }
 
     @Override
@@ -45,13 +51,15 @@ public class TurnResolutionPhaseStartService extends StateTransitionService {
                         RESOLUTION_PHASE_NOTIFICATION,
                         new ResolutionPhaseNotification(
                                 game.getStateManager().getTimeout(),
-                                notificationPair.forCurrentPlayer()
+                                notificationPair.forCurrentPlayer(),
+                                game.getId()
                         )),
                 new Notification<>(
                         RESOLUTION_PHASE_NOTIFICATION,
                         new ResolutionPhaseNotification(
                                 game.getStateManager().getTimeout(),
-                                notificationPair.forOpponent()
+                                notificationPair.forOpponent(),
+                                game.getId()
                         ))
         ));
     }
@@ -67,6 +75,10 @@ public class TurnResolutionPhaseStartService extends StateTransitionService {
     @Override
     protected Game changeGameState(Game game) {
         var stateManger = game.getStateManager();
+        if (aiPlayerConfig.isAiTurn(game)) {
+            aiTurnHandler.handleTurn(game);
+            stateManger.setCurrentlyTimedOut(false);
+        }
         stateManger.setGameState(GameState.RESOLVED);
 
         if (stateManger.isCurrentlyTimedOut()) {

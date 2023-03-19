@@ -1,22 +1,22 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.Player;
-import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.core.MessageSendingOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalTime;
-import java.util.stream.Stream;
 
 @Service
 public class PlayersNotifier {
 
-    private final MessageSendingOperations<String> messageSendingOperations;
+    private final static String TOPIC_TEMPLATE = "/topics/users/%s";
 
-    public PlayersNotifier(MessageSendingOperations<String> messageSendingOperations) {
+    private final MessageSendingOperations<String> messageSendingOperations;
+    private final AiPlayerConfig aiPlayerConfig;
+
+    public PlayersNotifier(MessageSendingOperations<String> messageSendingOperations, AiPlayerConfig aiPlayerConfig) {
         this.messageSendingOperations = messageSendingOperations;
+        this.aiPlayerConfig = aiPlayerConfig;
     }
 
     public void notifyPlayers(Game game, PlayersNotificationPair notification) {
@@ -30,23 +30,22 @@ public class PlayersNotifier {
             return;
         }
 
-        var currentPlayerTopic = String.format("/topics/users/%s", currentPlayerId.get());
-        messageSendingOperations.convertAndSend(currentPlayerTopic, notification.forCurrentPlayer());
-
-        var otherPlayerTopic = String.format("/topics/users/%s", otherPlayerId.get());
-        messageSendingOperations.convertAndSend(otherPlayerTopic, notification.forOpponent());
+        notifyPlayer(currentPlayerId.get(), notification.forCurrentPlayer());
+        notifyPlayer(otherPlayerId.get(), notification.forOpponent());
     }
 
     public void notifyPlayers(Game game, Notification<?> notification) {
         game.getPlayers().forEach(p -> {
             var id = p.getId();
-            var topic = String.format("/topics/users/%s", id);
-            messageSendingOperations.convertAndSend(topic, notification);
+            notifyPlayer(id, notification);
         });
     }
 
     public void notifyPlayer(String id, Notification<?> notification) {
-        var topic = String.format("/topics/users/%s", id);
+        if (id.equals(aiPlayerConfig.getId())) { // do not send anything to the AI user
+            return;
+        }
+        var topic = String.format(TOPIC_TEMPLATE, id);
         messageSendingOperations.convertAndSend(topic, notification);
     }
 }

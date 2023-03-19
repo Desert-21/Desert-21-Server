@@ -1,21 +1,18 @@
 package com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.stateTransitionServices;
 
+import com.github.maciejmalewicz.Desert21.config.AiPlayerConfig;
 import com.github.maciejmalewicz.Desert21.domain.games.Game;
 import com.github.maciejmalewicz.Desert21.domain.games.GameState;
 import com.github.maciejmalewicz.Desert21.repository.GameRepository;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.BasicGameTimer;
-import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notifiable;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.Notification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotificationPair;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.PlayersNotifier;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.notifications.contents.NextTurnNotification;
 import com.github.maciejmalewicz.Desert21.service.gameOrchestrator.stateTransitions.TimeoutExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTIFICATION;
@@ -24,16 +21,19 @@ import static com.github.maciejmalewicz.Desert21.config.Constants.NEXT_TURN_NOTI
 public class FirstTurnStartService extends StateTransitionService {
 
     private final BasicGameTimer gameTimer;
+    private final AiPlayerConfig aiPlayerConfig;
 
     @Autowired
-    public FirstTurnStartService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer) {
+    public FirstTurnStartService(PlayersNotifier playersNotifier, TimeoutExecutor timeoutExecutor, GameRepository gameRepository, BasicGameTimer gameTimer, AiPlayerConfig aiPlayerConfig) {
         super(playersNotifier, timeoutExecutor, gameRepository);
         this.gameTimer = gameTimer;
+        this.aiPlayerConfig = aiPlayerConfig;
     }
 
     @Override
     protected Optional<PlayersNotificationPair> getNotifications(Game game) {
         var content = new NextTurnNotification(
+                game.getId(),
                 game.getStateManager().getCurrentPlayerId(),
                 game.getStateManager().getTimeout(),
                 game.getStateManager().getTurnCounter()
@@ -53,7 +53,13 @@ public class FirstTurnStartService extends StateTransitionService {
     protected Game changeGameState(Game game) {
         var stateManager = game.getStateManager();
         var player = game.getPlayers().get(0);
-        stateManager.setGameState(GameState.AWAITING);
+
+        if (aiPlayerConfig.isAiTurn(game)) {
+            stateManager.setGameState(GameState.AWAITING_AI);
+        } else {
+            stateManager.setGameState(GameState.AWAITING);
+        }
+
         stateManager.setFirstPlayerId(player.getId());
         stateManager.setTurnCounter(1);
         stateManager.setCurrentPlayerId(player.getId());
